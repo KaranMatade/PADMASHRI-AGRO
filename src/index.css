@@ -1,6 +1,6 @@
 /* ==========================================================================
    Padmashri Agro Engineering Works - Master Stylesheet
-   Design System & Premium Mobile-First Architecture
+   Mobile-First & Ultra Responsive Architecture with SEO Optimization
    ========================================================================== */
 
 :root {
@@ -31,7 +31,7 @@
   --bg-main: #f8fafc;
   --bg-card: #ffffff;
   --bg-card-hover: #ffffff;
-  --bg-glass: rgba(255, 255, 255, 0.94);
+  --bg-glass: rgba(255, 255, 255, 0.95);
   --border-color: #e2e8f0;
   --text-main: #0f172a;
   --text-muted: #475569;
@@ -61,7 +61,7 @@
   --bg-main: #090d16;
   --bg-card: #111827;
   --bg-card-hover: #1f2937;
-  --bg-glass: rgba(17, 24, 39, 0.94);
+  --bg-glass: rgba(17, 24, 39, 0.95);
   --border-color: #1f2937;
   --text-main: #f3f4f6;
   --text-muted: #9ca3af;
@@ -94,7 +94,7 @@ body {
 
 @media (max-width: 768px) {
   body {
-    padding-bottom: 68px; /* Bottom space for mobile action bar */
+    padding-bottom: 68px; /* Space for fixed mobile bottom bar */
   }
 }
 
@@ -268,7 +268,7 @@ button {
 .brand-logo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
   text-decoration: none;
 }
 
@@ -284,12 +284,14 @@ button {
   font-weight: 800;
   font-size: 1.3rem;
   box-shadow: var(--shadow-glow);
+  flex-shrink: 0;
 }
 
 .brand-text h1 {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   color: var(--text-main);
   line-height: 1.1;
+  white-space: nowrap;
 }
 
 .brand-text span {
@@ -297,8 +299,9 @@ button {
   color: var(--primary);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   display: block;
+  white-space: nowrap;
 }
 
 .nav-links {
@@ -378,7 +381,7 @@ button {
 /* HERO SECTION */
 .hero-section {
   position: relative;
-  padding: 4rem 0 5rem 0;
+  padding: 3.5rem 0 4.5rem 0;
   background: radial-gradient(circle at 80% 20%, rgba(21, 128, 61, 0.15) 0%, transparent 50%),
               radial-gradient(circle at 10% 80%, rgba(217, 119, 6, 0.12) 0%, transparent 50%),
               var(--bg-main);
@@ -388,7 +391,7 @@ button {
 .hero-grid {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
-  gap: 3.5rem;
+  gap: 3rem;
   align-items: center;
 }
 
@@ -453,21 +456,31 @@ button {
   font-weight: 600;
 }
 
+/* Hero Right Visual Card Box */
 .hero-visual {
   position: relative;
+  width: 100%;
 }
 
-.hero-image-wrapper {
+.hero-card-box {
   position: relative;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-lg);
-  border: 3px solid rgba(255, 255, 255, 0.8);
+  border: 2px solid var(--border-color);
+  background: var(--slate-900);
+}
+
+.hero-image-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
 }
 
 .hero-image-wrapper img {
   width: 100%;
-  height: 440px;
+  height: 400px;
   object-fit: cover;
   display: block;
 }
@@ -477,7 +490,7 @@ button {
   bottom: 16px;
   left: 16px;
   right: 16px;
-  background: rgba(15, 23, 42, 0.88);
+  background: rgba(15, 23, 42, 0.92);
   backdrop-filter: blur(10px);
   color: white;
   padding: 1rem 1.25rem;
@@ -486,6 +499,28 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.hero-badge-overlay h4 {
+  font-size: 1.1rem;
+  color: white;
+  margin-bottom: 0.15rem;
+}
+
+.hero-badge-overlay p {
+  font-size: 0.88rem;
+  color: var(--secondary-light);
+  font-weight: 700;
+}
+
+.indiamart-hero-link {
+  color: var(--secondary-light);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
 }
 
 /* PRODUCT CATALOG SECTION */
@@ -564,7 +599,7 @@ button {
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
   gap: 1.75rem;
 }
 
@@ -720,7 +755,7 @@ button {
   min-height: 44px;
 }
 
-/* PRODUCT SPECIFICATIONS MODAL - PROFESSIONAL PC & MOBILE LAYOUT */
+/* PRODUCT SPECIFICATIONS MODAL */
 .product-specs-modal {
   width: 95% !important;
   max-width: 960px !important;
@@ -754,7 +789,6 @@ button {
   overflow: hidden;
   border: 1px solid var(--border-color);
   background: #000;
-  box-shadow: var(--shadow-sm);
 }
 
 .modal-main-image-box img {
@@ -794,14 +828,12 @@ button {
   border: 2px solid var(--border-color);
   cursor: pointer;
   flex-shrink: 0;
-  transition: var(--transition);
   opacity: 0.6;
 }
 
 .modal-thumb-btn.active, .modal-thumb-btn:hover {
   border-color: var(--primary);
   opacity: 1;
-  transform: scale(1.04);
 }
 
 .modal-thumb-btn img {
@@ -833,7 +865,6 @@ button {
   color: var(--text-main);
 }
 
-/* Modal Right Column & Size Selector */
 .modal-right-col {
   display: flex;
   flex-direction: column;
@@ -853,7 +884,6 @@ button {
   margin-bottom: 1.25rem;
 }
 
-/* Size Selector Container & Pills */
 .size-selector-container {
   background: var(--slate-100);
   border: 1px solid var(--border-color);
@@ -892,16 +922,10 @@ button {
   transition: var(--transition);
 }
 
-.size-select-pill:hover {
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
 .size-select-pill.selected {
   background: var(--primary);
   color: white;
   border-color: var(--primary-dark);
-  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.3);
 }
 
 .dynamic-modal-price {
@@ -1306,13 +1330,17 @@ button {
     display: flex !important;
   }
   .section-title {
-    font-size: 1.9rem;
+    font-size: 1.85rem;
+  }
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
   .hero-title {
-    font-size: 2.1rem;
+    font-size: 2rem;
   }
   .hero-subtitle {
-    font-size: 1.02rem;
+    font-size: 1rem;
   }
   .hero-actions {
     flex-direction: column;
@@ -1321,9 +1349,39 @@ button {
     width: 100%;
     justify-content: center;
   }
-  .hero-image-wrapper img {
-    height: 300px;
+  
+  /* Mobile Hero Card & Badge Styling Fix */
+  .hero-card-box {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--slate-900);
+    border: 1px solid var(--border-color);
   }
+  .hero-image-wrapper img {
+    height: 220px;
+  }
+  .hero-badge-overlay {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    padding: 1rem 1.2rem !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-top: 3px solid var(--secondary) !important;
+    background: var(--slate-900) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+  .hero-badge-overlay h4 {
+    font-size: 1.05rem;
+    line-height: 1.3;
+  }
+  .hero-badge-overlay p {
+    font-size: 0.9rem;
+  }
+
   .product-grid {
     grid-template-columns: 1fr;
   }
@@ -1339,7 +1397,7 @@ button {
     text-align: center;
   }
   .modal-content {
-    padding: 1.25rem;
+    padding: 1.25rem !important;
   }
   .modal-actions-row {
     flex-direction: column;

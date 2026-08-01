@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Shield, Award, CheckCircle, PhoneCall, MessageCircle, ExternalLink } from 'lucide-react';
+import { ArrowRight, Shield, PhoneCall, MessageCircle, ExternalLink } from 'lucide-react';
 import { mainContact } from '../data/branchesData';
 
 export default function HeroSection({ lang, onOpenInquiry }) {
@@ -54,11 +54,11 @@ export default function HeroSection({ lang, onOpenInquiry }) {
               id="hero-whatsapp-btn"
             >
               <MessageCircle size={18} />
-              <span>{lang === 'mr' ? 'व्हॉट्सॲप ऑर्डर' : 'WhatsApp Inquiry'}</span>
+              <span>{lang === 'mr' ? 'व्हॉट्सॲप ऑर्डर' : 'WhatsApp Order'}</span>
             </a>
 
             <button 
-              onClick={onOpenInquiry} 
+              onClick={() => onOpenInquiry()} 
               className="btn-outline"
               id="hero-quote-btn"
             >
@@ -85,11 +85,13 @@ export default function HeroSection({ lang, onOpenInquiry }) {
 
         {/* Hero Right Visual */}
         <div className="hero-visual">
-          <div className="hero-image-wrapper">
-            <img 
-              src="/Product_images/WhatsApp Image 2026-08-01 at 9.01.20 AM (2).jpeg" 
-              alt="Padmashri 2 Bottom Hydraulic Plough" 
-            />
+          <div className="hero-card-box">
+            <div className="hero-image-wrapper">
+              <img 
+                src="/Product_images/reversible_plough_2.jpeg" 
+                alt="Padmashri 2 Bottom Hydraulic Reversible Plough" 
+              />
+            </div>
             <div className="hero-badge-overlay">
               <div>
                 <h4>{lang === 'mr' ? '२ बॉटम हायड्रोलिक रिव्हर्सिबल नांगर' : '2 Bottom Hydraulic Reversible Plough'}</h4>
@@ -99,7 +101,7 @@ export default function HeroSection({ lang, onOpenInquiry }) {
                 href={mainContact.indiaMartUrl} 
                 target="_blank" 
                 rel="noreferrer" 
-                style={{ color: 'var(--secondary-light)', display: 'flex', alignItems: 'center', gap: '4px' }}
+                className="indiamart-hero-link"
                 title="View on IndiaMART"
               >
                 <span>IndiaMART</span>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, Globe, Menu, X, ShieldCheck, Sun, Moon, MessageSquare, ArrowRight } from 'lucide-react';
+import { Phone, Mail, MapPin, Globe, Menu, X, ShieldCheck, Sun, Moon, MessageSquare } from 'lucide-react';
 import { mainContact } from '../data/branchesData';
 
 export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }) {
@@ -73,8 +73,8 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
           <a href="#home" className="brand-logo">
             <div className="brand-icon-box">P</div>
             <div className="brand-text">
-              <h1>{lang === 'mr' ? mainContact.companyNameMr : 'PADMASHRI AGRO'}</h1>
-              <span>{lang === 'mr' ? 'इंजिनिअरिंग वर्क्स • सन् १९९८' : 'ENGINEERING WORKS • EST. 1998'}</span>
+              <h1>{lang === 'mr' ? 'पद्मश्री ॲग्रो' : 'PADMASHRI AGRO'}</h1>
+              <span>{lang === 'mr' ? 'शेती अवजारे • सन १९९८' : 'AGRO MACHINERY • EST. 1998'}</span>
             </div>
           </a>
 
@@ -86,7 +86,7 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
                 className="nav-link-item active" 
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {lang === 'mr' ? 'मुख्य पृष्ठ' : 'Home'}
+                {lang === 'mr' ? 'मुख्य पृष्ठ (Home)' : 'Home'}
               </a>
             </li>
             <li>
@@ -95,7 +95,7 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
                 className="nav-link-item" 
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {lang === 'mr' ? 'शेती अवजारे' : 'Products & Catalog'}
+                {lang === 'mr' ? 'शेती अवजारे (Catalog)' : 'Products & Catalog'}
               </a>
             </li>
             <li>
@@ -104,7 +104,7 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
                 className="nav-link-item" 
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {lang === 'mr' ? 'दर अंदाजपत्रक' : 'Price Estimator'}
+                {lang === 'mr' ? 'दर अंदाजपत्रक (Calculator)' : 'Price Estimator'}
               </a>
             </li>
             <li>
