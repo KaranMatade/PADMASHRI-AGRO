@@ -48,14 +48,14 @@ export const productsData = [
     categoryName: "Primary Tillage",
     badge: "Bestseller / मुख्य उत्पादने",
     tractorHp: "40 HP - 75 HP",
-    image: "/Product_images/reversible_plough_2.jpeg",
+    image: "/Padma Shri Photo Gallery/hydraulic-reversible-plough-gallery-01.png",
     images: [
-      "/Product_images/reversible_plough_2.jpeg",
+      "/Padma Shri Photo Gallery/hydraulic-reversible-plough-gallery-01.png",
       "/Padma Shri Photo Gallery/2-bottom-reversible-mb-plough-gallery-01.png",
       "/Padma Shri Photo Gallery/3-bottom-reversible-mb-plough-gallery-01.png",
-      "/Padma Shri Photo Gallery/hydraulic-reversible-plough-gallery-01.png",
       "/Padma Shri Photo Gallery/plough-attached-to-tractor-gallery-01.png",
-      "/Padma Shri Photo Gallery/plough-frame-and-shares-gallery-01.png"
+      "/Padma Shri Photo Gallery/plough-frame-and-shares-gallery-01.png",
+      "/Padma Shri Photo Gallery/reversible-mechanism-detail-gallery-01.png"
     ],
     features: [
       "Primary tillage implement for deep soil turning, lifting & inversion",
@@ -200,9 +200,8 @@ export const productsData = [
     categoryName: "Secondary Tillage",
     badge: "Weed Control / डकफूट कोळपे",
     tractorHp: "24 HP - 55 HP",
-    image: "/Product_images/duckfoot_cultivator_1.jpeg",
+    image: "/Padma Shri Photo Gallery/5-tine-duckfoot-cultivator.png",
     images: [
-      "/Product_images/duckfoot_cultivator_1.jpeg",
       "/Padma Shri Photo Gallery/5-tine-duckfoot-cultivator.png",
       "/Padma Shri Photo Gallery/duckfoot-sweep-cultivator.png"
     ],
