@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Phone, MessageCircle, Navigation, Clock, Building2 } from 'lucide-react';
+import { MapPin, Phone, MessageCircle, Navigation, Clock, Building2, ShieldCheck, Award } from 'lucide-react';
 import { mainContact, branchesData } from '../data/branchesData';
 
 export default function BranchLocator({ lang }) {
@@ -33,51 +33,48 @@ export default function BranchLocator({ lang }) {
         </div>
 
         {/* Head Office Highlight Card */}
-        <div 
-          className="branch-card" 
-          style={{ 
-            marginBottom: '2.5rem', 
-            background: 'linear-gradient(135deg, var(--slate-900), #162032)', 
-            color: 'white',
-            border: '2px solid var(--secondary)'
-          }}
-        >
-          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem', alignItems: 'center' }}>
-            <div>
-              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                <span className="badge badge-amber">{mainContact.headOffice.badge}</span>
-                <span className="badge badge-primary">{lang === 'mr' ? 'मुख्य कारखाना' : 'Headquarters'}</span>
+        <div className="head-office-card">
+          <div className="head-office-grid">
+            <div className="head-office-info">
+              <div className="head-office-badges">
+                <span className="badge badge-amber">
+                  <Award size={13} />
+                  <span>{mainContact.headOffice.badge}</span>
+                </span>
+                <span className="badge badge-primary">
+                  <ShieldCheck size={13} />
+                  <span>{lang === 'mr' ? 'मुख्य कारखाना' : 'Headquarters'}</span>
+                </span>
               </div>
 
-              <h3 style={{ fontSize: '1.8rem', color: 'white', marginBottom: '0.5rem' }}>
+              <h3 className="head-office-title">
                 {lang === 'mr' ? mainContact.headOffice.titleMr : mainContact.headOffice.title}
               </h3>
 
-              <p style={{ color: 'var(--slate-300)', fontSize: '1.05rem', marginBottom: '1.2rem', display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
-                <MapPin size={20} style={{ color: 'var(--secondary)', flexShrink: 0, marginTop: '3px' }} />
+              <p className="head-office-address">
+                <MapPin size={20} className="address-pin-icon" />
                 <span>{lang === 'mr' ? mainContact.headOffice.addressMr : mainContact.headOffice.address}</span>
               </p>
 
-              <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', color: 'var(--slate-300)', fontSize: '0.92rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <Phone size={16} style={{ color: 'var(--secondary)' }} />
-                  <a href={`tel:${mainContact.headOffice.phoneClean}`} style={{ color: 'white', fontWeight: '700' }}>
+              <div className="head-office-meta">
+                <div className="meta-item">
+                  <Phone size={16} style={{ color: 'var(--secondary-light)' }} />
+                  <a href={`tel:${mainContact.headOffice.phoneClean}`} className="meta-phone-link">
                     {mainContact.headOffice.phone}
                   </a>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <Clock size={16} style={{ color: 'var(--secondary)' }} />
+                <div className="meta-item">
+                  <Clock size={16} style={{ color: 'var(--secondary-light)' }} />
                   <span>Mon - Sat: 9:00 AM - 8:30 PM</span>
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div className="head-office-actions">
               <a 
                 href={`tel:${mainContact.headOffice.phoneClean}`}
-                className="btn-amber"
-                style={{ width: '100%', justifyContent: 'center', padding: '0.9rem' }}
+                className="btn-amber head-office-btn"
               >
                 <Phone size={18} />
                 <span>{lang === 'mr' ? 'मुख्य कारखान्यात कॉल करा' : 'Call Main Office'}</span>
@@ -87,8 +84,7 @@ export default function BranchLocator({ lang }) {
                 href={`https://wa.me/${mainContact.headOffice.phoneClean}?text=${encodeURIComponent('Hello Padmashri Agro Main Office')}`}
                 target="_blank"
                 rel="noreferrer"
-                className="btn-primary"
-                style={{ width: '100%', justifyContent: 'center', padding: '0.9rem' }}
+                className="btn-primary head-office-btn"
               >
                 <MessageCircle size={18} />
                 <span>{lang === 'mr' ? 'व्हॉट्सॲप मेसेज करा' : 'WhatsApp Main Office'}</span>

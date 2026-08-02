@@ -140,6 +140,7 @@ button {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  width: fit-content;
 }
 
 .badge-primary {
@@ -352,6 +353,19 @@ button {
   min-height: 44px;
 }
 
+.btn-outline {
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  padding: 0.65rem 1.3rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: var(--transition);
+  min-height: 44px;
+}
+
 /* HERO SECTION */
 .hero-section {
   position: relative;
@@ -473,7 +487,6 @@ button {
   background: var(--bg-main);
 }
 
-/* TOP RECOMMENDED PRODUCTS HORIZONTAL RAIL (Justdial / IndiaMART Mobile Header Rail) */
 .mobile-recommended-rail-container {
   margin-bottom: 1.75rem;
   background: var(--bg-card);
@@ -681,7 +694,6 @@ button {
   color: var(--text-muted);
 }
 
-/* View Mode Toggle Switch (B2B List vs Grid) */
 .view-mode-toggle {
   display: flex;
   background: var(--slate-100);
@@ -708,9 +720,7 @@ button {
   box-shadow: var(--shadow-sm);
 }
 
-/* ==========================================================================
-   INDIA MART / JUSTDIAL STYLE B2B LISTING CARDS (Mobile-First Row Format)
-   ========================================================================== */
+/* B2B LISTING CARDS */
 .b2b-list-container {
   display: flex;
   flex-direction: column;
@@ -726,12 +736,6 @@ button {
   transition: var(--transition);
 }
 
-.b2b-product-card:hover {
-  border-color: rgba(21, 128, 61, 0.4);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
-}
-
-/* Header bar inside listing card */
 .b2b-card-header {
   display: flex;
   align-items: center;
@@ -781,7 +785,6 @@ button {
   border: 1px solid rgba(217, 119, 6, 0.3);
 }
 
-/* B2B Card Body (Image Left, Info Right) */
 .b2b-card-body {
   display: flex;
   padding: 1.1rem;
@@ -811,11 +814,6 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.b2b-img-box:hover img {
-  transform: scale(1.08);
 }
 
 .b2b-img-zoom-tag {
@@ -847,10 +845,6 @@ button {
   line-height: 1.2;
   cursor: pointer;
   margin-bottom: 0.15rem;
-}
-
-.b2b-title:hover {
-  color: var(--primary);
 }
 
 .b2b-title-mr {
@@ -910,26 +904,6 @@ button {
   color: var(--text-main);
 }
 
-.b2b-highlights-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.b2b-feat-item {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
-.b2b-check-icon {
-  color: var(--primary);
-  flex-shrink: 0;
-}
-
-/* Dual / Triple Action Buttons Row (Justdial / IndiaMART Mobile Buttons) */
 .b2b-card-actions {
   display: flex;
   gap: 0.5rem;
@@ -946,7 +920,7 @@ button {
 
 .b2b-btn-call {
   flex: 1;
-  background: #0284c7; /* Call Blue */
+  background: #0284c7;
   color: white;
   padding: 0.65rem;
   border-radius: var(--radius-md);
@@ -956,7 +930,6 @@ button {
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
   min-height: 42px;
 }
 
@@ -991,547 +964,97 @@ button {
   min-height: 42px;
 }
 
-/* Standard Grid Layout fallback */
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-  gap: 1.75rem;
-}
-
-/* Product Card Grid Item */
-.product-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  display: flex;
-  flex-direction: column;
-}
-
-.product-card-image-box {
-  position: relative;
-  height: 230px;
-  background: var(--slate-900);
-  overflow: hidden;
-}
-
-.product-card-image-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.product-card-badge-pill {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 5;
-  background: rgba(15, 23, 42, 0.88);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+/* ==========================================================================
+   HEAD OFFICE & BRANCH LOCATOR RESPONSIVE STYLES
+   ========================================================================== */
+.head-office-card {
+  margin-bottom: 2.5rem;
+  background: linear-gradient(135deg, var(--slate-900), #162032);
   color: white;
-  padding: 0.35rem 0.8rem;
-  border-radius: var(--radius-full);
-  font-size: 0.76rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-.badge-pill-icon {
-  color: var(--secondary-light);
-}
-
-.product-card-body {
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.product-title {
-  font-size: 1.3rem;
-  color: var(--text-main);
-  margin-bottom: 0.2rem;
-}
-
-.product-title-mr {
-  font-size: 0.9rem;
-  color: var(--primary);
-  font-weight: 700;
-  margin-bottom: 0.85rem;
-}
-
-.product-sizes-row {
-  margin-bottom: 0.85rem;
-}
-
-.sizes-row-header {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  margin-bottom: 0.3rem;
-}
-
-.sizes-chips-group {
-  display: flex;
-  gap: 0.35rem;
-  flex-wrap: wrap;
-}
-
-.size-chip-item {
-  background: var(--slate-100);
-  color: var(--text-main);
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
-}
-
-.product-price-tag {
-  background: linear-gradient(135deg, rgba(217, 119, 6, 0.08) 0%, rgba(21, 128, 61, 0.08) 100%);
-  border: 1.5px dashed rgba(217, 119, 6, 0.45);
-  padding: 0.8rem 1rem;
-  border-radius: var(--radius-md);
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.price-label {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  font-weight: 700;
-}
-
-.price-value {
-  font-family: var(--font-heading);
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--secondary-dark);
-}
-
-.product-features-list {
-  list-style: none;
-  margin-bottom: 1.25rem;
-  flex-grow: 1;
-}
-
-.product-feature-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-bottom: 0.35rem;
-}
-
-.product-feature-item svg {
-  color: var(--primary);
-  flex-shrink: 0;
-  margin-top: 0.2rem;
-}
-
-.product-card-footer {
-  display: flex;
-  gap: 0.6rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid var(--border-color);
-}
-
-.btn-card-details {
-  flex: 1;
-  border: 1.5px solid var(--border-color);
-  background: var(--slate-100);
-  color: var(--text-main);
-  padding: 0.65rem;
-  border-radius: var(--radius-md);
-  font-weight: 700;
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  min-height: 42px;
-}
-
-.btn-card-quote {
-  flex: 1.2;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: white;
-  padding: 0.65rem;
-  border-radius: var(--radius-md);
-  font-weight: 700;
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  box-shadow: var(--shadow-glow);
-  min-height: 42px;
-}
-
-/* MODAL STYLES */
-.product-specs-modal {
-  width: 95% !important;
-  max-width: 960px !important;
-  padding: 2rem !important;
-  border-radius: var(--radius-lg);
-  background: var(--bg-card);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
-  border: 1px solid var(--border-color);
-  overflow-y: auto;
-  max-height: 92vh;
-}
-
-.modal-grid-container {
-  display: grid;
-  grid-template-columns: 1fr 1.15fr;
-  gap: 2rem;
-  align-items: start;
-}
-
-.modal-left-col {
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-}
-
-.modal-main-image-box {
-  position: relative;
-  width: 100%;
-  height: 300px;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  border: 1px solid var(--border-color);
-  background: #000;
-}
-
-.modal-main-image-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.modal-image-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(6px);
-  color: white;
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-full);
-  font-size: 0.78rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-.modal-thumbs-row {
-  display: flex;
-  gap: 0.6rem;
-  overflow-x: auto;
-  padding-bottom: 0.4rem;
-}
-
-.modal-thumb-btn {
-  width: 74px;
-  height: 58px;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  border: 2px solid var(--border-color);
-  cursor: pointer;
-  flex-shrink: 0;
-  opacity: 0.65;
-}
-
-.modal-thumb-btn.active, .modal-thumb-btn:hover {
-  border-color: var(--primary);
-  opacity: 1;
-}
-
-.modal-thumb-btn img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.hp-recommendation-box {
-  background: rgba(21, 128, 61, 0.08);
-  border: 1px solid rgba(21, 128, 61, 0.25);
-  padding: 1rem;
-  border-radius: var(--radius-md);
-}
-
-.hp-header {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-weight: 700;
-  color: var(--primary);
-  font-size: 0.88rem;
-  margin-bottom: 0.2rem;
-}
-
-.hp-value {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: var(--text-main);
-}
-
-.modal-right-col {
-  display: flex;
-  flex-direction: column;
-}
-
-.modal-product-title {
-  font-size: 1.65rem;
-  color: var(--text-main);
-  margin-bottom: 0.2rem;
-  line-height: 1.15;
-}
-
-.modal-product-title-mr {
-  font-size: 1rem;
-  color: var(--primary);
-  font-weight: 700;
-  margin-bottom: 1.1rem;
-}
-
-.size-selector-container {
-  background: var(--slate-100);
-  border: 1px solid var(--border-color);
-  padding: 0.85rem 1rem;
-  border-radius: var(--radius-md);
-  margin-bottom: 1.1rem;
-}
-
-.size-selector-label {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-weight: 700;
-  font-size: 0.88rem;
-  color: var(--text-main);
-  margin-bottom: 0.5rem;
-}
-
-.size-buttons-group {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.size-select-pill {
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-full);
-  font-weight: 700;
-  font-size: 0.85rem;
-  background: var(--bg-card);
-  color: var(--text-main);
-  border: 2px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  transition: var(--transition);
-}
-
-.size-select-pill.selected {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary-dark);
-}
-
-.dynamic-modal-price {
-  background: rgba(217, 119, 6, 0.1);
-  border: 1.5px dashed rgba(217, 119, 6, 0.45);
-  padding: 0.85rem 1.1rem;
-  margin-bottom: 1.1rem;
-}
-
-.modal-features-section {
-  margin-bottom: 1.1rem;
-}
-
-.modal-features-section h4 {
-  font-size: 0.92rem;
-  color: var(--text-main);
-  margin-bottom: 0.4rem;
-}
-
-.modal-features-list {
-  list-style: none;
-}
-
-.modal-features-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  font-size: 0.86rem;
-  color: var(--text-muted);
-  margin-bottom: 0.3rem;
-}
-
-.modal-features-list svg {
-  color: var(--primary);
-  flex-shrink: 0;
-  margin-top: 0.2rem;
-}
-
-.modal-specs-box {
-  background: var(--bg-main);
-  border: 1px solid var(--border-color);
-  padding: 0.9rem;
-  border-radius: var(--radius-md);
-  margin-bottom: 1.25rem;
-}
-
-.modal-specs-box h4 {
-  font-size: 0.88rem;
-  margin-bottom: 0.5rem;
-  color: var(--text-main);
-}
-
-.specs-table-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.spec-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.82rem;
-  padding: 0.25rem 0;
-  border-bottom: 1px dashed var(--border-color);
-}
-
-.spec-row:last-child {
-  border-bottom: none;
-}
-
-.spec-key {
-  color: var(--text-muted);
-}
-
-.spec-val {
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-.modal-actions-row {
-  display: flex;
-  gap: 0.75rem;
-}
-
-/* PRICE CALCULATOR SECTION */
-.calculator-section {
-  padding: 4rem 0;
-  background: linear-gradient(180deg, var(--slate-900), #0b1120);
-  color: white;
-}
-
-.calculator-card {
-  background: var(--slate-800);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 2px solid var(--secondary);
   border-radius: var(--radius-lg);
   padding: 2rem;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.head-office-grid {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 2.2rem;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 2rem;
+  align-items: center;
 }
 
-.calc-form-group {
-  margin-bottom: 1.25rem;
-}
-
-.calc-label {
-  display: block;
-  font-weight: 700;
-  margin-bottom: 0.4rem;
-  color: var(--slate-200);
-  font-size: 0.9rem;
-}
-
-.calc-select, .calc-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  background: var(--slate-900);
-  border: 1px solid var(--slate-700);
-  border-radius: var(--radius-md);
-  color: white;
-  font-size: 0.92rem;
-  outline: none;
-  min-height: 44px;
-}
-
-.calc-result-box {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: var(--radius-md);
-  padding: 1.6rem;
+.head-office-info {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
-.result-price-display {
-  font-family: var(--font-heading);
-  font-size: 2.4rem;
-  color: var(--secondary-light);
-  font-weight: 800;
-  margin: 0.75rem 0;
+.head-office-badges {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
 }
 
-/* PHOTO GALLERY SECTION */
-.gallery-section {
-  padding: 4rem 0;
-  background: var(--bg-main);
+.head-office-title {
+  font-size: 1.8rem;
+  color: white;
+  margin-bottom: 0.6rem;
+  line-height: 1.25;
 }
 
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.2rem;
+.head-office-address {
+  color: var(--slate-300);
+  font-size: 1.05rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  line-height: 1.5;
 }
 
-.gallery-item {
-  position: relative;
-  height: 220px;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  cursor: pointer;
-  border: 1px solid var(--border-color);
-  background: var(--slate-900);
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
+.address-pin-icon {
+  color: var(--secondary);
+  flex-shrink: 0;
+  margin-top: 3px;
 }
 
-.gallery-item:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+.head-office-meta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  color: var(--slate-300);
+  font-size: 0.92rem;
 }
 
-.gallery-item img {
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.meta-phone-link {
+  color: white;
+  font-weight: 700;
+}
+
+.head-office-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
-/* BRANCH LOCATOR SECTION */
+.head-office-btn {
+  width: 100% !important;
+  justify-content: center !important;
+  padding: 0.85rem 1rem !important;
+  text-align: center;
+}
+
 .branch-section {
-  padding: 4rem 0;
+  padding: 3.5rem 0;
   background: var(--slate-100);
 }
 
@@ -1566,7 +1089,7 @@ button {
 
 .branch-actions {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.65rem;
 }
 
 /* FOOTER SECTION */
@@ -1691,7 +1214,7 @@ button {
   min-height: 44px;
 }
 
-/* Visibility Control Classes */
+/* Mobile Specific Overrides */
 @media (min-width: 769px) {
   .mobile-sticky-action-bar {
     display: none !important;
@@ -1756,6 +1279,26 @@ button {
     gap: 0.4rem !important;
   }
 
+  /* HEAD OFFICE CARD MOBILE FIX */
+  .head-office-card {
+    padding: 1.25rem !important;
+  }
+  .head-office-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+  }
+  .head-office-title {
+    font-size: 1.45rem !important;
+  }
+  .head-office-address {
+    font-size: 0.95rem !important;
+    margin-bottom: 1rem !important;
+  }
+  .head-office-meta {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+
   .calculator-card {
     grid-template-columns: 1fr !important;
     gap: 1.4rem !important;
@@ -1781,7 +1324,7 @@ button {
     flex-direction: column;
   }
   .view-btn-text {
-    display: none; /* Hide label text on tiny mobile, keep icons */
+    display: none;
   }
 }
 
