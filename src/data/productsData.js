@@ -10,12 +10,13 @@ export const productsData = [
     categoryName: "Transport & Haulage",
     badge: "Heavy Duty / दणकट ट्रॉली",
     tractorHp: "35 HP - 75 HP",
-    image: "/Product_images/tractor-hydrolic-tipping-trailer-trolley.png",
+    image: "/Product_images/hydraulic_trailer_1.jpeg",
     images: [
-      "/Product_images/tractor-hydrolic-tipping-trailer-trolley.png",
-      "/Padma Shri Photo Gallery/tractor-hydraulic-tipping-trailer-gallery-01.png",
-      "/Padma Shri Photo Gallery/hydraulic-trailer-dump-jack-gallery-01.png",
-      "/Padma Shri Photo Gallery/padmashree-heavy-duty-farm-trailer-gallery-01.png"
+      "/Product_images/hydraulic_trailer_1.jpeg",
+      "/Product_images/hydraulic_trailer_2.jpeg",
+      "/Product_images/hydraulic_trailer_3.jpeg",
+      "/Product_images/hydraulic_trailer_4.jpeg",
+      "/Product_images/tractor-hydrolic-tipping-trailer-trolley.png"
     ],
     features: [
       "Heavy duty ISMB channel chassis beams & 4mm chequered floor sheet",
@@ -48,14 +49,16 @@ export const productsData = [
     categoryName: "Primary Tillage",
     badge: "Bestseller / मुख्य उत्पादने",
     tractorHp: "40 HP - 75 HP",
-    image: "/Padma Shri Photo Gallery/hydraulic-reversible-plough-gallery-01.png",
+    image: "/Product_images/reversible_plough_1.jpeg",
     images: [
-      "/Padma Shri Photo Gallery/hydraulic-reversible-plough-gallery-01.png",
-      "/Padma Shri Photo Gallery/2-bottom-reversible-mb-plough-gallery-01.png",
-      "/Padma Shri Photo Gallery/3-bottom-reversible-mb-plough-gallery-01.png",
-      "/Padma Shri Photo Gallery/plough-attached-to-tractor-gallery-01.png",
-      "/Padma Shri Photo Gallery/plough-frame-and-shares-gallery-01.png",
-      "/Padma Shri Photo Gallery/reversible-mechanism-detail-gallery-01.png"
+      "/Product_images/reversible_plough_1.jpeg",
+      "/Product_images/reversible_plough_2.jpeg",
+      "/Product_images/reversible_plough_3.jpeg",
+      "/Product_images/reversible_plough_4.jpeg",
+      "/Product_images/reversible_plough_5.jpeg",
+      "/Product_images/reversible_plough_6.jpeg",
+      "/Product_images/reversible_plough_7.jpeg",
+      "/Product_images/reversible_plough_8.jpeg"
     ],
     features: [
       "Primary tillage implement for deep soil turning, lifting & inversion",
@@ -88,12 +91,12 @@ export const productsData = [
     categoryName: "Primary Tillage",
     badge: "Economical / साधा नांगर",
     tractorHp: "25 HP - 45 HP",
-    image: "/Product_images/fix-mouldboard-plow.png",
+    image: "/Product_images/fixed_plough_1.jpeg",
     images: [
-      "/Product_images/fix-mouldboard-plow.png",
-      "/Padma Shri Photo Gallery/2-bottom-fixed-mb-plough-gallery-01.png",
-      "/Padma Shri Photo Gallery/fixed-mb-plough-front-linkage-gallery-01.png",
-      "/Padma Shri Photo Gallery/fixed-plough-stock-gallery-01.png"
+      "/Product_images/fixed_plough_1.jpeg",
+      "/Product_images/fixed_plough_2.jpeg",
+      "/Product_images/fixed_plough_3.jpeg",
+      "/Product_images/fix-mouldboard-plow.png"
     ],
     features: [
       "Traditional fixed direction deep plowing implement",
@@ -125,12 +128,12 @@ export const productsData = [
     categoryName: "Inter-Cultivation",
     badge: "Sugarcane Special / ऊस लागवड",
     tractorHp: "25 HP - 50 HP",
-    image: "/Product_images/sugarcane-ridger-and-inter-row-cultivator.png",
+    image: "/Product_images/sugarcane_ridger_1.jpeg",
     images: [
-      "/Product_images/sugarcane-ridger-and-inter-row-cultivator.png",
-      "/Padma Shri Photo Gallery/sugarcane-inter-row-cultivator-gallery-01.png",
-      "/Padma Shri Photo Gallery/sugarcane-ridger-field-operation-gallery-01.png",
-      "/Padma Shri Photo Gallery/sugarcane-furrowing-wings-gallery-01.png"
+      "/Product_images/sugarcane_ridger_1.jpeg",
+      "/Product_images/sugarcane_ridger_2.jpeg",
+      "/Product_images/sugarcane_ridger_3.jpeg",
+      "/Product_images/sugarcane-ridger-and-inter-row-cultivator.png"
     ],
     features: [
       "Specially built for sugarcane inter-row operations & furrow creation",
@@ -162,13 +165,13 @@ export const productsData = [
     categoryName: "Bed & Channel Prep",
     badge: "Popular / बांदणी यंत्र",
     tractorHp: "25 HP - 55 HP",
-    image: "/Product_images/tractor-ridger-build-maker-3-row-furrrower.png",
+    image: "/Product_images/tractor_ridger_bundmaker_1.jpeg",
     images: [
-      "/Product_images/tractor-ridger-build-maker-3-row-furrrower.png",
-      "/Padma Shri Photo Gallery/3-row-tractor-ridger-gallery-01.png",
-      "/Padma Shri Photo Gallery/2-row-adjustable-ridger.png",
-      "/Padma Shri Photo Gallery/bund-maker-side-wings-gallery-01.png",
-      "/Padma Shri Photo Gallery/bund-maker-frame-type.png"
+      "/Product_images/tractor_ridger_bundmaker_1.jpeg",
+      "/Product_images/tractor_ridger_bundmaker_2.jpeg",
+      "/Product_images/tractor_ridger_bundmaker_3.jpeg",
+      "/Product_images/tractor_ridger_bundmaker_4.jpeg",
+      "/Product_images/tractor-ridger-build-maker-3-row-furrrower.png"
     ],
     features: [
       "Creates ridges, furrows & raised beds for cotton, potato & vegetables",
@@ -200,10 +203,12 @@ export const productsData = [
     categoryName: "Secondary Tillage",
     badge: "Weed Control / डकफूट कोळपे",
     tractorHp: "24 HP - 55 HP",
-    image: "/Padma Shri Photo Gallery/5-tine-duckfoot-cultivator.png",
+    image: "/Product_images/duckfoot_cultivator_1.jpeg",
     images: [
-      "/Padma Shri Photo Gallery/5-tine-duckfoot-cultivator.png",
-      "/Padma Shri Photo Gallery/duckfoot-sweep-cultivator.png"
+      "/Product_images/duckfoot_cultivator_1.jpeg",
+      "/Product_images/duckfoot_cultivator_2.jpeg",
+      "/Product_images/duckfoot_cultivator_3.jpeg",
+      "/Product_images/duckfoot_cultivator_4.jpeg"
     ],
     features: [
       "Wide triangular duckfoot blades slice weeds at shallow depth",
@@ -235,11 +240,11 @@ export const productsData = [
     categoryName: "Sowing & Planting",
     badge: "Automatic Sowing / पेरणी यंत्र",
     tractorHp: "35 HP - 55 HP",
-    image: "/Product_images/seed-cum-fertilizer-drill-machine.png",
+    image: "/Product_images/seed_fertilizer_drill_1.jpeg",
     images: [
-      "/Product_images/seed-cum-fertilizer-drill-machine.png",
-      "/Padma Shri Photo Gallery/tractor-mounted-seed-drill.png",
-      "/Padma Shri Photo Gallery/dual-chamber-seed-fertilizer-box.png"
+      "/Product_images/seed_fertilizer_drill_1.jpeg",
+      "/Product_images/seed_fertilizer_drill_2.jpeg",
+      "/Product_images/seed-cum-fertilizer-drill-machine.png"
     ],
     features: [
       "Simultaneous sowing of seeds & fertilizer placement at precise depth",
@@ -271,11 +276,12 @@ export const productsData = [
     categoryName: "Land Development",
     badge: "Precision Leveling / लेव्हलर",
     tractorHp: "30 HP - 60 HP",
-    image: "/Product_images/heavy-duty-and-leveler-scaraper-blade.png",
+    image: "/Product_images/land_leveler_blade_1.jpeg",
     images: [
-      "/Product_images/heavy-duty-and-leveler-scaraper-blade.png",
-      "/Padma Shri Photo Gallery/heavy-duty-land-leveler-blade.png",
-      "/Padma Shri Photo Gallery/land-leveler-turntable-index-plate.png"
+      "/Product_images/land_leveler_blade_1.jpeg",
+      "/Product_images/land_leveler_blade_2.jpeg",
+      "/Product_images/land_leveler_blade_3.jpeg",
+      "/Product_images/heavy-duty-and-leveler-scaraper-blade.png"
     ],
     features: [
       "High strength curved steel cutting blade for pushing & pulling earth",
