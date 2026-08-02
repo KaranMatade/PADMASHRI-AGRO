@@ -490,6 +490,16 @@ input,textarea,select { font-family: var(--font-body); }
   align-items: center;
 }
 
+/* When no right image card — content is centered & wider */
+.hero-single-col {
+  grid-template-columns: 1fr !important;
+  max-width: 780px;
+  text-align: left;
+}
+.hero-single-col .hero-stats {
+  max-width: 480px;
+}
+
 .hero-tag {
   display: inline-flex;
   align-items: center;

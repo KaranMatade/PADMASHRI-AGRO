@@ -11,7 +11,7 @@ export default function HeroSection({ lang, onOpenInquiry }) {
 
   return (
     <section id="home" className="hero-section">
-      <div className="container hero-grid">
+      <div className="container hero-grid hero-single-col">
         <div className="hero-content">
           <div className="hero-tag">
             <Shield size={16} />
@@ -85,23 +85,6 @@ export default function HeroSection({ lang, onOpenInquiry }) {
           </div>
         </div>
 
-        {/* Hero Right Visual — clean product image card, no IndiaMART overlay */}
-        <div className="hero-visual">
-          <div className="hero-card-box">
-            <div className="hero-image-wrapper">
-              <img 
-                src="/Product_images/reversible_plough_2.jpeg" 
-                alt="Padmashri 2 Bottom Hydraulic Reversible Plough" 
-              />
-            </div>
-            <div className="hero-badge-overlay">
-              <div>
-                <h4>{lang === 'mr' ? '२ बॉटम हायड्रोलिक रिव्हर्सिबल नांगर' : '2 Bottom Hydraulic Reversible Plough'}</h4>
-                <p>{lang === 'mr' ? '१२", १४", १६" इंच | रु. ८२,००० ते ९५,०००/-' : '12, 14, 16 inch | ₹82,000 to ₹95,000'}</p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
