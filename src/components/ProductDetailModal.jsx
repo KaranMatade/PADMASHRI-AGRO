@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, CheckCircle2, MessageCircle, PhoneCall, ShieldCheck, Wrench, Layers, Tag, Check, Sparkles, Award } from 'lucide-react';
+import { X, CheckCircle2, MessageCircle, PhoneCall, ShieldCheck, Wrench, Layers, Tag, Check, Sparkles, Award, Cpu, FileText, CheckSquare } from 'lucide-react';
 import { mainContact } from '../data/branchesData';
 
 export default function ProductDetailModal({ product, lang, onClose, onOpenInquiry }) {
@@ -33,7 +33,6 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
       <div 
         className="modal-content product-specs-modal" 
         onClick={e => e.stopPropagation()}
-        style={{ maxWidth: '960px', padding: '2rem' }}
       >
         <button 
           className="modal-close-btn" 
@@ -81,16 +80,16 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
 
           {/* Right Column: Product Specs & Size Selector */}
           <div className="modal-right-col">
-            {/* High-Contrast Glassmorphism Category Badges */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
-              <div className="product-card-badge-pill" style={{ position: 'static' }}>
-                <Tag size={13} className="badge-pill-icon" />
+            {/* Category & Verified Badges */}
+            <div className="modal-badges-header">
+              <span className="badge badge-primary">
+                <Tag size={13} />
                 <span>{product.categoryName}</span>
-              </div>
-              <div className="product-card-badge-pill" style={{ position: 'static' }}>
-                <Award size={13} className="badge-pill-icon" />
+              </span>
+              <span className="badge badge-amber">
+                <Award size={13} />
                 <span>{product.badge}</span>
-              </div>
+              </span>
             </div>
 
             <h2 className="modal-product-title">{product.name}</h2>
@@ -122,12 +121,12 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
             </div>
 
             {/* Dynamic Price Display */}
-            <div className="product-price-tag dynamic-modal-price">
-              <div>
-                <div className="price-label">
+            <div className="modal-price-box">
+              <div className="price-info-group">
+                <span className="price-label">
                   {lang === 'mr' ? `अंदाजित कारखान्यातील दर (${selectedSize}):` : `Estimated Factory Price for (${selectedSize}):`}
-                </div>
-                <div className="price-value">
+                </span>
+                <div className="price-val">
                   ₹{displayPriceMin.toLocaleString()} - ₹{displayPriceMax.toLocaleString()}/-
                 </div>
               </div>
@@ -136,25 +135,37 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
 
             {/* Key Advantages List */}
             <div className="modal-features-section">
-              <h4>{lang === 'mr' ? 'मुख्य तांत्रिक वैशिष्ट्ये (Key Advantages):' : 'Main Technical Characteristics:'}</h4>
+              <h4 className="modal-section-h4">
+                <CheckSquare size={16} style={{ color: 'var(--primary)' }} />
+                <span>{lang === 'mr' ? 'मुख्य तांत्रिक वैशिष्ट्ये (Key Advantages):' : 'Main Technical Characteristics:'}</span>
+              </h4>
               <ul className="modal-features-list">
                 {(lang === 'mr' ? product.featuresMr : product.features).map((f, i) => (
                   <li key={i}>
-                    <CheckCircle2 size={16} />
+                    <CheckCircle2 size={16} className="feat-check" />
                     <span>{f}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Technical Specs Grid */}
+            {/* Technical Specs Table Grid */}
             <div className="modal-specs-box">
-              <h4>{lang === 'mr' ? 'तांत्रिक माहिती (Technical Specifications):' : 'Technical Specifications:'}</h4>
+              <h4 className="modal-section-h4">
+                <FileText size={16} style={{ color: 'var(--secondary)' }} />
+                <span>{lang === 'mr' ? 'तांत्रिक माहिती (Technical Specifications):' : 'Technical Specifications:'}</span>
+              </h4>
+
               <div className="specs-table-grid">
                 {Object.entries(product.specs).map(([key, val], idx) => (
                   <div key={idx} className="spec-row">
-                    <span className="spec-key">{key}:</span>
-                    <span className="spec-val">{val}</span>
+                    <div className="spec-key-col">
+                      <Cpu size={14} className="spec-icon" />
+                      <span>{key}</span>
+                    </div>
+                    <div className="spec-val-col">
+                      {val}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -166,8 +177,7 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
                 href={whatsappUrl} 
                 target="_blank" 
                 rel="noreferrer" 
-                className="btn-amber"
-                style={{ flex: 1, justifyContent: 'center' }}
+                className="btn-amber modal-btn"
               >
                 <MessageCircle size={18} />
                 <span>{lang === 'mr' ? 'व्हॉट्सॲप ऑर्डर' : 'WhatsApp Order'}</span>
@@ -175,8 +185,7 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
 
               <button 
                 onClick={() => { onClose(); onOpenInquiry(product); }}
-                className="btn-primary" 
-                style={{ flex: 1, justifyContent: 'center' }}
+                className="btn-primary modal-btn" 
               >
                 <PhoneCall size={18} />
                 <span>{lang === 'mr' ? 'कोटेशन मागा' : 'Get Official Quote'}</span>
