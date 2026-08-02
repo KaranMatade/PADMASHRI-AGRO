@@ -455,22 +455,22 @@ input,textarea,select { font-family: var(--font-body); }
   position: relative;
   padding: 3.5rem 0 4rem;
   background:
-    url('/Frontpage_background.png') center center / cover no-repeat;
+    url('/Frontpage_background.png') right center / cover no-repeat;
   overflow: hidden;
   isolation: isolate;
 }
 
-/* Light frosted overlay so text stays crisp over the photo */
+/* Stronger white overlay on left (text area), fades to transparent on right (image area) */
 .hero-section::before {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    105deg,
-    rgba(248, 250, 252, 0.88) 0%,
-    rgba(240, 253, 244, 0.82) 40%,
-    rgba(255, 255, 255, 0.45) 70%,
-    rgba(255, 255, 255, 0.18) 100%
+    100deg,
+    rgba(248, 250, 252, 0.96) 0%,
+    rgba(240, 253, 244, 0.90) 35%,
+    rgba(255, 255, 255, 0.60) 58%,
+    rgba(255, 255, 255, 0.10) 100%
   );
   z-index: 0;
 }
@@ -490,14 +490,17 @@ input,textarea,select { font-family: var(--font-body); }
   align-items: center;
 }
 
-/* When no right image card — content is centered & wider */
+/* When no right image card — content anchored LEFT, occupies left ~55% */
 .hero-single-col {
   grid-template-columns: 1fr !important;
-  max-width: 780px;
+  max-width: 100% !important;
   text-align: left;
 }
+.hero-single-col .hero-content {
+  max-width: 620px;
+}
 .hero-single-col .hero-stats {
-  max-width: 480px;
+  max-width: 520px;
 }
 
 .hero-tag {
