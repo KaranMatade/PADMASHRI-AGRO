@@ -71,7 +71,9 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
       <nav className="navbar">
         <div className="container navbar-inner">
           <a href="#home" className="brand-logo">
-            <div className="brand-icon-box">P</div>
+            <div className="brand-logo-img-wrapper">
+              <img src="/logo.jpeg" alt="Padmashri Agro Logo" className="brand-logo-img" />
+            </div>
             <div className="brand-text">
               <h1>{lang === 'mr' ? 'पद्मश्री ॲग्रो' : 'PADMASHRI AGRO'}</h1>
               <span>{lang === 'mr' ? 'शेती अवजारे • सन १९९८' : 'AGRO MACHINERY • EST. 1998'}</span>

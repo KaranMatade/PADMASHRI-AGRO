@@ -1,241 +1,220 @@
 export const galleryImages = [
-  // 1. Hydraulic Trailer
+  // 1. Hydraulic Trailer Gallery
   {
     id: 1,
-    url: "/Product_images/hydraulic_trailer_1.jpeg",
+    url: "/Padma Shri Photo Gallery/tractor-hydraulic-tipping-trailer-gallery-01.png",
     title: "Tractor Hydraulic Tipping Trailer",
     category: "haulage",
     caption: "Heavy Duty 5-Ton Hydraulic Tipping Trailer / Trolley"
   },
   {
     id: 2,
-    url: "/Product_images/hydraulic_trailer_2.jpeg",
-    title: "Tractor Trailer Chassis View",
-    category: "haulage",
-    caption: "ISMB Heavy Channel Chassis & Axle Assembly"
-  },
-  {
-    id: 3,
-    url: "/Product_images/hydraulic_trailer_3.jpeg",
+    url: "/Padma Shri Photo Gallery/hydraulic-trailer-dump-jack-gallery-01.png",
     title: "Hydraulic Trailer Dump Jack",
     category: "haulage",
     caption: "Heavy Duty Hydraulic Tipping Cylinder Mechanism"
   },
   {
-    id: 4,
-    url: "/Product_images/hydraulic_trailer_4.jpeg",
-    title: "Finished Tractor Trailer Ready for Delivery",
+    id: 3,
+    url: "/Padma Shri Photo Gallery/padmashree-heavy-duty-farm-trailer-gallery-01.png",
+    title: "Finished Heavy Duty Farm Trailer",
     category: "haulage",
     caption: "Factory Finished Trailer in Agriculture Blue Paint"
   },
 
-  // 2. Reversible MB Plough
+  // 2. Reversible MB Plough Gallery
   {
-    id: 5,
-    url: "/Product_images/reversible_plough_1.jpeg",
+    id: 4,
+    url: "/Padma Shri Photo Gallery/2-bottom-reversible-mb-plough-gallery-01.png",
     title: "2 Bottom Reversible MB Plough",
     category: "ploughs",
     caption: "2 Bottom Reversible Mouldboard Plough"
   },
   {
+    id: 5,
+    url: "/Padma Shri Photo Gallery/3-bottom-reversible-mb-plough-gallery-01.png",
+    title: "3 Bottom Reversible MB Plough",
+    category: "ploughs",
+    caption: "3 Bottom MB Plough for High HP Tractors"
+  },
+  {
     id: 6,
-    url: "/Product_images/reversible_plough_2.jpeg",
+    url: "/Padma Shri Photo Gallery/hydraulic-reversible-plough-gallery-01.png",
     title: "Hydraulic Reversible Plough",
     category: "ploughs",
     caption: "Heavy Duty Hydraulic Reversible Plough with Dual Cylinders"
   },
   {
     id: 7,
-    url: "/Product_images/reversible_plough_3.jpeg",
-    title: "3 Bottom Reversible MB Plough",
-    category: "ploughs",
-    caption: "3 Bottom MB Plough for High HP Tractors"
-  },
-  {
-    id: 8,
-    url: "/Product_images/reversible_plough_4.jpeg",
+    url: "/Padma Shri Photo Gallery/plough-attached-to-tractor-gallery-01.png",
     title: "Plough Attached to Tractor",
     category: "ploughs",
     caption: "Hydraulic Reversible Plough connected to Tractor Linkage"
   },
   {
-    id: 9,
-    url: "/Product_images/reversible_plough_5.jpeg",
+    id: 8,
+    url: "/Padma Shri Photo Gallery/plough-frame-and-shares-gallery-01.png",
     title: "Plough Frame & Shares",
     category: "ploughs",
     caption: "Forged High-Carbon Steel Plough Share Points"
   },
   {
-    id: 10,
-    url: "/Product_images/reversible_plough_6.jpeg",
+    id: 9,
+    url: "/Padma Shri Photo Gallery/reversible-mechanism-detail-gallery-01.png",
     title: "Reversible Mechanism Detail",
     category: "ploughs",
     caption: "Smooth Reversing Pivot Assembly"
   },
   {
-    id: 11,
-    url: "/Product_images/reversible_plough_7.jpeg",
-    title: "Hydraulic Hose & Valve Connection",
-    category: "ploughs",
-    caption: "Dual Wire High Pressure Hydraulic Hose Lines"
-  },
-  {
-    id: 12,
-    url: "/Product_images/reversible_plough_8.jpeg",
+    id: 10,
+    url: "/Padma Shri Photo Gallery/reversible-plow-side-profile-gallery-01.png",
     title: "Reversible Plough Side Profile",
     category: "ploughs",
     caption: "14-Inch Mouldboard Curve for Soil Inversion"
   },
-
-  // 3. Fixed MB Plough
   {
-    id: 13,
-    url: "/Product_images/fixed_plough_1.jpeg",
+    id: 11,
+    url: "/Padma Shri Photo Gallery/hydraulic-hose-and-valve-connection-01.png",
+    title: "Hydraulic Hose & Valve Connection",
+    category: "ploughs",
+    caption: "Dual Wire High Pressure Hydraulic Hose Lines"
+  },
+
+  // 3. Fixed MB Plough Gallery
+  {
+    id: 12,
+    url: "/Padma Shri Photo Gallery/2-bottom-fixed-mb-plough-gallery-01.png",
     title: "2 Bottom Fixed MB Plough",
     category: "ploughs",
     caption: "2 Bottom Fixed Mouldboard Plough (साधा नांगर)"
   },
   {
-    id: 14,
-    url: "/Product_images/fixed_plough_2.jpeg",
+    id: 13,
+    url: "/Padma Shri Photo Gallery/fixed-mb-plough-front-linkage-gallery-01.png",
     title: "Fixed MB Plough Front Linkage",
     category: "ploughs",
     caption: "Category II Tractor Hitch Mount"
   },
   {
-    id: 15,
-    url: "/Product_images/fixed_plough_3.jpeg",
+    id: 14,
+    url: "/Padma Shri Photo Gallery/fixed-plough-stock-gallery-01.png",
     title: "Fixed Plough Stock",
     category: "ploughs",
     caption: "Finished Fixed MB Ploughs at Workshop"
   },
 
-  // 4. Sugarcane Ridger
+  // 4. Sugarcane Ridger Gallery
   {
-    id: 16,
-    url: "/Product_images/sugarcane_ridger_1.jpeg",
+    id: 15,
+    url: "/Padma Shri Photo Gallery/sugarcane-inter-row-cultivator-gallery-01.png",
     title: "Sugarcane Inter-Row Cultivator",
     category: "tillage",
     caption: "Sugarcane Ridger / Earthing-up Cultivator (उसाची बांधणी)"
   },
   {
-    id: 17,
-    url: "/Product_images/sugarcane_ridger_2.jpeg",
+    id: 16,
+    url: "/Padma Shri Photo Gallery/sugarcane-ridger-field-operation-gallery-01.png",
     title: "Sugarcane Ridger Field Operation",
     category: "tillage",
     caption: "In-field sugarcane furrowing and root earthing-up"
   },
   {
-    id: 18,
-    url: "/Product_images/sugarcane_ridger_3.jpeg",
+    id: 17,
+    url: "/Padma Shri Photo Gallery/sugarcane-furrowing-wings-gallery-01.png",
     title: "Sugarcane Furrowing Wings",
     category: "tillage",
     caption: "Screw adjustable earthing wings detail"
   },
 
-  // 5. Tractor Ridger & Bund Maker
+  // 5. Tractor Ridger & Bund Maker Gallery
   {
-    id: 19,
-    url: "/Product_images/tractor_ridger_bundmaker_1.jpeg",
+    id: 18,
+    url: "/Padma Shri Photo Gallery/3-row-tractor-ridger-gallery-01.png",
     title: "3-Row Tractor Ridger",
     category: "tillage",
     caption: "3-Row Tractor Ridger / Bund Maker / Furrower"
   },
   {
+    id: 19,
+    url: "/Padma Shri Photo Gallery/3-row-ridger-bund-maker.png",
+    title: "3-Row Ridger & Bund Maker",
+    category: "tillage",
+    caption: "Heavy Duty Ridger for Row Crop Channel Prep"
+  },
+  {
     id: 20,
-    url: "/Product_images/tractor_ridger_bundmaker_2.jpeg",
-    title: "Bund Maker Side Wings",
-    category: "tillage",
-    caption: "Heavy Duty Side Wings for Field Bund Creation"
-  },
-  {
-    id: 21,
-    url: "/Product_images/tractor_ridger_bundmaker_3.jpeg",
-    title: "Ridger Share Points",
-    category: "tillage",
-    caption: "Forged Share Points for Easy Soil Penetration"
-  },
-  {
-    id: 22,
-    url: "/Product_images/tractor_ridger_bundmaker_4.jpeg",
+    url: "/Padma Shri Photo Gallery/2-row-adjustable-ridger.png",
     title: "2-Row Adjustable Ridger",
     category: "tillage",
     caption: "2-Row Adjustable Ridger for Row Crop Planting"
   },
   {
-    id: 23,
-    url: "/Product_images/tractor_ridger_bundmaker_5.jpeg",
-    title: "Bund Maker Frame View",
+    id: 21,
+    url: "/Padma Shri Photo Gallery/bund-maker-side-wings-gallery-01.png",
+    title: "Bund Maker Side Wings",
+    category: "tillage",
+    caption: "Heavy Duty Side Wings for Field Bund Creation"
+  },
+  {
+    id: 22,
+    url: "/Padma Shri Photo Gallery/bund-maker-frame-type.png",
+    title: "Bund Maker Frame Type",
     category: "tillage",
     caption: "Reinforced Box Frame Construction"
   },
 
-  // 6. Duckfoot Cultivator
+  // 6. Duckfoot Cultivator Gallery
   {
-    id: 24,
-    url: "/Product_images/duckfoot_cultivator_1.jpeg",
+    id: 23,
+    url: "/Padma Shri Photo Gallery/5-tine-duckfoot-cultivator.png",
     title: "5-Tine Duckfoot Cultivator",
     category: "tillage",
     caption: "5-Tine Duckfoot Cultivator / Sweep Cultivator (डकफूट कोळपे)"
   },
   {
-    id: 25,
-    url: "/Product_images/duckfoot_cultivator_2.jpeg",
-    title: "Duckfoot Sweep Blades",
+    id: 24,
+    url: "/Padma Shri Photo Gallery/duckfoot-sweep-cultivator.png",
+    title: "Duckfoot Sweep Cultivator",
     category: "tillage",
     caption: "Triangular Sweep Blades for Shallow Weed Slicing"
   },
-  {
-    id: 26,
-    url: "/Product_images/duckfoot_cultivator_3.jpeg",
-    title: "Duckfoot Cultivator Tine Detail",
-    category: "tillage",
-    caption: "Forged Tine Mounts for Stony Soil Resilience"
-  },
-  {
-    id: 27,
-    url: "/Product_images/duckfoot_cultivator_4.jpeg",
-    title: "Duckfoot Cultivator Stock",
-    category: "tillage",
-    caption: "Finished Duckfoot Cultivators ready for delivery"
-  },
 
-  // 7. Seed cum Fertilizer Drill
+  // 7. Seed cum Fertilizer Drill Gallery
   {
-    id: 28,
-    url: "/Product_images/seed_fertilizer_drill_1.jpeg",
-    title: "Seed Cum Fertilizer Drill Machine",
+    id: 25,
+    url: "/Padma Shri Photo Gallery/tractor-mounted-seed-drill.png",
+    title: "Tractor Mounted Seed Drill",
     category: "sowing",
     caption: "Automatic Seed cum Fertilizer Drill Machine"
   },
   {
-    id: 29,
-    url: "/Product_images/seed_fertilizer_drill_2.jpeg",
-    title: "Seed Drill Metering Box",
+    id: 26,
+    url: "/Padma Shri Photo Gallery/dual-chamber-seed-fertilizer-box.png",
+    title: "Dual Chamber Seed & Fertilizer Box",
     category: "sowing",
-    caption: "Dual Chamber Seed & Fertilizer Metering Box"
+    caption: "Metering Box for Seed & Fertilizer Sowing"
   },
 
-  // 8. Land Leveler Blade
+  // 8. Land Leveler Blade Gallery
   {
-    id: 30,
-    url: "/Product_images/land_leveler_blade_1.jpeg",
+    id: 27,
+    url: "/Padma Shri Photo Gallery/heavy-duty-land-leveler-blade.png",
     title: "Heavy Duty Land Leveler Blade",
     category: "tillage",
     caption: "Tractor Mounted Land Leveler / Scraper Blade"
   },
   {
-    id: 31,
-    url: "/Product_images/land_leveler_blade_2.jpeg",
-    title: "Land Leveler Turntable Index Plate",
-    category: "tillage",
-    caption: "360-Degree Rotation Index Turntable for Pushing/Pulling Soil"
-  },
-  {
-    id: 32,
-    url: "/Product_images/land_leveler_blade_3.jpeg",
+    id: 28,
+    url: "/Padma Shri Photo Gallery/finished-land-leveler-blade.png",
     title: "Finished Land Leveler Blade",
     category: "tillage",
     caption: "7-Feet Land Leveler Blade in Agriculture Green"
+  },
+  {
+    id: 29,
+    url: "/Padma Shri Photo Gallery/land-leveler-turntable-index-plate.png",
+    title: "Land Leveler Turntable Index Plate",
+    category: "tillage",
+    caption: "360-Degree Rotation Index Turntable for Pushing/Pulling Soil"
   }
 ];
