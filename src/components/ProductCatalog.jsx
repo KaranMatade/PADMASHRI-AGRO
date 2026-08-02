@@ -6,7 +6,7 @@ import { mainContact } from '../data/branchesData';
 export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry }) {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState('b2b'); // 'b2b' (IndiaMART/Justdial style) or 'grid'
+  const [viewMode, setViewMode] = useState('grid'); // Default to e-commerce Flipkart/Amazon grid view
 
   const categories = [
     { id: 'all', nameEn: 'All Implements (8)', nameMr: 'सर्व अवजारे (८)' },
@@ -55,7 +55,7 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
           </p>
         </div>
 
-        {/* Top Horizontal Quick Highlights Rail (Justdial / IndiaMART Recommended Products Bar) */}
+        {/* Top Horizontal Quick Highlights Rail */}
         <div className="mobile-recommended-rail-container">
           <div className="rail-header">
             <span className="rail-title">
@@ -67,7 +67,7 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
             {productsData.slice(0, 5).map(prod => (
               <div key={prod.id} className="rail-card" onClick={() => onSelectProduct(prod)}>
                 <div className="rail-card-img-wrapper">
-                  <img src={prod.image} alt={prod.name} />
+                  <img src={prod.image} alt={prod.name} loading="lazy" />
                   <span className="rail-badge">{prod.badge.split('/')[0]}</span>
                 </div>
                 <div className="rail-card-info">
@@ -113,191 +113,153 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
             {/* View Mode Toggle Button */}
             <div className="view-mode-toggle">
               <button 
-                className={`view-btn ${viewMode === 'b2b' ? 'active' : ''}`}
-                onClick={() => setViewMode('b2b')}
-                title="B2B List View (IndiaMART/Justdial Style)"
-              >
-                <List size={18} />
-                <span className="view-btn-text">{lang === 'mr' ? 'यादी' : 'List'}</span>
-              </button>
-              <button 
                 className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
                 onClick={() => setViewMode('grid')}
-                title="Grid View"
+                title="E-Commerce Grid View"
               >
                 <Grid size={18} />
-                <span className="view-btn-text">{lang === 'mr' ? 'कार्ड' : 'Grid'}</span>
+                <span className="view-btn-text">{lang === 'mr' ? 'कार्ड (Grid)' : 'Grid'}</span>
+              </button>
+              <button 
+                className={`view-btn ${viewMode === 'b2b' ? 'active' : ''}`}
+                onClick={() => setViewMode('b2b')}
+                title="B2B List View"
+              >
+                <List size={18} />
+                <span className="view-btn-text">{lang === 'mr' ? 'यादी (List)' : 'List'}</span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* MAIN B2B LISTING CARDS / GRID CONTAINER */}
-        <div className={viewMode === 'b2b' ? 'b2b-list-container' : 'product-grid'}>
+        {/* MAIN E-COMMERCE GRID / B2B LIST CONTAINER */}
+        <div className={viewMode === 'grid' ? 'product-grid' : 'b2b-list-container'}>
           {filteredProducts.map(product => {
-            if (viewMode === 'b2b') {
+            if (viewMode === 'grid') {
               return (
-                <div key={product.id} className="b2b-product-card">
-                  {/* Manufacturer Header Bar */}
-                  <div className="b2b-card-header">
-                    <div className="b2b-header-left">
-                      <span className="b2b-verified-tag">
-                        <ShieldCheck size={14} />
-                        <span>VERIFIED MANUFACTURER</span>
-                      </span>
-                      <span className="b2b-rating-pill">
-                        <Star size={13} fill="#f59e0b" color="#f59e0b" />
-                        <span>4.9 (150+ Reviews)</span>
-                      </span>
+                <div key={product.id} className="product-card">
+                  <div className="product-card-image-box" onClick={() => onSelectProduct(product)}>
+                    <img src={product.image} alt={product.name} loading="lazy" />
+                    <div className="product-card-badge-pill">
+                      <Award size={13} />
+                      <span>{product.badge}</span>
                     </div>
-                    <span className="b2b-badge-pill">{product.badge}</span>
                   </div>
 
-                  {/* Card Content Row */}
-                  <div className="b2b-card-body">
-                    {/* Product Photo Box */}
-                    <div className="b2b-img-box" onClick={() => onSelectProduct(product)}>
-                      <img src={product.image} alt={product.name} loading="lazy" />
-                      <div className="b2b-img-zoom-tag">
-                        <Eye size={13} />
-                        <span>{lang === 'mr' ? 'झूम पहा' : 'View'}</span>
-                      </div>
-                    </div>
+                  <div className="product-card-body">
+                    <h3 className="product-title" onClick={() => onSelectProduct(product)}>{product.name}</h3>
+                    <p className="product-title-mr">{product.nameMr}</p>
 
-                    {/* Product Info Col */}
-                    <div className="b2b-info-col">
-                      <h3 className="b2b-title" onClick={() => onSelectProduct(product)}>
-                        {product.name}
-                      </h3>
-                      <p className="b2b-title-mr">{product.nameMr}</p>
-
-                      {/* Price Pill */}
-                      <div className="b2b-price-box">
-                        <span className="b2b-price-label">{lang === 'mr' ? 'कारखान्यातील थेट दर:' : 'Starts From:'}</span>
-                        <div className="b2b-price-val">
+                    <div className="product-price-tag">
+                      <div>
+                        <div className="price-label">{lang === 'mr' ? 'कारखान्यातील दर:' : 'Factory Price:'}</div>
+                        <div className="price-value">
                           ₹{product.priceMin.toLocaleString()} - ₹{product.priceMax.toLocaleString()}/-
                         </div>
                       </div>
-
-                      {/* Variant Chips */}
-                      <div className="b2b-variants-row">
-                        <span className="variant-label">{lang === 'mr' ? 'साईज:' : 'Sizes:'}</span>
-                        {product.sizes.map((sz, i) => (
-                          <span key={i} className="b2b-size-chip">{sz}</span>
-                        ))}
-                      </div>
-
-                      {/* Short Highlights */}
-                      <div className="b2b-highlights-list">
-                        {(lang === 'mr' ? product.featuresMr : product.features).slice(0, 2).map((ft, i) => (
-                          <div key={i} className="b2b-feat-item">
-                            <CheckCircle2 size={14} className="b2b-check-icon" />
-                            <span>{ft}</span>
-                          </div>
-                        ))}
-                      </div>
+                      <Tag size={16} style={{ color: 'var(--secondary)' }} />
                     </div>
-                  </div>
 
-                  {/* Dual Action Buttons (Justdial / IndiaMART Style) */}
-                  <div className="b2b-card-actions">
-                    <a
-                      href={`tel:${mainContact.phone}`}
-                      className="b2b-btn-call"
-                    >
-                      <PhoneCall size={16} />
-                      <span>{lang === 'mr' ? 'कॉल करा' : 'Call Now'}</span>
-                    </a>
+                    <div className="product-card-footer">
+                      <button
+                        id={`btn-details-${product.id}`}
+                        className="btn-card-details"
+                        onClick={() => onSelectProduct(product)}
+                      >
+                        <Eye size={14} />
+                        <span>{lang === 'mr' ? 'तपशील' : 'Specs'}</span>
+                      </button>
 
-                    <button
-                      className="b2b-btn-specs"
-                      onClick={() => onSelectProduct(product)}
-                    >
-                      <Eye size={16} />
-                      <span>{lang === 'mr' ? 'तपशील' : 'Specs'}</span>
-                    </button>
-
-                    <a
-                      href={getWhatsAppMessage(product)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="b2b-btn-quote"
-                    >
-                      <MessageCircle size={16} />
-                      <span>{lang === 'mr' ? 'ऑफर दर मागा' : 'Get Best Price'}</span>
-                    </a>
+                      <a
+                        id={`btn-wa-${product.id}`}
+                        href={getWhatsAppMessage(product)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn-card-quote"
+                      >
+                        <MessageCircle size={14} />
+                        <span>{lang === 'mr' ? 'ऑर्डर' : 'Quote'}</span>
+                      </a>
+                    </div>
                   </div>
                 </div>
               );
             }
 
-            // Standard Grid Card View
+            // B2B Row Card View
             return (
-              <div key={product.id} className="product-card">
-                <div className="product-card-image-box">
-                  <img src={product.image} alt={product.name} loading="lazy" />
-                  <div className="product-card-badge-pill">
-                    <Award size={14} className="badge-pill-icon" />
-                    <span>{product.badge}</span>
+              <div key={product.id} className="b2b-product-card">
+                <div className="b2b-card-header">
+                  <div className="b2b-header-left">
+                    <span className="b2b-verified-tag">
+                      <ShieldCheck size={14} />
+                      <span>VERIFIED MANUFACTURER</span>
+                    </span>
+                    <span className="b2b-rating-pill">
+                      <Star size={13} fill="#f59e0b" color="#f59e0b" />
+                      <span>4.9 (150+ Reviews)</span>
+                    </span>
                   </div>
+                  <span className="b2b-badge-pill">{product.badge}</span>
                 </div>
 
-                <div className="product-card-body">
-                  <h3 className="product-title">{product.name}</h3>
-                  <p className="product-title-mr">{product.nameMr}</p>
-
-                  <div className="product-sizes-row">
-                    <div className="sizes-row-header">
-                      <SlidersHorizontal size={13} />
-                      <span>{lang === 'mr' ? 'उपलब्ध साईज:' : 'Available Variants:'}</span>
-                    </div>
-                    <div className="sizes-chips-group">
-                      {product.sizes.map((sz, idx) => (
-                        <span key={idx} className="size-chip-item">{sz}</span>
-                      ))}
+                <div className="b2b-card-body">
+                  <div className="b2b-img-box" onClick={() => onSelectProduct(product)}>
+                    <img src={product.image} alt={product.name} loading="lazy" />
+                    <div className="b2b-img-zoom-tag">
+                      <Eye size={13} />
+                      <span>{lang === 'mr' ? 'झूम पहा' : 'View'}</span>
                     </div>
                   </div>
 
-                  <div className="product-price-tag">
-                    <div>
-                      <div className="price-label">{lang === 'mr' ? 'अंदाजे कारखान्यातील किंमत' : 'Estimated Factory Price'}</div>
-                      <div className="price-value">
+                  <div className="b2b-info-col">
+                    <h3 className="b2b-title" onClick={() => onSelectProduct(product)}>
+                      {product.name}
+                    </h3>
+                    <p className="b2b-title-mr">{product.nameMr}</p>
+
+                    <div className="b2b-price-box">
+                      <span className="b2b-price-label">{lang === 'mr' ? 'कारखान्यातील थेट दर:' : 'Starts From:'}</span>
+                      <div className="b2b-price-val">
                         ₹{product.priceMin.toLocaleString()} - ₹{product.priceMax.toLocaleString()}/-
                       </div>
                     </div>
-                    <Tag size={20} style={{ color: 'var(--secondary)' }} />
+
+                    <div className="b2b-variants-row">
+                      <span className="variant-label">{lang === 'mr' ? 'साईज:' : 'Sizes:'}</span>
+                      {product.sizes.map((sz, i) => (
+                        <span key={i} className="b2b-size-chip">{sz}</span>
+                      ))}
+                    </div>
                   </div>
+                </div>
 
-                  <ul className="product-features-list">
-                    {(lang === 'mr' ? product.featuresMr : product.features).slice(0, 3).map((feat, i) => (
-                      <li key={i} className="product-feature-item">
-                        <CheckCircle2 size={16} />
-                        <span>{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
+                <div className="b2b-card-actions">
+                  <a
+                    href={`tel:${mainContact.phone}`}
+                    className="b2b-btn-call"
+                  >
+                    <PhoneCall size={16} />
+                    <span>{lang === 'mr' ? 'कॉल करा' : 'Call Now'}</span>
+                  </a>
 
-                  <div className="product-card-footer">
-                    <button
-                      id={`btn-details-${product.id}`}
-                      className="btn-card-details"
-                      onClick={() => onSelectProduct(product)}
-                    >
-                      <Eye size={16} />
-                      <span>{lang === 'mr' ? 'तपशील (Specs)' : 'View Specs'}</span>
-                    </button>
+                  <button
+                    className="b2b-btn-specs"
+                    onClick={() => onSelectProduct(product)}
+                  >
+                    <Eye size={16} />
+                    <span>{lang === 'mr' ? 'तपशील' : 'Specs'}</span>
+                  </button>
 
-                    <a
-                      id={`btn-wa-${product.id}`}
-                      href={getWhatsAppMessage(product)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="btn-card-quote"
-                    >
-                      <MessageCircle size={16} />
-                      <span>{lang === 'mr' ? 'ऑर्डर करा' : 'WhatsApp'}</span>
-                    </a>
-                  </div>
+                  <a
+                    href={getWhatsAppMessage(product)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="b2b-btn-quote"
+                  >
+                    <MessageCircle size={16} />
+                    <span>{lang === 'mr' ? 'ऑफर दर मागा' : 'Get Best Price'}</span>
+                  </a>
                 </div>
               </div>
             );
