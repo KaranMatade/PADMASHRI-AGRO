@@ -15,6 +15,15 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
 
   return (
     <header className="header-wrapper">
+      {/* Dark Backdrop Overlay on mobile when menu is open */}
+      {mobileMenuOpen && (
+        <div 
+          className="nav-backdrop" 
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Top Contact Bar (Desktop Only) */}
       <div className="top-bar">
         <div className="container top-bar-inner">

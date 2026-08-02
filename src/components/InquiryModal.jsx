@@ -73,7 +73,7 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div className="form-two-col">
                 <div className="calc-form-group">
                   <label className="calc-label" style={{ color: 'var(--text-main)' }}>
                     {lang === 'mr' ? '२. मोबाईल नंबर:' : '2. Mobile Number:'}
