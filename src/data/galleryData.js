@@ -136,27 +136,20 @@ export const galleryImages = [
   },
   {
     id: 19,
-    url: "/Padma Shri Photo Gallery/3-row-ridger-bund-maker.png",
-    title: "3-Row Ridger & Bund Maker",
-    category: "tillage",
-    caption: "Heavy Duty Ridger for Row Crop Channel Prep"
-  },
-  {
-    id: 20,
     url: "/Padma Shri Photo Gallery/2-row-adjustable-ridger.png",
     title: "2-Row Adjustable Ridger",
     category: "tillage",
     caption: "2-Row Adjustable Ridger for Row Crop Planting"
   },
   {
-    id: 21,
+    id: 20,
     url: "/Padma Shri Photo Gallery/bund-maker-side-wings-gallery-01.png",
     title: "Bund Maker Side Wings",
     category: "tillage",
     caption: "Heavy Duty Side Wings for Field Bund Creation"
   },
   {
-    id: 22,
+    id: 21,
     url: "/Padma Shri Photo Gallery/bund-maker-frame-type.png",
     title: "Bund Maker Frame Type",
     category: "tillage",
@@ -165,14 +158,14 @@ export const galleryImages = [
 
   // 6. Duckfoot Cultivator Gallery
   {
-    id: 23,
+    id: 22,
     url: "/Padma Shri Photo Gallery/5-tine-duckfoot-cultivator.png",
     title: "5-Tine Duckfoot Cultivator",
     category: "tillage",
     caption: "5-Tine Duckfoot Cultivator / Sweep Cultivator (डकफूट कोळपे)"
   },
   {
-    id: 24,
+    id: 23,
     url: "/Padma Shri Photo Gallery/duckfoot-sweep-cultivator.png",
     title: "Duckfoot Sweep Cultivator",
     category: "tillage",
@@ -181,14 +174,14 @@ export const galleryImages = [
 
   // 7. Seed cum Fertilizer Drill Gallery
   {
-    id: 25,
+    id: 24,
     url: "/Padma Shri Photo Gallery/tractor-mounted-seed-drill.png",
     title: "Tractor Mounted Seed Drill",
     category: "sowing",
     caption: "Automatic Seed cum Fertilizer Drill Machine"
   },
   {
-    id: 26,
+    id: 25,
     url: "/Padma Shri Photo Gallery/dual-chamber-seed-fertilizer-box.png",
     title: "Dual Chamber Seed & Fertilizer Box",
     category: "sowing",
@@ -197,21 +190,14 @@ export const galleryImages = [
 
   // 8. Land Leveler Blade Gallery
   {
-    id: 27,
+    id: 26,
     url: "/Padma Shri Photo Gallery/heavy-duty-land-leveler-blade.png",
     title: "Heavy Duty Land Leveler Blade",
     category: "tillage",
     caption: "Tractor Mounted Land Leveler / Scraper Blade"
   },
   {
-    id: 28,
-    url: "/Padma Shri Photo Gallery/finished-land-leveler-blade.png",
-    title: "Finished Land Leveler Blade",
-    category: "tillage",
-    caption: "7-Feet Land Leveler Blade in Agriculture Green"
-  },
-  {
-    id: 29,
+    id: 27,
     url: "/Padma Shri Photo Gallery/land-leveler-turntable-index-plate.png",
     title: "Land Leveler Turntable Index Plate",
     category: "tillage",

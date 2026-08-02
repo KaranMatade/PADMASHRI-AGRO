@@ -166,7 +166,6 @@ export const productsData = [
     images: [
       "/Product_images/tractor-ridger-build-maker-3-row-furrrower.png",
       "/Padma Shri Photo Gallery/3-row-tractor-ridger-gallery-01.png",
-      "/Padma Shri Photo Gallery/3-row-ridger-bund-maker.png",
       "/Padma Shri Photo Gallery/2-row-adjustable-ridger.png",
       "/Padma Shri Photo Gallery/bund-maker-side-wings-gallery-01.png",
       "/Padma Shri Photo Gallery/bund-maker-frame-type.png"
@@ -277,7 +276,6 @@ export const productsData = [
     images: [
       "/Product_images/heavy-duty-and-leveler-scaraper-blade.png",
       "/Padma Shri Photo Gallery/heavy-duty-land-leveler-blade.png",
-      "/Padma Shri Photo Gallery/finished-land-leveler-blade.png",
       "/Padma Shri Photo Gallery/land-leveler-turntable-index-plate.png"
     ],
     features: [
