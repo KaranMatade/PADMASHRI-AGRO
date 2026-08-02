@@ -43,17 +43,6 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
           </div>
 
           <div className="top-bar-right">
-            <a 
-              href={mainContact.indiaMartUrl} 
-              target="_blank" 
-              rel="noreferrer" 
-              className="badge badge-verified"
-              title="IndiaMART Verified Member"
-            >
-              <ShieldCheck size={14} />
-              <span>IndiaMART Verified</span>
-            </a>
-
             <button 
               id="lang-toggle-btn" 
               onClick={toggleLang} 

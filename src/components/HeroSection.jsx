@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Shield, PhoneCall, MessageCircle, ExternalLink, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Shield, PhoneCall, MessageCircle } from 'lucide-react';
 import { mainContact } from '../data/branchesData';
 
 export default function HeroSection({ lang, onOpenInquiry }) {
@@ -67,21 +67,7 @@ export default function HeroSection({ lang, onOpenInquiry }) {
             </button>
           </div>
 
-          {/* IndiaMART Trust Badge — shown as a proper trust seal below the buttons */}
-          <a
-            href={mainContact.indiaMartUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="indiamart-trust-badge"
-            title="View Padmashri Agro on IndiaMART"
-          >
-            <ShieldCheck size={18} className="im-shield-icon" />
-            <div className="im-badge-text">
-              <span className="im-label">IndiaMART</span>
-              <span className="im-sublabel">{lang === 'mr' ? 'अधिकृत पुरवठादार' : 'Verified Supplier'}</span>
-            </div>
-            <ExternalLink size={14} className="im-ext-icon" />
-          </a>
+
 
           <div className="hero-stats">
             <div className="stat-item">
