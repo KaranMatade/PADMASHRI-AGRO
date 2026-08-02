@@ -148,7 +148,7 @@ export default function PriceCalculator({ lang }) {
               </label>
             </div>
 
-            <div className="calc-farmer-grid">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1.5rem' }}>
               <div>
                 <label className="calc-label">{lang === 'mr' ? 'तुमचे नाव:' : 'Your Name:'}</label>
                 <input 
@@ -175,7 +175,7 @@ export default function PriceCalculator({ lang }) {
           {/* Right Result Display */}
           <div className="calc-result-box">
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
                 <span className="badge badge-amber">{lang === 'mr' ? 'अंदाजित दरपत्रक' : 'Estimated Quotation'}</span>
                 <span style={{ fontSize: '0.85rem', color: 'var(--slate-400)' }}>GST + Warrenty Included</span>
               </div>

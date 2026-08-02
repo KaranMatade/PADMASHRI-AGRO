@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, CheckCircle2, SlidersHorizontal, MessageCircle, Eye, Tag, Sparkles, Award } from 'lucide-react';
+import { Search, CheckCircle2, SlidersHorizontal, MessageCircle, Eye, Tag, Sparkles, Award, ChevronLeft, ChevronRight, Hand } from 'lucide-react';
 import { productsData } from '../data/productsData';
 import { mainContact } from '../data/branchesData';
 
@@ -31,6 +31,16 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
       ? `नमस्कार पद्मश्री ॲग्रो, मला ${product.nameMr} (किंमत: ₹${product.priceMin.toLocaleString()} - ₹${product.priceMax.toLocaleString()}) बद्दल अधिक माहिती व ऑर्डर करायची आहे.`
       : `Hello Padmashri Agro, I want to inquire about ${product.name} (Price range: ₹${product.priceMin.toLocaleString()} - ₹${product.priceMax.toLocaleString()}).`;
     return `https://wa.me/${mainContact.whatsapp}?text=${encodeURIComponent(text)}`;
+  };
+
+  const scrollGridLeft = () => {
+    const container = document.getElementById('mobile-product-grid');
+    if (container) container.scrollBy({ left: -300, behavior: 'smooth' });
+  };
+
+  const scrollGridRight = () => {
+    const container = document.getElementById('mobile-product-grid');
+    if (container) container.scrollBy({ left: 300, behavior: 'smooth' });
   };
 
   return (
@@ -81,8 +91,24 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
           </div>
         </div>
 
-        {/* Product Cards Grid */}
-        <div className="product-grid">
+        {/* Mobile Touch Swipe Hint Bar & Controls */}
+        <div className="mobile-swipe-hint-bar">
+          <div className="swipe-hint-text">
+            <Hand size={16} className="hand-swipe-anim" />
+            <span>{lang === 'mr' ? 'उजवीकडे स्वाइप करा (Swipe right to view products)' : 'Swipe left/right to browse all products'}</span>
+          </div>
+          <div className="mobile-slider-controls">
+            <button onClick={scrollGridLeft} className="slider-arrow-btn" aria-label="Previous product">
+              <ChevronLeft size={20} />
+            </button>
+            <button onClick={scrollGridRight} className="slider-arrow-btn" aria-label="Next product">
+              <ChevronRight size={20} />
+            </button>
+          </div>
+        </div>
+
+        {/* Product Cards Grid & Mobile Touch-Swipe Container */}
+        <div id="mobile-product-grid" className="product-grid">
           {filteredProducts.map(product => (
             <div key={product.id} className="product-card">
               <div className="product-card-image-box">
@@ -150,7 +176,7 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
                     className="btn-card-quote"
                   >
                     <MessageCircle size={16} />
-                    <span>{lang === 'mr' ? 'व्हॉट्सॲप ऑर्डर' : 'WhatsApp Order'}</span>
+                    <span>{lang === 'mr' ? 'ऑर्डर करा' : 'WhatsApp'}</span>
                   </a>
                 </div>
               </div>
