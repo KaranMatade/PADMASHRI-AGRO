@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Shield, PhoneCall, MessageCircle, ExternalLink } from 'lucide-react';
+import { ArrowRight, Shield, PhoneCall, MessageCircle, ExternalLink, ShieldCheck } from 'lucide-react';
 import { mainContact } from '../data/branchesData';
 
 export default function HeroSection({ lang, onOpenInquiry }) {
@@ -29,7 +29,7 @@ export default function HeroSection({ lang, onOpenInquiry }) {
               </>
             ) : (
               <>
-                Heavy Duty & Precision <span className="highlight">Agricultural Implements</span> for Modern Farming
+                Heavy Duty &amp; Precision <span className="highlight">Agricultural Implements</span> for Modern Farming
               </>
             )}
           </h1>
@@ -67,6 +67,22 @@ export default function HeroSection({ lang, onOpenInquiry }) {
             </button>
           </div>
 
+          {/* IndiaMART Trust Badge — shown as a proper trust seal below the buttons */}
+          <a
+            href={mainContact.indiaMartUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="indiamart-trust-badge"
+            title="View Padmashri Agro on IndiaMART"
+          >
+            <ShieldCheck size={18} className="im-shield-icon" />
+            <div className="im-badge-text">
+              <span className="im-label">IndiaMART</span>
+              <span className="im-sublabel">{lang === 'mr' ? 'अधिकृत पुरवठादार' : 'Verified Supplier'}</span>
+            </div>
+            <ExternalLink size={14} className="im-ext-icon" />
+          </a>
+
           <div className="hero-stats">
             <div className="stat-item">
               <h3>9+</h3>
@@ -83,7 +99,7 @@ export default function HeroSection({ lang, onOpenInquiry }) {
           </div>
         </div>
 
-        {/* Hero Right Visual */}
+        {/* Hero Right Visual — clean product image card, no IndiaMART overlay */}
         <div className="hero-visual">
           <div className="hero-card-box">
             <div className="hero-image-wrapper">
@@ -97,16 +113,6 @@ export default function HeroSection({ lang, onOpenInquiry }) {
                 <h4>{lang === 'mr' ? '२ बॉटम हायड्रोलिक रिव्हर्सिबल नांगर' : '2 Bottom Hydraulic Reversible Plough'}</h4>
                 <p>{lang === 'mr' ? '१२", १४", १६" इंच | रु. ८२,००० ते ९५,०००/-' : '12, 14, 16 inch | ₹82,000 to ₹95,000'}</p>
               </div>
-              <a 
-                href={mainContact.indiaMartUrl} 
-                target="_blank" 
-                rel="noreferrer" 
-                className="indiamart-hero-link"
-                title="View on IndiaMART"
-              >
-                <span>IndiaMART</span>
-                <ExternalLink size={14} />
-              </a>
             </div>
           </div>
         </div>
