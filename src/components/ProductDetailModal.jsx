@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, CheckCircle2, MessageCircle, PhoneCall, ShieldCheck, Wrench, Layers, Tag, Check, Sparkles } from 'lucide-react';
+import { X, CheckCircle2, MessageCircle, PhoneCall, ShieldCheck, Wrench, Layers, Tag, Check, Sparkles, Award } from 'lucide-react';
 import { mainContact } from '../data/branchesData';
 
 export default function ProductDetailModal({ product, lang, onClose, onOpenInquiry }) {
@@ -18,14 +18,13 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
   if (totalSizes > 1) {
     const step = (product.priceMax - product.priceMin) / (totalSizes - 1);
     const estVal = Math.round(product.priceMin + (step * selectedSizeIndex));
-    // Provide a narrow range around estVal or exact price
     displayPriceMin = Math.round(estVal * 0.96);
     displayPriceMax = Math.round(estVal * 1.04);
   }
 
   const whatsappUrl = `https://wa.me/${mainContact.whatsapp}?text=${encodeURIComponent(
     lang === 'mr'
-      ? `नमस्कार, मला ${product.nameMr} (${product.name}) - साईज: ${selectedSize} (दर: ₹${displayPriceMin.toLocaleString()} - ₹${displayPriceMax.toLocaleString()}/-) ची सविस्तर माहिती व खरेदी कोटेशन हवे आहे.`
+      ? `नमस्कार पद्मश्री ॲग्रो, मला ${product.nameMr} (${product.name}) - साईज: ${selectedSize} (दर: ₹${displayPriceMin.toLocaleString()} - ₹${displayPriceMax.toLocaleString()}/-) ची सविस्तर माहिती व खरेदी कोटेशन हवे आहे.`
       : `Hello Padmashri Agro, I would like to get a formal quotation for ${product.name} (Size Variant: ${selectedSize}, Price range: ₹${displayPriceMin.toLocaleString()} - ₹${displayPriceMax.toLocaleString()}).`
   )}`;
 
@@ -51,7 +50,7 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
             <div className="modal-main-image-box">
               <img src={activeImg} alt={product.name} />
               <div className="modal-image-badge">
-                <ShieldCheck size={14} />
+                <ShieldCheck size={14} style={{ color: 'var(--primary-light)' }} />
                 <span>100% Factory Built</span>
               </div>
             </div>
@@ -70,7 +69,7 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
               ))}
             </div>
 
-            {/* Tractor HP Compatibility Badge */}
+            {/* Tractor HP Compatibility Badge Card */}
             <div className="hp-recommendation-box">
               <div className="hp-header">
                 <Wrench size={18} className="hp-icon" />
@@ -82,9 +81,16 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
 
           {/* Right Column: Product Specs & Size Selector */}
           <div className="modal-right-col">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-              <span className="badge badge-amber">{product.categoryName}</span>
-              <span className="badge badge-primary">{product.badge}</span>
+            {/* High-Contrast Glassmorphism Category Badges */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
+              <div className="product-card-badge-pill" style={{ position: 'static' }}>
+                <Tag size={13} className="badge-pill-icon" />
+                <span>{product.categoryName}</span>
+              </div>
+              <div className="product-card-badge-pill" style={{ position: 'static' }}>
+                <Award size={13} className="badge-pill-icon" />
+                <span>{product.badge}</span>
+              </div>
             </div>
 
             <h2 className="modal-product-title">{product.name}</h2>
@@ -130,7 +136,7 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
 
             {/* Key Advantages List */}
             <div className="modal-features-section">
-              <h4>{lang === 'mr' ? 'मुख्य तांत्रिक वैशिष्ट्ये:' : 'Key Advantages:'}</h4>
+              <h4>{lang === 'mr' ? 'मुख्य तांत्रिक वैशिष्ट्ये (Key Advantages):' : 'Main Technical Characteristics:'}</h4>
               <ul className="modal-features-list">
                 {(lang === 'mr' ? product.featuresMr : product.features).map((f, i) => (
                   <li key={i}>
@@ -143,7 +149,7 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
 
             {/* Technical Specs Grid */}
             <div className="modal-specs-box">
-              <h4>{lang === 'mr' ? 'तांत्रिक माहिती (Technical Specs):' : 'Technical Specifications:'}</h4>
+              <h4>{lang === 'mr' ? 'तांत्रिक माहिती (Technical Specifications):' : 'Technical Specifications:'}</h4>
               <div className="specs-table-grid">
                 {Object.entries(product.specs).map(([key, val], idx) => (
                   <div key={idx} className="spec-row">
