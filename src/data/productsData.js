@@ -16,7 +16,7 @@ export const productsData = [
       "/Product_images/hydraulic_trailer_2.jpeg",
       "/Product_images/hydraulic_trailer_3.jpeg",
       "/Product_images/hydraulic_trailer_4.jpeg",
-      "/Product_images/tractor-hydrolic-tipping-trailer-trolley.png"
+      "/Product_images/tractor-hydraulic-tipping-trailer-trolley.png"
     ],
     features: [
       "Heavy duty ISMB channel chassis beams & 4mm chequered floor sheet",
@@ -58,7 +58,12 @@ export const productsData = [
       "/Product_images/reversible_plough_5.jpeg",
       "/Product_images/reversible_plough_6.jpeg",
       "/Product_images/reversible_plough_7.jpeg",
-      "/Product_images/reversible_plough_8.jpeg"
+      "/Product_images/reversible_plough_9.jpeg",
+      "/Product_images/reversible_plough_10.jpeg",
+      "/Product_images/reversible_plough_11.jpeg",
+      "/Product_images/reversible_plough_12.jpeg",
+      "/Product_images/reversible_plough_13.jpeg",
+      "/Product_images/reversible_plough_14.jpeg"
     ],
     features: [
       "Primary tillage implement for deep soil turning, lifting & inversion",
@@ -171,7 +176,10 @@ export const productsData = [
       "/Product_images/tractor_ridger_bundmaker_2.jpeg",
       "/Product_images/tractor_ridger_bundmaker_3.jpeg",
       "/Product_images/tractor_ridger_bundmaker_4.jpeg",
-      "/Product_images/tractor-ridger-build-maker-3-row-furrrower.png"
+      "/Product_images/tractor_ridger_bundmaker_5.jpeg",
+      "/Product_images/tractor_ridger_bundmaker_6.jpeg",
+      "/Product_images/tractor_ridger_bundmaker_7.jpeg",
+      "/Product_images/tractor-ridger-build-maker-3-row-furrower.png"
     ],
     features: [
       "Creates ridges, furrows & raised beds for cotton, potato & vegetables",
@@ -208,7 +216,9 @@ export const productsData = [
       "/Product_images/duckfoot_cultivator_1.jpeg",
       "/Product_images/duckfoot_cultivator_2.jpeg",
       "/Product_images/duckfoot_cultivator_3.jpeg",
-      "/Product_images/duckfoot_cultivator_4.jpeg"
+      "/Product_images/duckfoot_cultivator_4.jpeg",
+      "/Product_images/duckfoot_cultivator_5.jpeg",
+      "/Product_images/duckfoot_cultivator_6.jpeg"
     ],
     features: [
       "Wide triangular duckfoot blades slice weeds at shallow depth",
@@ -281,7 +291,7 @@ export const productsData = [
       "/Product_images/land_leveler_blade_1.jpeg",
       "/Product_images/land_leveler_blade_2.jpeg",
       "/Product_images/land_leveler_blade_3.jpeg",
-      "/Product_images/heavy-duty-and-leveler-scaraper-blade.png"
+      "/Product_images/heavy-duty-and-leveler-scraper-blade.png"
     ],
     features: [
       "High strength curved steel cutting blade for pushing & pulling earth",

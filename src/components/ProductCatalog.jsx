@@ -29,7 +29,7 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
 
   const getWhatsAppMessage = (product) => {
     const text = lang === 'mr'
-      ? `नमस्कार पद्मश्री ॲग्रो, मला ${product.nameMr} (किंमत: ₹${product.priceMin.toLocaleString()} - ₹${product.priceMax.toLocaleString()}) बद्दल बेस्ट प्राईस डिस्काउंट व खरेदी कोटेशन हवे आहे.`
+      ? `नमस्कार पद्मश्री ॲग्रो, मला ${product.nameMr} (किंमत: ₹${product.priceMin.toLocaleString()} - ₹${product.priceMax.toLocaleString()}) बद्दल सर्वोत्तम किंमत व सवलत खरेदी कोटेशन हवे आहे.`
       : `Hello Padmashri Agro, I want to get the best factory price quotation for ${product.name} (Price: ₹${product.priceMin.toLocaleString()} - ₹${product.priceMax.toLocaleString()}).`;
     return `https://wa.me/${mainContact.whatsapp}?text=${encodeURIComponent(text)}`;
   };

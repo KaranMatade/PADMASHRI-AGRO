@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapPin, Phone, Mail, ShieldCheck, ExternalLink, Heart } from 'lucide-react';
 import { mainContact, branchesData } from '../data/branchesData';
+import { galleryImages } from '../data/galleryData';
 
 export default function Footer({ lang }) {
   return (
@@ -38,7 +39,7 @@ export default function Footer({ lang }) {
               <li><a href="#home">{lang === 'mr' ? 'मुख्य पृष्ठ (Home)' : 'Home Overview'}</a></li>
               <li><a href="#products">{lang === 'mr' ? 'शेती अवजारे (Products)' : 'Equipment Catalog'}</a></li>
               <li><a href="#calculator">{lang === 'mr' ? 'दर अंदाजपत्रक (Estimator)' : 'Price Estimator'}</a></li>
-              <li><a href="#gallery">{lang === 'mr' ? 'फोटो गॅलरी (Gallery)' : 'Photo Gallery (43)'}</a></li>
+              <li><a href="#gallery">{lang === 'mr' ? `फोटो गॅलरी (${galleryImages.length})` : `Photo Gallery (${galleryImages.length})`}</a></li>
               <li><a href="#branches">{lang === 'mr' ? 'शाखा नेटवर्क (Branches)' : 'Branch Locations'}</a></li>
             </ul>
           </div>

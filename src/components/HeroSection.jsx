@@ -71,7 +71,7 @@ export default function HeroSection({ lang, onOpenInquiry }) {
 
           <div className="hero-stats">
             <div className="stat-item">
-              <h3>9+</h3>
+              <h3>8+</h3>
               <p>{lang === 'mr' ? 'मुख्य अवजारे' : 'Equipment Lines'}</p>
             </div>
             <div className="stat-item">

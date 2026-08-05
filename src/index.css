@@ -2162,7 +2162,7 @@ input,textarea,select { font-family: var(--font-body); }
   grid-template-columns: 1fr 1fr;
   gap: 0.85rem;
 }
-@media (max-width: 480px) { .calc-farmer-row { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .calc-farmer-row { grid-template-columns: 1fr; } }
 .calc-farmer-field { display: flex; flex-direction: column; gap: 0.4rem; }
 .calc-input {
   background: var(--bg-card);
@@ -2368,7 +2368,6 @@ input,textarea,select { font-family: var(--font-body); }
   padding: 0.55rem 0.75rem;
   display: flex;
   gap: 0.45rem;
-  safe-area-inset-bottom: env(safe-area-inset-bottom);
   padding-bottom: calc(0.55rem + env(safe-area-inset-bottom, 0px));
 }
 .mobile-action-btn {
