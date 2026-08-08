@@ -5,3 +5,5 @@ dist-ssr
 *.log
 *.tmp
 .tempmediaStorage
+.env
+.env.local

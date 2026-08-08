@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight, Shield, PhoneCall, MessageCircle } from 'lucide-react';
 import { mainContact } from '../data/branchesData';
+import { imageUrl } from '../lib/imageUrl';
 
 export default function HeroSection({ lang, onOpenInquiry }) {
   const whatsappUrl = `https://wa.me/${mainContact.whatsapp}?text=${encodeURIComponent(
@@ -10,7 +11,11 @@ export default function HeroSection({ lang, onOpenInquiry }) {
   )}`;
 
   return (
-    <section id="home" className="hero-section">
+    <section
+      id="home"
+      className="hero-section"
+      style={{ '--hero-background-image': `url("${imageUrl('/Frontpage_background.png')}")` }}
+    >
       <div className="container hero-grid hero-single-col">
         <div className="hero-content">
           <div className="hero-tag">

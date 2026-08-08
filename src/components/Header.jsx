@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Globe, Menu, X, ShieldCheck, Sun, Moon, MessageSquare } from 'lucide-react';
 import { mainContact } from '../data/branchesData';
+import { imageUrl } from '../lib/imageUrl';
 
 export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -70,7 +71,7 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
         <div className="container navbar-inner">
           <a href="#home" className="brand-logo">
             <div className="brand-logo-img-wrapper">
-              <img src="/logo.jpeg" alt="Padmashri Agro Logo" className="brand-logo-img" />
+              <img src={imageUrl("https://res.cloudinary.com/bthbndrq/image/upload/v1786167598/padmashri-agro/site/logo.jpg")} alt="Padmashri Agro Logo" className="brand-logo-img" />
             </div>
             <div className="brand-text">
               <h1>{lang === 'mr' ? 'पद्मश्री ॲग्रो' : 'PADMASHRI AGRO'}</h1>

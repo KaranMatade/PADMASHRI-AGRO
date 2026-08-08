@@ -455,7 +455,7 @@ input,textarea,select { font-family: var(--font-body); }
   position: relative;
   padding: 3.5rem 0 4rem;
   background:
-    url('/Frontpage_background.png') right center / cover no-repeat;
+    var(--hero-background-image, url('https://res.cloudinary.com/bthbndrq/image/upload/v1786167608/padmashri-agro/site/Frontpage_background.jpg')) right center / cover no-repeat;
   overflow: hidden;
   isolation: isolate;
 }

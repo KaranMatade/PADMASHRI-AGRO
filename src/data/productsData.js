@@ -1,4 +1,6 @@
-export const productsData = [
+import { imageUrl } from '../lib/imageUrl';
+
+const productData = [
   {
     id: "hydraulic-trailer",
     name: "Tractor Hydraulic Tipping Trailer / Trolley",
@@ -10,13 +12,13 @@ export const productsData = [
     categoryName: "Transport & Haulage",
     badge: "Heavy Duty / दणकट ट्रॉली",
     tractorHp: "35 HP - 75 HP",
-    image: "/Product_images/hydraulic_trailer_1.jpeg",
+    image: "https://res.cloudinary.com/bthbndrq/image/upload/v1786167228/padmashri-agro/products/hydraulic_trailer_1.jpg",
     images: [
-      "/Product_images/hydraulic_trailer_1.jpeg",
-      "/Product_images/hydraulic_trailer_2.jpeg",
-      "/Product_images/hydraulic_trailer_3.jpeg",
-      "/Product_images/hydraulic_trailer_4.jpeg",
-      "/Product_images/tractor-hydraulic-tipping-trailer-trolley.png"
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167228/padmashri-agro/products/hydraulic_trailer_1.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167230/padmashri-agro/products/hydraulic_trailer_2.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167232/padmashri-agro/products/hydraulic_trailer_3.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167233/padmashri-agro/products/hydraulic_trailer_4.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167288/padmashri-agro/products/tractor-hydraulic-tipping-trailer-trolley.jpg"
     ],
     features: [
       "Heavy duty ISMB channel chassis beams & 4mm chequered floor sheet",
@@ -49,21 +51,21 @@ export const productsData = [
     categoryName: "Primary Tillage",
     badge: "Bestseller / मुख्य उत्पादने",
     tractorHp: "40 HP - 75 HP",
-    image: "/Product_images/reversible_plough_1.jpeg",
+    image: "https://res.cloudinary.com/bthbndrq/image/upload/v1786167238/padmashri-agro/products/reversible_plough_1.jpg",
     images: [
-      "/Product_images/reversible_plough_1.jpeg",
-      "/Product_images/reversible_plough_2.jpeg",
-      "/Product_images/reversible_plough_3.jpeg",
-      "/Product_images/reversible_plough_4.jpeg",
-      "/Product_images/reversible_plough_5.jpeg",
-      "/Product_images/reversible_plough_6.jpeg",
-      "/Product_images/reversible_plough_7.jpeg",
-      "/Product_images/reversible_plough_9.jpeg",
-      "/Product_images/reversible_plough_10.jpeg",
-      "/Product_images/reversible_plough_11.jpeg",
-      "/Product_images/reversible_plough_12.jpeg",
-      "/Product_images/reversible_plough_13.jpeg",
-      "/Product_images/reversible_plough_14.jpeg"
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167238/padmashri-agro/products/reversible_plough_1.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167246/padmashri-agro/products/reversible_plough_2.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167247/padmashri-agro/products/reversible_plough_3.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167249/padmashri-agro/products/reversible_plough_4.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167250/padmashri-agro/products/reversible_plough_5.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167251/padmashri-agro/products/reversible_plough_6.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167252/padmashri-agro/products/reversible_plough_7.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167254/padmashri-agro/products/reversible_plough_9.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167240/padmashri-agro/products/reversible_plough_10.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167241/padmashri-agro/products/reversible_plough_11.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167242/padmashri-agro/products/reversible_plough_12.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167243/padmashri-agro/products/reversible_plough_13.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167244/padmashri-agro/products/reversible_plough_14.jpg"
     ],
     features: [
       "Primary tillage implement for deep soil turning, lifting & inversion",
@@ -96,12 +98,12 @@ export const productsData = [
     categoryName: "Primary Tillage",
     badge: "Economical / साधा नांगर",
     tractorHp: "25 HP - 45 HP",
-    image: "/Product_images/fixed_plough_1.jpeg",
+    image: "https://res.cloudinary.com/bthbndrq/image/upload/v1786167212/padmashri-agro/products/fixed_plough_1.jpg",
     images: [
-      "/Product_images/fixed_plough_1.jpeg",
-      "/Product_images/fixed_plough_2.jpeg",
-      "/Product_images/fixed_plough_3.jpeg",
-      "/Product_images/fix-mouldboard-plow.png"
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167212/padmashri-agro/products/fixed_plough_1.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167213/padmashri-agro/products/fixed_plough_2.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167214/padmashri-agro/products/fixed_plough_3.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167210/padmashri-agro/products/fix-mouldboard-plow.jpg"
     ],
     features: [
       "Traditional fixed direction deep plowing implement",
@@ -133,12 +135,12 @@ export const productsData = [
     categoryName: "Inter-Cultivation",
     badge: "Sugarcane Special / ऊस लागवड",
     tractorHp: "25 HP - 50 HP",
-    image: "/Product_images/sugarcane_ridger_1.jpeg",
+    image: "https://res.cloudinary.com/bthbndrq/image/upload/v1786167274/padmashri-agro/products/sugarcane_ridger_1.jpg",
     images: [
-      "/Product_images/sugarcane_ridger_1.jpeg",
-      "/Product_images/sugarcane_ridger_2.jpeg",
-      "/Product_images/sugarcane_ridger_3.jpeg",
-      "/Product_images/sugarcane-ridger-and-inter-row-cultivator.png"
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167274/padmashri-agro/products/sugarcane_ridger_1.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167276/padmashri-agro/products/sugarcane_ridger_2.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167278/padmashri-agro/products/sugarcane_ridger_3.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167273/padmashri-agro/products/sugarcane-ridger-and-inter-row-cultivator.jpg"
     ],
     features: [
       "Specially built for sugarcane inter-row operations & furrow creation",
@@ -170,16 +172,16 @@ export const productsData = [
     categoryName: "Bed & Channel Prep",
     badge: "Popular / बांदणी यंत्र",
     tractorHp: "25 HP - 55 HP",
-    image: "/Product_images/tractor_ridger_bundmaker_1.jpeg",
+    image: "https://res.cloudinary.com/bthbndrq/image/upload/v1786167307/padmashri-agro/products/tractor_ridger_bundmaker_1.jpg",
     images: [
-      "/Product_images/tractor_ridger_bundmaker_1.jpeg",
-      "/Product_images/tractor_ridger_bundmaker_2.jpeg",
-      "/Product_images/tractor_ridger_bundmaker_3.jpeg",
-      "/Product_images/tractor_ridger_bundmaker_4.jpeg",
-      "/Product_images/tractor_ridger_bundmaker_5.jpeg",
-      "/Product_images/tractor_ridger_bundmaker_6.jpeg",
-      "/Product_images/tractor_ridger_bundmaker_7.jpeg",
-      "/Product_images/tractor-ridger-build-maker-3-row-furrower.png"
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167307/padmashri-agro/products/tractor_ridger_bundmaker_1.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167310/padmashri-agro/products/tractor_ridger_bundmaker_2.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167312/padmashri-agro/products/tractor_ridger_bundmaker_3.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167314/padmashri-agro/products/tractor_ridger_bundmaker_4.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167316/padmashri-agro/products/tractor_ridger_bundmaker_5.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167319/padmashri-agro/products/tractor_ridger_bundmaker_6.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167319/padmashri-agro/products/tractor_ridger_bundmaker_7.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167304/padmashri-agro/products/tractor-ridger-build-maker-3-row-furrower.jpg"
     ],
     features: [
       "Creates ridges, furrows & raised beds for cotton, potato & vegetables",
@@ -211,14 +213,14 @@ export const productsData = [
     categoryName: "Secondary Tillage",
     badge: "Weed Control / डकफूट कोळपे",
     tractorHp: "24 HP - 55 HP",
-    image: "/Product_images/duckfoot_cultivator_1.jpeg",
+    image: "https://res.cloudinary.com/bthbndrq/image/upload/v1786167196/padmashri-agro/products/duckfoot_cultivator_1.jpg",
     images: [
-      "/Product_images/duckfoot_cultivator_1.jpeg",
-      "/Product_images/duckfoot_cultivator_2.jpeg",
-      "/Product_images/duckfoot_cultivator_3.jpeg",
-      "/Product_images/duckfoot_cultivator_4.jpeg",
-      "/Product_images/duckfoot_cultivator_5.jpeg",
-      "/Product_images/duckfoot_cultivator_6.jpeg"
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167196/padmashri-agro/products/duckfoot_cultivator_1.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167197/padmashri-agro/products/duckfoot_cultivator_2.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167199/padmashri-agro/products/duckfoot_cultivator_3.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167200/padmashri-agro/products/duckfoot_cultivator_4.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167202/padmashri-agro/products/duckfoot_cultivator_5.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167203/padmashri-agro/products/duckfoot_cultivator_6.jpg"
     ],
     features: [
       "Wide triangular duckfoot blades slice weeds at shallow depth",
@@ -250,11 +252,11 @@ export const productsData = [
     categoryName: "Sowing & Planting",
     badge: "Automatic Sowing / पेरणी यंत्र",
     tractorHp: "35 HP - 55 HP",
-    image: "/Product_images/seed_fertilizer_drill_1.jpeg",
+    image: "https://res.cloudinary.com/bthbndrq/image/upload/v1786167263/padmashri-agro/products/seed_fertilizer_drill_1.jpg",
     images: [
-      "/Product_images/seed_fertilizer_drill_1.jpeg",
-      "/Product_images/seed_fertilizer_drill_2.jpeg",
-      "/Product_images/seed-cum-fertilizer-drill-machine.png"
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167263/padmashri-agro/products/seed_fertilizer_drill_1.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167264/padmashri-agro/products/seed_fertilizer_drill_2.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167261/padmashri-agro/products/seed-cum-fertilizer-drill-machine.jpg"
     ],
     features: [
       "Simultaneous sowing of seeds & fertilizer placement at precise depth",
@@ -286,12 +288,12 @@ export const productsData = [
     categoryName: "Land Development",
     badge: "Precision Leveling / लेव्हलर",
     tractorHp: "30 HP - 60 HP",
-    image: "/Product_images/land_leveler_blade_1.jpeg",
+    image: "https://res.cloudinary.com/bthbndrq/image/upload/v1786167234/padmashri-agro/products/land_leveler_blade_1.jpg",
     images: [
-      "/Product_images/land_leveler_blade_1.jpeg",
-      "/Product_images/land_leveler_blade_2.jpeg",
-      "/Product_images/land_leveler_blade_3.jpeg",
-      "/Product_images/heavy-duty-and-leveler-scraper-blade.png"
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167234/padmashri-agro/products/land_leveler_blade_1.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167236/padmashri-agro/products/land_leveler_blade_2.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167237/padmashri-agro/products/land_leveler_blade_3.jpg",
+      "https://res.cloudinary.com/bthbndrq/image/upload/v1786167226/padmashri-agro/products/heavy-duty-and-leveler-scraper-blade.jpg"
     ],
     features: [
       "High strength curved steel cutting blade for pushing & pulling earth",
@@ -313,3 +315,9 @@ export const productsData = [
     }
   }
 ];
+
+export const productsData = productData.map((product) => ({
+  ...product,
+  image: imageUrl(product.image),
+  images: product.images.map(imageUrl)
+}));
