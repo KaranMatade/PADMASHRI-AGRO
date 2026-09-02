@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
+import ResponsiveImage from './ResponsiveImage';
 import { Camera, Maximize2, X, ChevronLeft, ChevronRight, Play, Pause, Grid, LayoutList, MessageCircle, Sparkles } from 'lucide-react';
 import { galleryImages } from '../data/galleryData';
 import { mainContact } from '../data/branchesData';
@@ -83,12 +84,11 @@ export default function PhotoGallery({ lang }) {
             <Camera size={16} style={{ display: 'inline', marginRight: '6px' }} />
             {lang === 'mr' ? 'प्रत्यक्ष कारखान्यातील व अवजारांचे फोटो' : 'Real Factory & Product Photos'}
           </span>
-          <h2 className="section-title">
-            {lang === 'mr' ? (
-              <>पद्मश्री <span>फोटो गॅलरी</span> (27 HD Photos)</>
-            ) : (
-              <>Product & <span>Factory Photo Gallery</span></>
-            )}
+          <h2 className="section-title" key={`gallery-title-${lang}`}>
+            {lang === 'mr' 
+              ? <React.Fragment>पद्मश्री <span>फोटो गॅलरी</span> (27 HD Photos)</React.Fragment>
+              : <React.Fragment>Product & <span>Factory Photo Gallery</span></React.Fragment>
+            }
           </h2>
           <p className="section-desc">
             {lang === 'mr'
@@ -139,17 +139,27 @@ export default function PhotoGallery({ lang }) {
                 src={filteredImages[currentSlideIndex].url} 
                 alt={filteredImages[currentSlideIndex].title} 
                 className="carousel-main-img"
+                loading="eager"
+                decoding="async"
               />
 
-              <div className="carousel-badge-counter">
+              <div className="carousel-badge-counter" aria-live="polite" aria-atomic="true">
                 <span>{currentSlideIndex + 1} / {filteredImages.length}</span>
               </div>
 
               {/* Slider Controls */}
-              <button onClick={prevSlide} className="carousel-arrow left" aria-label="Previous image">
+              <button 
+                onClick={prevSlide} 
+                className="carousel-arrow left" 
+                aria-label={lang === 'mr' ? 'मागील फोटो' : 'Previous image'}
+              >
                 <ChevronLeft size={24} />
               </button>
-              <button onClick={nextSlide} className="carousel-arrow right" aria-label="Next image">
+              <button 
+                onClick={nextSlide} 
+                className="carousel-arrow right" 
+                aria-label={lang === 'mr' ? 'पुढील फोटो' : 'Next image'}
+              >
                 <ChevronRight size={24} />
               </button>
 
@@ -171,7 +181,7 @@ export default function PhotoGallery({ lang }) {
                   <a 
                     href={getWhatsAppGalleryUrl(filteredImages[currentSlideIndex])}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="btn-primary"
                     style={{ padding: '0.5rem 1rem', fontSize: '0.82rem' }}
                   >
@@ -187,7 +197,8 @@ export default function PhotoGallery({ lang }) {
               <button 
                 onClick={() => setIsAutoplay(!isAutoplay)} 
                 className={`autoplay-btn ${isAutoplay ? 'active' : ''}`}
-                title={isAutoplay ? 'Pause auto-slide' : 'Play auto-slide'}
+                title={isAutoplay ? (lang === 'mr' ? 'ऑटो-स्लाईड बंद करा' : 'Pause auto-slide') : (lang === 'mr' ? 'ऑटो-स्लाईड सुरू करा' : 'Play auto-slide')}
+                aria-label={isAutoplay ? (lang === 'mr' ? 'ऑटो-प्ले थांबवा' : 'Pause autoplay') : (lang === 'mr' ? 'ऑटो-प्ले सुरू करा' : 'Start autoplay')}
               >
                 {isAutoplay ? <Pause size={16} /> : <Play size={16} />}
                 <span>{isAutoplay ? 'Pause' : 'Auto Play'}</span>
@@ -200,7 +211,7 @@ export default function PhotoGallery({ lang }) {
                     className={`thumb-item ${currentSlideIndex === idx ? 'active' : ''}`}
                     onClick={() => setCurrentSlideIndex(idx)}
                   >
-                    <img src={img.url} alt={img.title} />
+                    <ResponsiveImage src={img.url} alt={img.title} preset="thumbnail" />
                   </div>
                 ))}
               </div>
@@ -218,7 +229,12 @@ export default function PhotoGallery({ lang }) {
                 onClick={() => openLightbox(idx)}
               >
                 <div className="gallery-card-img-box">
-                  <img src={img.url} alt={img.title} loading="lazy" />
+                  <img 
+                    src={img.url} 
+                    alt={img.title} 
+                    loading="lazy"
+                    decoding="async"
+                  />
                   <div className="gallery-card-badge">
                     <Sparkles size={12} style={{ color: 'var(--secondary-light)' }} />
                     <span>HD Photo</span>
@@ -249,7 +265,7 @@ export default function PhotoGallery({ lang }) {
               <button 
                 onClick={closeLightbox}
                 className="lightbox-close-btn"
-                aria-label="Close modal"
+                aria-label={lang === 'mr' ? 'लाईटबॉक्स बंद करा' : 'Close lightbox'}
               >
                 <X size={22} />
               </button>
@@ -261,11 +277,19 @@ export default function PhotoGallery({ lang }) {
                   className="lightbox-active-img"
                 />
 
-                <button onClick={prevLightbox} className="lightbox-arrow left" aria-label="Previous">
+                <button 
+                  onClick={prevLightbox} 
+                  className="lightbox-arrow left" 
+                  aria-label={lang === 'mr' ? 'मागील फोटो' : 'Previous photo'}
+                >
                   <ChevronLeft size={28} />
                 </button>
 
-                <button onClick={nextLightbox} className="lightbox-arrow right" aria-label="Next">
+                <button 
+                  onClick={nextLightbox} 
+                  className="lightbox-arrow right" 
+                  aria-label={lang === 'mr' ? 'पुढील फोटो' : 'Next photo'}
+                >
                   <ChevronRight size={28} />
                 </button>
 
@@ -284,7 +308,7 @@ export default function PhotoGallery({ lang }) {
                 <a 
                   href={getWhatsAppGalleryUrl(filteredImages[lightboxIndex])}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="btn-amber"
                   style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}
                 >
@@ -301,7 +325,7 @@ export default function PhotoGallery({ lang }) {
                     className={`lb-thumb ${lightboxIndex === i ? 'active' : ''}`}
                     onClick={() => setLightboxIndex(i)}
                   >
-                    <img src={img.url} alt={img.title} />
+                    <ResponsiveImage src={img.url} alt={img.title} preset="thumbnail" />
                   </div>
                 ))}
               </div>
@@ -312,3 +336,5 @@ export default function PhotoGallery({ lang }) {
     </section>
   );
 }
+
+

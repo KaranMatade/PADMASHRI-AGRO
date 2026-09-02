@@ -1,4 +1,5 @@
 import React from 'react';
+import ResponsiveImage from './ResponsiveImage';
 import { ArrowRight, Shield, PhoneCall, MessageCircle } from 'lucide-react';
 import { mainContact } from '../data/branchesData';
 import { imageUrl } from '../lib/imageUrl';
@@ -27,15 +28,15 @@ export default function HeroSection({ lang, onOpenInquiry }) {
             </span>
           </div>
 
-          <h1 className="hero-title">
+          <h1 className="hero-title" key={`hero-title-${lang}`}>
             {lang === 'mr' ? (
-              <>
+              <span>
                 दमदार आणि टिकाऊ <span className="highlight">शेती अवजारे</span>, उत्तम पिकाची खात्री!
-              </>
+              </span>
             ) : (
-              <>
+              <span>
                 Heavy Duty &amp; Precision <span className="highlight">Agricultural Implements</span> for Modern Farming
-              </>
+              </span>
             )}
           </h1>
 
@@ -54,7 +55,7 @@ export default function HeroSection({ lang, onOpenInquiry }) {
             <a 
               href={whatsappUrl} 
               target="_blank" 
-              rel="noreferrer" 
+              rel="noopener noreferrer" 
               className="btn-amber"
               id="hero-whatsapp-btn"
             >
@@ -94,3 +95,4 @@ export default function HeroSection({ lang, onOpenInquiry }) {
     </section>
   );
 }
+
