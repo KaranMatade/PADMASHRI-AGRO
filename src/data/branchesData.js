@@ -58,6 +58,10 @@ export const branchesData = [
   }
 ];
 
+// ==========================================
+// PADMASHRI AGRO - BRANCH LOCATOR & CONTACTS DATA
+// Maintained by: Sahyadri Shinde (@Sahyadrishinde)
+// ==========================================
 /**
  * Get branch information by ID
  * Handles special case of 'main' for headquarters
