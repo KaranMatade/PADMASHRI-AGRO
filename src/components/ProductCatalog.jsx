@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
+import ResponsiveImage from './ResponsiveImage';
 import { Search, CheckCircle2, SlidersHorizontal, MessageCircle, Eye, Tag, Sparkles, Award, PhoneCall, Star, ShieldCheck, Grid, List } from 'lucide-react';
 import { productsData } from '../data/productsData';
 import { mainContact } from '../data/branchesData';
+import useDebounce from '../hooks/useDebounce';
 
 export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry }) {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState('grid'); // Default to e-commerce Flipkart/Amazon grid view
+
+  // Debounce search query to prevent excessive re-renders
+  // Use immediate execution if search is empty
+  const debouncedSearch = useDebounce(searchQuery, searchQuery === '' ? 0 : 300);
 
   const categories = [
     { id: 'all', nameEn: 'All Implements (8)', nameMr: 'सर्व अवजारे (८)' },
@@ -18,7 +24,7 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
 
   const filteredProducts = productsData.filter(product => {
     const matchesCategory = activeCategory === 'all' || product.category === activeCategory;
-    const searchLower = searchQuery.toLowerCase();
+    const searchLower = debouncedSearch.toLowerCase();
     const matchesSearch = 
       product.name.toLowerCase().includes(searchLower) ||
       product.nameMr.includes(searchLower) ||
@@ -41,11 +47,11 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
           <span className="section-subtitle">
             {lang === 'mr' ? 'गुणवत्ता व 100% कारखान्यातील दर' : 'Heavy Duty Agriculture Machinery'}
           </span>
-          <h2 className="section-title">
+          <h2 className="section-title" key={`prod-title-${lang}`}>
             {lang === 'mr' ? (
-              <>पद्मश्री <span>शेती अवजारे</span> कॅटलॉग</>
+              <span>पद्मश्री <span>शेती अवजारे</span> कॅटलॉग</span>
             ) : (
-              <>Product <span>Catalog & Factory Pricing</span></>
+              <span>Product <span>Catalog & Factory Pricing</span></span>
             )}
           </h2>
           <p className="section-desc">
@@ -67,7 +73,7 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
             {productsData.slice(0, 5).map(prod => (
               <div key={prod.id} className="rail-card" onClick={() => onSelectProduct(prod)}>
                 <div className="rail-card-img-wrapper">
-                  <img src={prod.image} alt={prod.name} loading="lazy" />
+                  <ResponsiveImage src={prod.image} alt={prod.name} preset="thumbnail" />
                   <span className="rail-badge">{prod.badge.split('/')[0]}</span>
                 </div>
                 <div className="rail-card-info">
@@ -100,13 +106,14 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
 
           <div className="filter-controls-right">
             <div className="search-input-wrapper">
-              <Search className="search-icon" size={18} />
+              <Search className="search-icon" size={18} aria-hidden="true" />
               <input
                 id="product-search-input"
                 type="text"
                 placeholder={lang === 'mr' ? 'अवजार किंवा साईज शोधा (उदा. 14 inch)...' : 'Search product or size (e.g. 14 inch)...'}
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
+                aria-label={lang === 'mr' ? 'उत्पादने शोधा' : 'Search products'}
               />
             </div>
 
@@ -115,7 +122,9 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
               <button 
                 className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
                 onClick={() => setViewMode('grid')}
-                title="E-Commerce Grid View"
+                title={lang === 'mr' ? 'ग्रिड व्ह्यू' : 'E-Commerce Grid View'}
+                aria-label={lang === 'mr' ? 'ग्रिड व्ह्यू' : 'Grid view'}
+                aria-pressed={viewMode === 'grid'}
               >
                 <Grid size={18} />
                 <span className="view-btn-text">{lang === 'mr' ? 'कार्ड (Grid)' : 'Grid'}</span>
@@ -123,7 +132,9 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
               <button 
                 className={`view-btn ${viewMode === 'b2b' ? 'active' : ''}`}
                 onClick={() => setViewMode('b2b')}
-                title="B2B List View"
+                title={lang === 'mr' ? 'यादी व्ह्यू' : 'B2B List View'}
+                aria-label={lang === 'mr' ? 'यादी व्ह्यू' : 'List view'}
+                aria-pressed={viewMode === 'b2b'}
               >
                 <List size={18} />
                 <span className="view-btn-text">{lang === 'mr' ? 'यादी (List)' : 'List'}</span>
@@ -139,7 +150,12 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
               return (
                 <div key={product.id} className="product-card">
                   <div className="product-card-image-box" onClick={() => onSelectProduct(product)}>
-                    <img src={product.image} alt={product.name} loading="lazy" />
+                    <img 
+                      src={product.image} 
+                      alt={product.name} 
+                      loading="lazy"
+                      decoding="async"
+                    />
                     <div className="product-card-badge-pill">
                       <Award size={13} />
                       <span>{product.badge}</span>
@@ -174,7 +190,7 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
                         id={`btn-wa-${product.id}`}
                         href={getWhatsAppMessage(product)}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="btn-card-quote"
                       >
                         <MessageCircle size={14} />
@@ -205,7 +221,12 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
 
                 <div className="b2b-card-body">
                   <div className="b2b-img-box" onClick={() => onSelectProduct(product)}>
-                    <img src={product.image} alt={product.name} loading="lazy" />
+                    <img 
+                      src={product.image} 
+                      alt={product.name} 
+                      loading="lazy"
+                      decoding="async"
+                    />
                     <div className="b2b-img-zoom-tag">
                       <Eye size={13} />
                       <span>{lang === 'mr' ? 'झूम पहा' : 'View'}</span>
@@ -254,7 +275,7 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
                   <a
                     href={getWhatsAppMessage(product)}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="b2b-btn-quote"
                   >
                     <MessageCircle size={16} />
@@ -276,3 +297,4 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
     </section>
   );
 }
+

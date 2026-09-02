@@ -1,12 +1,42 @@
-import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
+import ResponsiveImage from './ResponsiveImage';
 import { X, CheckCircle2, MessageCircle, PhoneCall, ShieldCheck, Wrench, Layers, Tag, Check, Sparkles, Award, Cpu, FileText, CheckSquare } from 'lucide-react';
 import { mainContact } from '../data/branchesData';
+import useFocusTrap from '../hooks/useFocusTrap';
 
 export default function ProductDetailModal({ product, lang, onClose, onOpenInquiry }) {
   if (!product) return null;
 
   const [activeImg, setActiveImg] = useState(product.image);
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
+
+  // Focus trap for keyboard accessibility
+  const modalRef = useFocusTrap(!!product);
+
+  // IMPORTANT: Reset modal state when product changes
+  useEffect(() => {
+    if (product) {
+      setActiveImg(product.image);
+      setSelectedSizeIndex(0);
+    }
+  }, [product.id]); // Reset when product ID changes
+
+  // Handle Escape key to close modal
+  useEffect(() => {
+    const handleEscapeEvent = () => {
+      onClose();
+    };
+
+    if (modalRef.current) {
+      modalRef.current.addEventListener('escapeKeyPressed', handleEscapeEvent);
+    }
+
+    return () => {
+      if (modalRef.current) {
+        modalRef.current.removeEventListener('escapeKeyPressed', handleEscapeEvent);
+      }
+    };
+  }, [onClose]);
 
   const selectedSize = product.sizes[selectedSizeIndex] || product.sizes[0];
 
@@ -31,14 +61,18 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div 
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-product-title"
         className="modal-content product-specs-modal" 
         onClick={e => e.stopPropagation()}
       >
         <button 
           className="modal-close-btn" 
           onClick={onClose} 
-          aria-label="Close modal"
-          title="Close window"
+          aria-label={lang === 'mr' ? 'मोडल बंद करा' : 'Close modal'}
+          title={lang === 'mr' ? 'विंडो बंद करा' : 'Close window'}
         >
           <X size={20} />
         </button>
@@ -47,23 +81,29 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
           {/* Left Column: Visual Showcase & Gallery */}
           <div className="modal-left-col">
             <div className="modal-main-image-box">
-              <img src={activeImg} alt={product.name} />
+              <ResponsiveImage src={activeImg} alt={product.name} preset="gallery" eager={true} />
               <div className="modal-image-badge">
                 <ShieldCheck size={14} style={{ color: 'var(--primary-light)' }} />
                 <span>100% Factory Built</span>
               </div>
             </div>
 
-            {/* Thumbnail Carousel */}
+            {/* Thumbnail Carousel - Filter out duplicate images */}
             <div className="modal-thumbs-row">
-              {product.images.map((img, i) => (
+              {Array.from(new Set(product.images)).map((img, i) => (
                 <button 
                   key={i} 
                   type="button"
                   onClick={() => setActiveImg(img)}
                   className={`modal-thumb-btn ${activeImg === img ? 'active' : ''}`}
+                  aria-label={`${lang === 'mr' ? 'थंबनेल' : 'Thumbnail'} ${i + 1}`}
                 >
-                  <img src={img} alt={`Thumb ${i}`} />
+                  <img 
+                    src={img} 
+                    alt={`${product.name} - Thumbnail ${i + 1}`} 
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </button>
               ))}
             </div>
@@ -92,7 +132,7 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
               </span>
             </div>
 
-            <h2 className="modal-product-title">{product.name}</h2>
+            <h2 className="modal-product-title" id="modal-product-title">{product.name}</h2>
             <p className="modal-product-title-mr">{product.nameMr}</p>
 
             {/* Size Selector Bar (Interactive) */}
@@ -111,6 +151,8 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
                       type="button"
                       onClick={() => setSelectedSizeIndex(idx)}
                       className={`size-select-pill ${isSelected ? 'selected' : ''}`}
+                      aria-label={`${lang === 'mr' ? 'साईज निवडा' : 'Select size'} ${sz}`}
+                      aria-pressed={isSelected}
                     >
                       {isSelected && <Check size={14} className="check-icon" />}
                       <span>{sz}</span>
@@ -176,7 +218,7 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
               <a 
                 href={whatsappUrl} 
                 target="_blank" 
-                rel="noreferrer" 
+                rel="noopener noreferrer" 
                 className="btn-amber modal-btn"
               >
                 <MessageCircle size={18} />
@@ -197,3 +239,4 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
     </div>
   );
 }
+

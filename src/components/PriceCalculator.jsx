@@ -17,14 +17,20 @@ export default function PriceCalculator({ lang }) {
     const prodId = e.target.value;
     setSelectedProductId(prodId);
     const p = productsData.find(prod => prod.id === prodId);
-    if (p && p.sizes.length > 0) setSelectedSize(p.sizes[0]);
+    // Always reset to first size when product changes to avoid index mismatch
+    if (p && p.sizes.length > 0) {
+      setSelectedSize(p.sizes[0]);
+    }
   };
 
+  // Safe size index calculation with fallback to prevent -1 errors
   const sizeIndex = currentProduct.sizes.indexOf(selectedSize);
+  const safeSizeIndex = sizeIndex >= 0 ? sizeIndex : 0;
+  
   const sizeStep = currentProduct.sizes.length > 1
     ? (currentProduct.priceMax - currentProduct.priceMin) / (currentProduct.sizes.length - 1)
     : 0;
-  const basePriceEst = Math.round(currentProduct.priceMin + (sizeStep * (sizeIndex >= 0 ? sizeIndex : 0)));
+  const basePriceEst = Math.round(currentProduct.priceMin + (sizeStep * safeSizeIndex));
   const transportEst = includeTransport ? 2500 : 0;
   const totalPriceEst = basePriceEst + transportEst;
 
@@ -64,11 +70,11 @@ export default function PriceCalculator({ lang }) {
             <Calculator size={16} />
             {lang === 'mr' ? 'थेट दर अंदाजपत्रक' : 'Instant Quotation Tool'}
           </span>
-          <h2 className="section-title calc-section-title">
+          <h2 className="section-title calc-section-title" key={`calc-title-${lang}`}>
             {lang === 'mr' ? (
-              <>दर <span>अंदाजपत्रक कॅल्क्युलेटर</span></>
+              <span>दर <span>अंदाजपत्रक कॅल्क्युलेटर</span></span>
             ) : (
-              <>Equipment <span>Price Estimator</span></>
+              <span>Equipment <span>Price Estimator</span></span>
             )}
           </h2>
           <p className="section-desc calc-section-desc">
