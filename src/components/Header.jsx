@@ -48,7 +48,8 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
               id="lang-toggle-btn" 
               onClick={toggleLang} 
               className="lang-toggle-btn"
-              title="Switch Language / भाषा बदला"
+              title={lang === 'en' ? 'भाषा बदला' : 'Switch Language'}
+              aria-label={lang === 'en' ? 'Switch to Marathi' : 'Switch to English'}
             >
               <Globe size={14} />
               <span>{lang === 'en' ? 'मराठी मध्ये पहा' : 'English'}</span>
@@ -58,7 +59,8 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
               id="theme-toggle-btn" 
               onClick={toggleTheme} 
               className="lang-toggle-btn"
-              title="Toggle Dark/Light Mode"
+              title={lang === 'mr' ? 'थीम बदला' : 'Toggle Dark/Light Mode'}
+              aria-label={theme === 'light' ? (lang === 'mr' ? 'डार्क मोड चालू करा' : 'Switch to dark mode') : (lang === 'mr' ? 'लाईट मोड चालू करा' : 'Switch to light mode')}
             >
               {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
             </button>
@@ -155,7 +157,8 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
               id="mobile-nav-toggle"
               className="mobile-menu-toggle"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle navigation"
+              aria-label={mobileMenuOpen ? (lang === 'mr' ? 'मेनू बंद करा' : 'Close navigation menu') : (lang === 'mr' ? 'मेनू उघडा' : 'Open navigation menu')}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
             </button>

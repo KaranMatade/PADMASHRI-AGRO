@@ -21,7 +21,7 @@ export default function Footer({ lang }) {
               <a 
                 href={mainContact.indiaMartUrl} 
                 target="_blank" 
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="badge badge-verified"
                 style={{ padding: '0.5rem 1rem' }}
               >

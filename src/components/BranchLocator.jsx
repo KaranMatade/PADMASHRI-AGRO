@@ -18,11 +18,11 @@ export default function BranchLocator({ lang }) {
             <Building2 size={16} style={{ display: 'inline', marginRight: '6px' }} />
             {lang === 'mr' ? 'थेट संपर्क व सेवा केंद्रे' : 'Sales & Service Centers'}
           </span>
-          <h2 className="section-title">
+          <h2 className="section-title" key={`branch-title-${lang}`}>
             {lang === 'mr' ? (
-              <>आमच्या <span>शाखा व संपर्क</span></>
+              <span>आमच्या <span>शाखा व संपर्क</span></span>
             ) : (
-              <>Our Factory & <span>Branch Network</span></>
+              <span>Our Factory & <span>Branch Network</span></span>
             )}
           </h2>
           <p className="section-desc">
@@ -83,7 +83,7 @@ export default function BranchLocator({ lang }) {
               <a 
                 href={`https://wa.me/${mainContact.headOffice.phoneClean}?text=${encodeURIComponent('Hello Padmashri Agro Main Office')}`}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="btn-primary head-office-btn"
               >
                 <MessageCircle size={18} />
@@ -135,7 +135,7 @@ export default function BranchLocator({ lang }) {
                 <a 
                   href={getWhatsAppBranch(branch)}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="btn-amber"
                   style={{ flex: 1, justifyContent: 'center', padding: '0.65rem' }}
                 >
