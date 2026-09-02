@@ -1,3 +1,7 @@
+// ==========================================
+// PADMASHRI AGRO - PRODUCT CATALOG DATA
+// Lead Developer: Rachana Shinde (@Rachanashinde0605)
+// ==========================================
 import { imageUrl } from '../lib/imageUrl';
 
 const productData = [
