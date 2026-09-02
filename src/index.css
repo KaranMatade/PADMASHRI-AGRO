@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    PADMASHRI AGRO ENGINEERING WORKS
    Complete Master Stylesheet — All Sections, Mobile-First, Premium UI
    ========================================================================== */
@@ -1245,6 +1245,13 @@ input,textarea,select { font-family: var(--font-body); }
   width: 100%;
   max-height: 92dvh;
   overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border-color);
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
   position: relative;
   padding: 1.5rem;
   box-shadow: var(--shadow-xl);
@@ -1275,9 +1282,15 @@ input,textarea,select { font-family: var(--font-body); }
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
+  min-height: 0;
 }
 @media (min-width: 640px) {
-  .modal-grid-container { grid-template-columns: 1fr 1.2fr; gap: 2rem; align-items: flex-start; }
+  .modal-grid-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  min-height: 0;
+}
 }
 
 .modal-left-col { display: flex; flex-direction: column; gap: 0.85rem; }
@@ -2461,3 +2474,57 @@ body { padding-bottom: 72px; }
 .modal-content::-webkit-scrollbar { width: 4px; }
 .modal-content::-webkit-scrollbar-track { background: var(--slate-100); }
 .modal-content::-webkit-scrollbar-thumb { background: var(--slate-300); border-radius: 4px; }
+
+
+
+/* ============================================================
+   MODAL MOBILE FIX - Ensure content is scrollable and visible
+   ============================================================ */
+@media (max-width: 640px) {
+  .modal-content {
+    max-height: 90vh !important;
+    padding: 1rem !important;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modal-grid-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+    overflow: visible !important;
+  }
+  
+  .modal-left-col,
+  .modal-right-col {
+    width: 100% !important;
+  }
+  
+  .modal-main-image-box {
+    max-height: 220px !important;
+    min-height: 180px !important;
+  }
+  
+  .modal-product-title {
+    font-size: 1.1rem !important;
+  }
+  
+  .modal-right-col {
+    padding-bottom: 1rem;
+  }
+}
+
+/* Ensure ResponsiveImage wrapper doesn't break layout */
+.modal-main-image-box .responsive-image-wrapper {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.modal-main-image-box .responsive-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  max-height: 280px;
+  object-fit: contain;
+}
+
