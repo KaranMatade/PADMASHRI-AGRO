@@ -25,7 +25,7 @@ export default function MobileStickyActionBar({ lang, onOpenInquiry }) {
         id="mobile-sticky-wa"
         href={whatsappUrl}
         target="_blank"
-        rel="noreferrer"
+        rel="noopener noreferrer"
         className="mobile-action-btn"
         style={{ background: '#25D366', color: 'white' }}
       >

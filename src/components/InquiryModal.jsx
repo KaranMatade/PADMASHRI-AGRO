@@ -1,36 +1,96 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Send, PhoneCall, CheckCircle, ShieldCheck } from 'lucide-react';
 import { mainContact, branchesData } from '../data/branchesData';
 import { productsData } from '../data/productsData';
+import { validateInquiryForm } from '../utils/validation';
+import useFocusTrap from '../hooks/useFocusTrap';
 
 export default function InquiryModal({ lang, preselectedProduct, onClose }) {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [village, setVillage] = useState('');
-  const [selectedProd, setSelectedProd] = useState(preselectedProduct ? preselectedProduct.id : productsData[0].id);
-  const [branch, setBranch] = useState('main');
-  const [message, setMessage] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    village: '',
+    product: preselectedProduct ? preselectedProduct.id : productsData[0].id,
+    branch: 'main',
+    message: ''
+  });
+  const [validationErrors, setValidationErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const [submitted, setSubmitted] = useState(false);
+
+  // Focus trap for keyboard accessibility
+  const modalRef = useFocusTrap(true);
+
+  // Handle Escape key to close modal
+  useEffect(() => {
+    const handleEscapeEvent = () => {
+      onClose();
+    };
+
+    if (modalRef.current) {
+      modalRef.current.addEventListener('escapeKeyPressed', handleEscapeEvent);
+    }
+
+    return () => {
+      if (modalRef.current) {
+        modalRef.current.removeEventListener('escapeKeyPressed', handleEscapeEvent);
+      }
+    };
+  }, [onClose]);
+
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    
+    // Mark field as touched
+    if (!touched[field]) {
+      setTouched(prev => ({ ...prev, [field]: true }));
+    }
+  };
+
+  const handleBlur = (field) => {
+    setTouched(prev => ({ ...prev, [field]: true }));
+    
+    // Validate form to show errors
+    const errors = validateInquiryForm(formData, lang);
+    setValidationErrors(errors);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const prod = productsData.find(p => p.id === selectedProd);
+    
+    // Mark all fields as touched
+    setTouched({
+      name: true,
+      phone: true,
+      village: true
+    });
+    
+    // Validate all fields
+    const errors = validateInquiryForm(formData, lang);
+    setValidationErrors(errors);
+    
+    // Only proceed if no errors
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+    
+    const prod = productsData.find(p => p.id === formData.product);
     
     const waText = lang === 'mr'
       ? `*कोटेशन विनंती - पद्मश्री ॲग्रो*\n\n` +
-        `• नाव: ${name}\n` +
-        `• संपर्क क्रमांक: ${phone}\n` +
-        `• गाव/पत्ता: ${village}\n` +
+        `• नाव: ${formData.name}\n` +
+        `• संपर्क क्रमांक: ${formData.phone}\n` +
+        `• गाव/पत्ता: ${formData.village}\n` +
         `• इच्छित अवजार: ${prod?.nameMr || prod?.name}\n` +
-        `• पसंतीची शाखा: ${branch}\n` +
-        `• संदेश: ${message || 'दर व माहिती हवी आहे.'}`
+        `• पसंतीची शाखा: ${formData.branch}\n` +
+        `• संदेश: ${formData.message || 'दर व माहिती हवी आहे.'}`
       : `*Quotation Request - Padmashri Agro*\n\n` +
-        `• Name: ${name}\n` +
-        `• Mobile: ${phone}\n` +
-        `• Village/City: ${village}\n` +
+        `• Name: ${formData.name}\n` +
+        `• Mobile: ${formData.phone}\n` +
+        `• Village/City: ${formData.village}\n` +
         `• Required Equipment: ${prod?.name}\n` +
-        `• Preferred Branch: ${branch}\n` +
-        `• Message: ${message || 'Please send formal quotation.'}`;
+        `• Preferred Branch: ${formData.branch}\n` +
+        `• Message: ${formData.message || 'Please send formal quotation.'}`;
 
     window.open(`https://wa.me/${mainContact.whatsapp}?text=${encodeURIComponent(waText)}`, '_blank');
     setSubmitted(true);
@@ -38,8 +98,20 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '600px' }}>
-        <button className="modal-close-btn" onClick={onClose}>
+      <div 
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="inquiry-modal-title"
+        className="modal-content" 
+        onClick={e => e.stopPropagation()} 
+        style={{ maxWidth: '600px' }}
+      >
+        <button 
+          className="modal-close-btn" 
+          onClick={onClose}
+          aria-label={lang === 'mr' ? 'मोडल बंद करा' : 'Close modal'}
+        >
           <X size={20} />
         </button>
 
@@ -49,7 +121,7 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
               <span className="badge badge-amber" style={{ marginBottom: '0.5rem' }}>
                 {lang === 'mr' ? 'थेट कारखाना कोटेशन' : 'Factory Direct Quote'}
               </span>
-              <h2 style={{ fontSize: '1.6rem', color: 'var(--text-main)' }}>
+              <h2 style={{ fontSize: '1.6rem', color: 'var(--text-main)' }} id="inquiry-modal-title">
                 {lang === 'mr' ? 'शेती अवजार कोटेशन विनंती' : 'Request Equipment Quotation'}
               </h2>
               <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
@@ -64,13 +136,21 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
                 </label>
                 <input 
                   type="text" 
-                  className="calc-input" 
-                  style={{ background: 'var(--bg-main)', color: 'var(--text-main)', borderColor: 'var(--border-color)' }}
+                  className={`calc-input ${touched.name && validationErrors.name ? 'input-error' : ''}`}
+                  style={{ background: 'var(--bg-main)', color: 'var(--text-main)', borderColor: touched.name && validationErrors.name ? '#dc2626' : 'var(--border-color)' }}
                   placeholder={lang === 'mr' ? 'उदा. ज्ञानेश्वर शेळके' : 'e.g. Dnyaneshwar Shelke'}
                   required
-                  value={name}
-                  onChange={e => setName(e.target.value)}
+                  value={formData.name}
+                  onChange={e => handleInputChange('name', e.target.value)}
+                  onBlur={() => handleBlur('name')}
+                  aria-invalid={touched.name && validationErrors.name ? 'true' : 'false'}
+                  aria-describedby={touched.name && validationErrors.name ? 'name-error' : undefined}
                 />
+                {touched.name && validationErrors.name && (
+                  <div id="name-error" className="input-error-message" role="alert" style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                    {validationErrors.name}
+                  </div>
+                )}
               </div>
 
               <div className="form-two-col">
@@ -80,13 +160,21 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
                   </label>
                   <input 
                     type="tel" 
-                    className="calc-input"
-                    style={{ background: 'var(--bg-main)', color: 'var(--text-main)', borderColor: 'var(--border-color)' }}
+                    className={`calc-input ${touched.phone && validationErrors.phone ? 'input-error' : ''}`}
+                    style={{ background: 'var(--bg-main)', color: 'var(--text-main)', borderColor: touched.phone && validationErrors.phone ? '#dc2626' : 'var(--border-color)' }}
                     placeholder="98xxxxxxxx"
                     required
-                    value={phone}
-                    onChange={e => setPhone(e.target.value)}
+                    value={formData.phone}
+                    onChange={e => handleInputChange('phone', e.target.value)}
+                    onBlur={() => handleBlur('phone')}
+                    aria-invalid={touched.phone && validationErrors.phone ? 'true' : 'false'}
+                    aria-describedby={touched.phone && validationErrors.phone ? 'phone-error' : undefined}
                   />
+                  {touched.phone && validationErrors.phone && (
+                    <div id="phone-error" className="input-error-message" role="alert" style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                      {validationErrors.phone}
+                    </div>
+                  )}
                 </div>
 
                 <div className="calc-form-group">
@@ -95,13 +183,21 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
                   </label>
                   <input 
                     type="text" 
-                    className="calc-input"
-                    style={{ background: 'var(--bg-main)', color: 'var(--text-main)', borderColor: 'var(--border-color)' }}
+                    className={`calc-input ${touched.village && validationErrors.village ? 'input-error' : ''}`}
+                    style={{ background: 'var(--bg-main)', color: 'var(--text-main)', borderColor: touched.village && validationErrors.village ? '#dc2626' : 'var(--border-color)' }}
                     placeholder={lang === 'mr' ? 'उदा. संगमनेर' : 'e.g. Sangamner'}
                     required
-                    value={village}
-                    onChange={e => setVillage(e.target.value)}
+                    value={formData.village}
+                    onChange={e => handleInputChange('village', e.target.value)}
+                    onBlur={() => handleBlur('village')}
+                    aria-invalid={touched.village && validationErrors.village ? 'true' : 'false'}
+                    aria-describedby={touched.village && validationErrors.village ? 'village-error' : undefined}
                   />
+                  {touched.village && validationErrors.village && (
+                    <div id="village-error" className="input-error-message" role="alert" style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                      {validationErrors.village}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -112,8 +208,8 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
                 <select 
                   className="calc-select"
                   style={{ background: 'var(--bg-main)', color: 'var(--text-main)', borderColor: 'var(--border-color)' }}
-                  value={selectedProd}
-                  onChange={e => setSelectedProd(e.target.value)}
+                  value={formData.product}
+                  onChange={e => handleInputChange('product', e.target.value)}
                 >
                   {productsData.map(p => (
                     <option key={p.id} value={p.id}>
@@ -130,8 +226,8 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
                 <select 
                   className="calc-select"
                   style={{ background: 'var(--bg-main)', color: 'var(--text-main)', borderColor: 'var(--border-color)' }}
-                  value={branch}
-                  onChange={e => setBranch(e.target.value)}
+                  value={formData.branch}
+                  onChange={e => handleInputChange('branch', e.target.value)}
                 >
                   <option value="main">Main Factory (Sadatpur, Sangamner)</option>
                   {branchesData.map(b => (

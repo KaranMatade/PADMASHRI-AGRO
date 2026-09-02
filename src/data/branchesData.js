@@ -57,3 +57,35 @@ export const branchesData = [
     badge: "Regional Showroom"
   }
 ];
+
+/**
+ * Get branch information by ID
+ * Handles special case of 'main' for headquarters
+ * @param {string} id - Branch ID or 'main' for headquarters
+ * @returns {Object} - Branch object with id, name, and nameMr
+ */
+export const getBranchById = (id) => {
+  if (id === 'main') {
+    return {
+      id: 'main',
+      name: mainContact.headOffice.title,
+      nameMr: mainContact.headOffice.titleMr
+    };
+  }
+  
+  const branch = branchesData.find(b => b.id === id);
+  if (branch) {
+    return {
+      id: branch.id,
+      name: branch.name,
+      nameMr: branch.nameMr
+    };
+  }
+  
+  // Fallback to main if branch not found
+  return {
+    id: 'main',
+    name: mainContact.headOffice.title,
+    nameMr: mainContact.headOffice.titleMr
+  };
+};
