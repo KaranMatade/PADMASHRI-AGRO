@@ -21,8 +21,9 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
   // Focus trap for keyboard accessibility
   const modalRef = useFocusTrap(true);
 
-  // Handle Escape key to close modal
+  // Lock body scroll and handle Escape key to close modal
   useEffect(() => {
+    document.body.classList.add('modal-open');
     const handleEscapeEvent = () => {
       onClose();
     };
@@ -31,12 +32,19 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
       modalRef.current.addEventListener('escapeKeyPressed', handleEscapeEvent);
     }
 
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
     return () => {
+      document.body.classList.remove('modal-open');
       if (modalRef.current) {
         modalRef.current.removeEventListener('escapeKeyPressed', handleEscapeEvent);
       }
+      document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [onClose]);
+  }, [onClose, modalRef]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -54,7 +62,6 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
     const errors = validateInquiryForm(formData, lang);
     setValidationErrors(errors);
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     

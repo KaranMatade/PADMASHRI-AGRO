@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ResponsiveImage from './ResponsiveImage';
 import { X, CheckCircle2, MessageCircle, PhoneCall, ShieldCheck, Wrench, Layers, Tag, Check, Sparkles, Award, Cpu, FileText, CheckSquare } from 'lucide-react';
 import { mainContact } from '../data/branchesData';
@@ -19,10 +19,11 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
       setActiveImg(product.image);
       setSelectedSizeIndex(0);
     }
-  }, [product.id]); // Reset when product ID changes
+  }, [product?.id]);
 
-  // Handle Escape key to close modal
+  // Lock body scroll and handle ESC key
   useEffect(() => {
+    document.body.classList.add('modal-open');
     const handleEscapeEvent = () => {
       onClose();
     };
@@ -31,12 +32,19 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
       modalRef.current.addEventListener('escapeKeyPressed', handleEscapeEvent);
     }
 
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
     return () => {
+      document.body.classList.remove('modal-open');
       if (modalRef.current) {
         modalRef.current.removeEventListener('escapeKeyPressed', handleEscapeEvent);
       }
+      document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [onClose]);
+  }, [onClose, modalRef]);
 
   const selectedSize = product.sizes[selectedSizeIndex] || product.sizes[0];
 

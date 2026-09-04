@@ -48,6 +48,9 @@
   --radius-lg: 20px;
   --radius-full: 9999px;
   --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  --focus-ring: 0 0 0 3px rgba(21,128,61,0.35);
+  --header-height: 68px;
+  --topbar-height: 32px;
 }
 
 [data-theme="dark"] {
@@ -61,6 +64,7 @@
   --slate-50: #111827;
   --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
   --shadow-lg: 0 10px 30px rgba(0,0,0,0.5);
+  --focus-ring: 0 0 0 3px rgba(34,197,94,0.4);
 }
 
 /* ============================================================
@@ -73,6 +77,7 @@ html {
   font-size: 16px;
   max-width: 100vw;
   overflow-x: hidden;
+  scroll-padding-top: calc(var(--header-height) + var(--topbar-height) + 8px);
 }
 body {
   font-family: var(--font-body);
@@ -82,13 +87,79 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+body.modal-open { overflow: hidden; }
 #root { max-width: 100vw; overflow-x: hidden; }
 img { max-width: 100%; height: auto; display: block; }
 a { color: var(--primary); text-decoration: none; transition: var(--transition); }
 button { font-family: var(--font-body); cursor: pointer; border: none; background: none; touch-action: manipulation; }
 h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); font-weight: 700; line-height: 1.2; }
 input,textarea,select { font-family: var(--font-body); }
+
+/* ---- Accessibility: Focus Styles ---- */
+*:focus { outline: none; }
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+button:focus-visible,
+a:focus-visible {
+  box-shadow: var(--focus-ring);
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ---- Screen Reader Only ---- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ---- Skip to Content Link ---- */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  background: var(--primary);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.9rem;
+  z-index: 9999;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+.skip-to-content:focus {
+  top: 1rem;
+  outline: 3px solid white;
+}
+
+/* ---- Reduced Motion Support ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---- Marathi / Devanagari Text Overflow Fix ---- */
+[lang="mr"], .mr-text {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
 
 /* ============================================================
    3. LAYOUT UTILITIES
@@ -251,19 +322,22 @@ input,textarea,select { font-family: var(--font-body); }
   padding: 0.45rem 0;
   font-size: 0.8rem;
   border-bottom: 1px solid rgba(255,255,255,0.06);
+  overflow: hidden;
 }
 .top-bar-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
   gap: 0.5rem;
+  flex-wrap: nowrap;
 }
 .top-bar-left {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 0.85rem;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  min-width: 0;
 }
 .top-bar-right {
   display: flex;
@@ -275,10 +349,22 @@ input,textarea,select { font-family: var(--font-body); }
   display: flex;
   align-items: center;
   gap: 0.35rem;
+  white-space: nowrap;
+  overflow: hidden;
+  min-width: 0;
 }
-.top-info-item a { color: var(--slate-300); }
+.top-info-item span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.top-info-item a { color: var(--slate-300); white-space: nowrap; }
 .top-info-item a:hover { color: var(--primary-light); }
 .text-secondary { color: var(--secondary-light); }
+/* Hide location info on tablet to prevent overflow */
+@media (max-width: 768px) {
+  .top-info-item:first-child { display: none; }
+}
 
 .lang-toggle-btn {
   display: flex;
@@ -332,6 +418,8 @@ input,textarea,select { font-family: var(--font-body); }
   color: var(--text-main);
   line-height: 1.1;
   white-space: nowrap;
+  font-family: var(--font-heading);
+  font-weight: 700;
 }
 .brand-text span {
   font-size: 0.68rem;
@@ -446,6 +534,8 @@ input,textarea,select { font-family: var(--font-body); }
 @media (max-width: 480px) {
   .top-bar { display: none; } /* Hide top bar on small phones */
   .brand-text h1 { font-size: 1.05rem; }
+  --header-height: 60px;
+  --topbar-height: 0px;
 }
 
 /* ============================================================
@@ -482,11 +572,14 @@ input,textarea,select { font-family: var(--font-body); }
 
 .hero-section {
   position: relative;
-  padding: 3.5rem 0 4rem;
+  padding: 2.5rem 0 3rem;
   background:
     var(--hero-background-image, url('https://res.cloudinary.com/bthbndrq/image/upload/v1786167608/padmashri-agro/site/Frontpage_background.jpg')) right center / cover no-repeat;
   overflow: hidden;
   isolation: isolate;
+}
+@media (min-width: 768px) {
+  .hero-section { padding: 3.5rem 0 4rem; }
 }
 
 /* Stronger white overlay on left (text area), fades to transparent on right (image area) */
@@ -502,6 +595,16 @@ input,textarea,select { font-family: var(--font-body); }
     rgba(255, 255, 255, 0.10) 100%
   );
   z-index: 0;
+}
+/* Dark mode hero overlay */
+[data-theme="dark"] .hero-section::before {
+  background: linear-gradient(
+    100deg,
+    rgba(9, 13, 22, 0.97) 0%,
+    rgba(9, 13, 22, 0.92) 40%,
+    rgba(9, 13, 22, 0.70) 65%,
+    rgba(9, 13, 22, 0.25) 100%
+  );
 }
 
 /* All direct children of .hero-grid must sit above the overlay */
@@ -526,10 +629,12 @@ input,textarea,select { font-family: var(--font-body); }
   text-align: left;
 }
 .hero-single-col .hero-content {
-  max-width: 620px;
+  max-width: 640px;
+  width: 100%;
 }
 .hero-single-col .hero-stats {
-  max-width: 520px;
+  max-width: 100%;
+  width: 100%;
 }
 
 .hero-tag {
@@ -714,18 +819,22 @@ input,textarea,select { font-family: var(--font-body); }
 }
 
 @media (max-width: 480px) {
-  .hero-actions { gap: 0.5rem; }
+  .hero-actions { gap: 0.5rem; flex-direction: column; }
   .hero-actions .btn-primary,
   .hero-actions .btn-amber,
   .hero-actions .btn-outline {
-    flex: 1;
-    min-width: 120px;
-    font-size: 0.82rem;
-    padding: 0.65rem 0.75rem;
+    width: 100%;
+    font-size: 0.88rem;
+    padding: 0.75rem 1rem;
     justify-content: center;
   }
   .hero-stats { gap: 0.75rem; }
-  .stat-item h3 { font-size: 1.4rem; }
+  .stat-item h3 { font-size: 1.35rem; }
+  .stat-item p { font-size: 0.72rem; }
+}
+@media (max-width: 375px) {
+  .hero-section { padding: 2rem 0 2.5rem; }
+  .hero-title { font-size: clamp(1.65rem, 8vw, 2.5rem); }
 }
 
 /* Respect users who prefer reduced motion */
@@ -949,8 +1058,11 @@ input,textarea,select { font-family: var(--font-body); }
 /* ---- E-Commerce Product Grid ---- */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 0.85rem;
+}
+@media (min-width: 480px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (min-width: 600px) {
   .product-grid { grid-template-columns: repeat(3, 1fr); }
@@ -1023,7 +1135,7 @@ input,textarea,select { font-family: var(--font-body); }
 }
 
 .product-title {
-  font-size: 0.88rem;
+  font-size: clamp(0.82rem, 2vw, 0.92rem);
   font-weight: 700;
   color: var(--text-main);
   line-height: 1.3;
@@ -1032,15 +1144,19 @@ input,textarea,select { font-family: var(--font-body); }
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 .product-title-mr {
   font-size: 0.75rem;
   color: var(--primary);
   font-weight: 700;
   display: -webkit-box;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .product-price-tag {
@@ -1170,10 +1286,13 @@ input,textarea,select { font-family: var(--font-body); }
   gap: 1.25rem;
   padding: 1.1rem;
 }
-@media (max-width: 560px) {
-  .b2b-card-body { grid-template-columns: 130px 1fr; gap: 0.75rem; padding: 0.85rem; }
+@media (max-width: 640px) {
+  .b2b-card-body { grid-template-columns: 120px 1fr; gap: 0.75rem; padding: 0.85rem; }
 }
-@media (max-width: 420px) {
+@media (max-width: 480px) {
+  .b2b-card-body { grid-template-columns: 100px 1fr; gap: 0.6rem; padding: 0.75rem; }
+}
+@media (max-width: 380px) {
   .b2b-card-body { grid-template-columns: 1fr; }
 }
 
@@ -1614,8 +1733,11 @@ input,textarea,select { font-family: var(--font-body); }
 /* Gallery Grid */
 .gallery-uniform-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 0.75rem;
+}
+@media (min-width: 480px) {
+  .gallery-uniform-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (min-width: 600px) {
   .gallery-uniform-grid { grid-template-columns: repeat(3, 1fr); }
@@ -1853,8 +1975,8 @@ input,textarea,select { font-family: var(--font-body); }
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 250px;
-  max-height: 60dvh;
+  min-height: 220px;
+  max-height: 65dvh;
 }
 .lightbox-active-img { max-width: 100%; max-height: 60dvh; object-fit: contain; }
 .lightbox-arrow {
@@ -1990,7 +2112,12 @@ input,textarea,select { font-family: var(--font-body); }
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
-  min-width: 220px;
+  min-width: 0;
+  width: 100%;
+  flex-shrink: 0;
+}
+@media (min-width: 640px) {
+  .head-office-actions { width: auto; min-width: 220px; }
 }
 .head-office-btn {
   width: 100%;
@@ -2054,9 +2181,12 @@ input,textarea,select { font-family: var(--font-body); }
    ============================================================ */
 .calculator-section {
   padding: 4rem 0;
-  background: #ffffff;
+  background: var(--bg-card);
   position: relative;
   overflow: hidden;
+}
+@media (max-width: 767px) {
+  .calculator-section { padding: 2.5rem 0; }
 }
 .calculator-section .container { position: relative; z-index: 1; }
 
@@ -2093,7 +2223,7 @@ input,textarea,select { font-family: var(--font-body); }
   border-right: 1.5px solid var(--border-color);
 }
 @media (max-width: 767px) {
-  .calc-form-col { border-right: none; border-bottom: 1.5px solid var(--border-color); }
+  .calc-form-col { padding: 1.25rem; border-right: none; border-bottom: 1.5px solid var(--border-color); }
 }
 
 .calc-form-inner { display: flex; flex-direction: column; gap: 1.4rem; }
@@ -2251,9 +2381,15 @@ input,textarea,select { font-family: var(--font-body); }
 /* ── RIGHT RESULT COLUMN ── */
 .calc-result-col {
   padding: 2rem;
-  background: linear-gradient(160deg, rgba(21,128,61,0.06), rgba(240,253,244,0.8));
+  background: linear-gradient(160deg, rgba(21,128,61,0.06), rgba(240,253,244,0.5));
   display: flex;
   align-items: stretch;
+}
+[data-theme="dark"] .calc-result-col {
+  background: linear-gradient(160deg, rgba(21,128,61,0.12), rgba(9,13,22,0.4));
+}
+@media (max-width: 767px) {
+  .calc-result-col { padding: 1.25rem; }
 }
 .calc-result-box {
   width: 100%;
@@ -2316,10 +2452,12 @@ input,textarea,select { font-family: var(--font-body); }
 .calc-price-rupee { font-size: 2rem; font-weight: 800; color: var(--primary); }
 .calc-price-amount {
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-size: clamp(2rem, 8vw, 3.5rem);
   font-weight: 900;
   color: var(--primary-dark);
   letter-spacing: -0.02em;
+  overflow-wrap: break-word;
+  word-break: break-all;
 }
 .calc-price-suffix { font-size: 1.5rem; font-weight: 800; color: var(--text-muted); }
 .calc-price-note {
@@ -2471,12 +2609,49 @@ input,textarea,select { font-family: var(--font-body); }
   gap: 2rem;
   margin-bottom: 2rem;
 }
-@media (min-width: 600px) {
-  .footer-grid { grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 580px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
 }
 @media (min-width: 900px) {
-  .footer-grid { grid-template-columns: 2fr 1fr 1fr 1.5fr; }
+  .footer-grid { grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 2rem; }
 }
+
+/* Footer utility classes (replacing inline styles) */
+.footer-brand-desc {
+  color: var(--slate-400);
+  font-size: 0.92rem;
+  margin-bottom: 1.2rem;
+  line-height: 1.6;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.footer-indiamart-row {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.footer-contact-list {
+  color: var(--slate-400);
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.footer-contact-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+.footer-contact-phone {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.footer-phone-link { color: white; font-weight: 700; }
+.footer-phone-link:hover { color: var(--primary-light); }
+.footer-email-link { color: var(--slate-300); }
+.footer-email-link:hover { color: var(--primary-light); }
 .footer-brand h3 {
   font-size: 1.2rem;
   color: white;
@@ -2507,6 +2682,13 @@ input,textarea,select { font-family: var(--font-body); }
   gap: 0.5rem;
   font-size: 0.82rem;
   color: var(--slate-400);
+  flex-wrap: wrap;
+}
+.footer-bottom-heart {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
 }
 @media (min-width: 640px) {
   .footer-bottom {
@@ -2524,15 +2706,13 @@ input,textarea,select { font-family: var(--font-body); }
 .text-amber { color: var(--secondary); }
 
 /* Page bottom padding for sticky bar */
-body { padding-bottom: 72px; }
+body { padding-bottom: 70px; }
 @media (min-width: 900px) { body { padding-bottom: 0; } }
 
 /* Smooth scrollbar for modal */
 .modal-content::-webkit-scrollbar { width: 4px; }
 .modal-content::-webkit-scrollbar-track { background: var(--slate-100); }
 .modal-content::-webkit-scrollbar-thumb { background: var(--slate-300); border-radius: 4px; }
-
-
 
 /* ============================================================
    MODAL MOBILE FIX - Ensure content is scrollable and visible
@@ -2585,3 +2765,165 @@ body { padding-bottom: 72px; }
   object-fit: contain;
 }
 
+/* ============================================================
+   16. ADDITIONAL RESPONSIVE FIXES & ACCESSIBILITY
+   ============================================================ */
+
+/* Section scroll margin for sticky header */
+#home, #products, #calculator, #gallery, #branches {
+  scroll-margin-top: calc(var(--header-height) + var(--topbar-height, 32px) + 8px);
+}
+
+/* Marathi text overflow prevention across all components */
+.nav-link-item,
+.tab-btn,
+.branch-name,
+.branch-address,
+.head-office-title,
+.head-office-address,
+.section-title,
+.section-desc,
+.hero-title,
+.hero-subtitle,
+.b2b-title,
+.b2b-title-mr,
+.calc-result-name,
+.footer-brand-desc {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Nav link: prevent overflow in mobile drawer */
+.nav-link-item {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Ensure all buttons have minimum touch target */
+button, a, [role="button"] {
+  min-height: 36px;
+}
+.btn-primary, .btn-amber, .btn-outline,
+.mobile-action-btn, .tab-btn, .lang-toggle-btn {
+  min-height: 44px;
+}
+.tab-btn {
+  min-height: 38px;
+}
+
+/* Product card action buttons: ensure readable size on smallest screens */
+@media (max-width: 360px) {
+  .btn-card-details, .btn-card-quote {
+    font-size: 0.68rem;
+    padding: 0.45rem 0.3rem;
+  }
+  .product-card-body { padding: 0.6rem; }
+  .price-value { font-size: 0.78rem; }
+}
+
+/* Dark mode: calculator section specific overrides */
+[data-theme="dark"] .calculator-section {
+  background: var(--bg-card);
+}
+[data-theme="dark"] .calc-form-col {
+  background: rgba(255,255,255,0.03);
+}
+[data-theme="dark"] .calc-select option {
+  background: var(--bg-card);
+  color: var(--text-main);
+}
+
+/* Section header: improve readability on very small screens */
+@media (max-width: 375px) {
+  .section-header { margin-bottom: 1.5rem; }
+  .section-title { font-size: clamp(1.4rem, 7vw, 1.9rem); }
+  .section-desc { font-size: 0.9rem; }
+}
+
+/* Footer: mobile safe area support */
+.footer {
+  padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* Mobile sticky bar: improved safe area */
+.mobile-sticky-action-bar {
+  padding-bottom: max(0.55rem, env(safe-area-inset-bottom));
+}
+
+/* Inquiry form on small screens */
+@media (max-width: 360px) {
+  .modal-content { padding: 1rem; }
+  .modal-backdrop { padding: 0.5rem; }
+}
+
+/* Branch locator map link */
+.branch-map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition);
+  padding: 0.25rem 0;
+}
+.branch-map-link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+/* Head office: fix overflow on small phones */
+@media (max-width: 375px) {
+  .head-office-card { padding: 1.25rem; }
+  .head-office-title { font-size: 1rem; }
+  .head-office-address { font-size: 0.82rem; }
+  .head-office-btn { padding: 0.65rem 1rem !important; font-size: 0.85rem !important; }
+}
+
+/* Rail cards: better on very small screens */
+@media (max-width: 380px) {
+  .rail-card { min-width: 110px; max-width: 110px; }
+}
+
+/* Tab btn: allow slight wrapping if needed */
+@media (max-width: 400px) {
+  .tab-btn { font-size: 0.75rem; padding: 0.4rem 0.75rem; }
+}
+
+/* Lightbox: better on small screens */
+@media (max-width: 480px) {
+  .lightbox-modal-content { border-radius: var(--radius-md); }
+  .lightbox-info-bar { padding: 0.65rem 0.85rem; }
+  .lightbox-image-stage { max-height: 50dvh; min-height: 180px; }
+}
+
+/* Product specs modal on mobile */
+@media (max-width: 480px) {
+  .modal-content { padding: 1rem; }
+  .modal-product-title { font-size: 1.15rem; }
+  .spec-key-col, .spec-val-col { font-size: 0.75rem; }
+}
+
+/* B2B card action row wrapping fix */
+@media (max-width: 480px) {
+  .b2b-card-actions { gap: 0.4rem; }
+  .b2b-btn-call, .b2b-btn-specs, .b2b-btn-quote {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.78rem;
+    flex: 1;
+  }
+  .b2b-btn-quote { margin-left: 0; }
+}
+
+/* Price calculator: better mobile layout */
+@media (max-width: 480px) {
+  .calc-size-pill { padding: 0.45rem 0.85rem; font-size: 0.8rem; }
+  .calc-whatsapp-btn { padding: 0.85rem 1rem; font-size: 0.92rem; }
+}
+
+/* Smooth section transitions */
+section {
+  transition: background 0.3s ease;
+}

@@ -13,7 +13,7 @@ export default function HeroSection({ lang, onOpenInquiry }) {
 
   return (
     <section
-      id="home"
+      id="skip-content"
       className="hero-section"
       style={{ '--hero-background-image': `url("${imageUrl('/Frontpage_background.png')}")` }}
     >
@@ -47,9 +47,9 @@ export default function HeroSection({ lang, onOpenInquiry }) {
           </p>
 
           <div className="hero-actions">
-            <a href="#products" className="btn-primary" id="hero-browse-btn">
+            <a href="#products" className="btn-primary" id="hero-browse-btn" aria-label={lang === 'mr' ? 'कॅटलॉग मधील अवजारे पहा' : 'Explore products catalog'}>
               <span>{lang === 'mr' ? 'अवजारे पहा (Catalog)' : 'Explore Products'}</span>
-              <ArrowRight size={18} />
+              <ArrowRight size={18} aria-hidden="true" />
             </a>
 
             <a 
@@ -58,8 +58,9 @@ export default function HeroSection({ lang, onOpenInquiry }) {
               rel="noopener noreferrer" 
               className="btn-amber"
               id="hero-whatsapp-btn"
+              aria-label={lang === 'mr' ? 'व्हॉट्सॲप द्वारे ऑर्डर करा' : 'Place order via WhatsApp'}
             >
-              <MessageCircle size={18} />
+              <MessageCircle size={18} aria-hidden="true" />
               <span>{lang === 'mr' ? 'व्हॉट्सॲप ऑर्डर' : 'WhatsApp Order'}</span>
             </a>
 
@@ -67,8 +68,9 @@ export default function HeroSection({ lang, onOpenInquiry }) {
               onClick={() => onOpenInquiry()} 
               className="btn-outline"
               id="hero-quote-btn"
+              aria-label={lang === 'mr' ? 'कॉल बॅक ची विनंती करा' : 'Request a callback'}
             >
-              <PhoneCall size={18} />
+              <PhoneCall size={18} aria-hidden="true" />
               <span>{lang === 'mr' ? 'कॉल बॅक मागा' : 'Request Callback'}</span>
             </button>
           </div>

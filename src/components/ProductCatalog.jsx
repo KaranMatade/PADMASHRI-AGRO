@@ -91,11 +91,13 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
 
         {/* Filter Bar with Search and View Mode Switcher */}
         <div className="filter-bar">
-          <div className="category-tabs">
+          <div className="category-tabs" role="tablist" aria-label={lang === 'mr' ? 'अवजार प्रकार' : 'Product categories'}>
             {categories.map(cat => (
               <button
                 key={cat.id}
                 id={`cat-tab-${cat.id}`}
+                role="tab"
+                aria-selected={activeCategory === cat.id}
                 className={`tab-btn ${activeCategory === cat.id ? 'active' : ''}`}
                 onClick={() => setActiveCategory(cat.id)}
               >
@@ -107,13 +109,16 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
           <div className="filter-controls-right">
             <div className="search-input-wrapper">
               <Search className="search-icon" size={18} aria-hidden="true" />
+              <label htmlFor="product-search-input" className="sr-only">
+                {lang === 'mr' ? 'अवजार शोधा' : 'Search products'}
+              </label>
               <input
                 id="product-search-input"
                 type="text"
                 placeholder={lang === 'mr' ? 'अवजार किंवा साईज शोधा (उदा. 14 inch)...' : 'Search product or size (e.g. 14 inch)...'}
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                aria-label={lang === 'mr' ? 'उत्पादने शोधा' : 'Search products'}
+                aria-label={lang === 'mr' ? 'अवजार शोधा' : 'Search products'}
               />
             </div>
 
@@ -288,9 +293,17 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
         </div>
 
         {filteredProducts.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '4rem', background: 'var(--bg-card)', borderRadius: 'var(--radius-md)' }}>
-            <h3>{lang === 'mr' ? 'कोणतेही अवजार सापडले नाही' : 'No products match your search filter'}</h3>
-            <p className="text-muted">{lang === 'mr' ? 'कृपया शोधाचे शब्द किंवा फिल्टर बदला.' : 'Try adjusting your search query or reset category filter.'}</p>
+          <div style={{ textAlign: 'center', padding: '3rem 1rem', background: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+            <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🔍</div>
+            <h3 style={{ color: 'var(--text-main)', marginBottom: '0.5rem' }}>{lang === 'mr' ? 'कोणतेही अवजार सापडले नाही' : 'No products match your search'}</h3>
+            <p className="text-muted">{lang === 'mr' ? 'कृपया शोधाचे शब्द किंवा फिल्टर बदला.' : 'Try adjusting your search query or reset the category filter.'}</p>
+            <button 
+              onClick={() => { setSearchQuery(''); setActiveCategory('all'); }}
+              className="btn-outline" 
+              style={{ marginTop: '1rem', padding: '0.6rem 1.25rem', fontSize: '0.88rem' }}
+            >
+              {lang === 'mr' ? 'सर्व अवजारे पहा' : 'View All Products'}
+            </button>
           </div>
         )}
       </div>

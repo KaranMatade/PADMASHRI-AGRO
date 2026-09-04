@@ -68,6 +68,19 @@ export default function BranchLocator({ lang }) {
                   <Clock size={16} style={{ color: 'var(--secondary-light)' }} />
                   <span>Mon - Sat: 9:00 AM - 8:30 PM</span>
                 </div>
+
+                <div className="meta-item">
+                  <a 
+                    href={`https://www.google.com/maps/search/?api=1&query=${mainContact.headOffice.mapQuery}`} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="branch-map-link"
+                    style={{ color: '#60a5fa' }}
+                  >
+                    <Navigation size={15} />
+                    {lang === 'mr' ? 'मॅपवर दिशा पहा' : 'Get Directions'}
+                  </a>
+                </div>
               </div>
             </div>
 
@@ -116,9 +129,20 @@ export default function BranchLocator({ lang }) {
                     {branch.phone}
                   </a>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem' }}>
                   <Clock size={15} />
                   <span>{branch.timing}</span>
+                </div>
+                <div>
+                  <a 
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(branch.address)}`} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="branch-map-link"
+                  >
+                    <Navigation size={14} />
+                    {lang === 'mr' ? 'मॅपवर दिशा पहा' : 'Get Directions'}
+                  </a>
                 </div>
               </div>
 

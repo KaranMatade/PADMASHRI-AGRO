@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Phone, Mail, MapPin, Globe, Menu, X, ShieldCheck, Sun, Moon, MessageSquare } from 'lucide-react';
 import { mainContact } from '../data/branchesData';
 import { imageUrl } from '../lib/imageUrl';
 
 export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile menu on ESC key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [mobileMenuOpen]);
 
   const toggleLang = () => {
     setLang(prev => (prev === 'en' ? 'mr' : 'en'));
@@ -51,7 +62,7 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
               title={lang === 'en' ? 'भाषा बदला' : 'Switch Language'}
               aria-label={lang === 'en' ? 'Switch to Marathi' : 'Switch to English'}
             >
-              <Globe size={14} />
+              <Globe size={14} aria-hidden="true" />
               <span>{lang === 'en' ? 'मराठी मध्ये पहा' : 'English'}</span>
             </button>
 
@@ -62,27 +73,31 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
               title={lang === 'mr' ? 'थीम बदला' : 'Toggle Dark/Light Mode'}
               aria-label={theme === 'light' ? (lang === 'mr' ? 'डार्क मोड चालू करा' : 'Switch to dark mode') : (lang === 'mr' ? 'लाईट मोड चालू करा' : 'Switch to light mode')}
             >
-              {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
+              {theme === 'light' ? <Moon size={14} aria-hidden="true" /> : <Sun size={14} aria-hidden="true" />}
             </button>
           </div>
         </div>
       </div>
 
       {/* Main Navbar */}
-      <nav className="navbar">
+      <nav className="navbar" role="navigation" aria-label={lang === 'mr' ? 'मुख्य नेव्हिगेशन' : 'Main Navigation'}>
         <div className="container navbar-inner">
-          <a href="#home" className="brand-logo">
+          <a href="#home" className="brand-logo" aria-label={lang === 'mr' ? 'पद्मश्री ॲग्रो - मुख्यपृष्ठ' : 'Padmashri Agro - Home'}>
             <div className="brand-logo-img-wrapper">
               <img src={imageUrl("https://res.cloudinary.com/bthbndrq/image/upload/v1786167598/padmashri-agro/site/logo.jpg")} alt="Padmashri Agro Logo" className="brand-logo-img" />
             </div>
             <div className="brand-text">
-              <h1>{lang === 'mr' ? 'पद्मश्री ॲग्रो' : 'PADMASHRI AGRO'}</h1>
+              <div className="brand-name">{lang === 'mr' ? 'पद्मश्री ॲग्रो' : 'PADMASHRI AGRO'}</div>
               <span>{lang === 'mr' ? 'शेती अवजारे • सन १९९८' : 'AGRO MACHINERY • EST. 1998'}</span>
             </div>
           </a>
 
           {/* Desktop & Mobile Nav Links Drawer */}
-          <ul className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
+          <ul 
+            className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}
+            role="list"
+            aria-label={lang === 'mr' ? 'मुख्य नेव्हिगेशन मेनू' : 'Main navigation menu'}
+          >
             <li>
               <a 
                 href="#home" 
@@ -148,8 +163,9 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
               id="header-inquiry-btn" 
               className="btn-amber desktop-only-action"
               onClick={() => onOpenInquiry()}
+              aria-label={lang === 'mr' ? 'कोटेशन मागा' : 'Get a quote'}
             >
-              <MessageSquare size={16} />
+              <MessageSquare size={16} aria-hidden="true" />
               <span>{lang === 'mr' ? 'कोटेशन मागा' : 'Get Quote'}</span>
             </button>
 
@@ -160,7 +176,7 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
               aria-label={mobileMenuOpen ? (lang === 'mr' ? 'मेनू बंद करा' : 'Close navigation menu') : (lang === 'mr' ? 'मेनू उघडा' : 'Open navigation menu')}
               aria-expanded={mobileMenuOpen}
             >
-              {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+              {mobileMenuOpen ? <X size={26} aria-hidden="true" /> : <Menu size={26} aria-hidden="true" />}
             </button>
           </div>
         </div>

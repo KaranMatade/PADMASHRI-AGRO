@@ -11,13 +11,13 @@ export default function Footer({ lang }) {
           {/* Brand Info */}
           <div className="footer-brand">
             <h3>{lang === 'mr' ? mainContact.companyNameMr : mainContact.companyName}</h3>
-            <p style={{ color: 'var(--slate-400)', fontSize: '0.92rem', marginBottom: '1.2rem', lineHeight: '1.6' }}>
+            <p className="footer-brand-desc">
               {lang === 'mr'
-                ? 'सन १९९८ पासून महाराष्ट्रातील शेतकऱ्यांच्या सेवेत. मजबूत लोखंडी बनावट, सुधारित तंत्रज्ञान व प्रत्यक्ष कारखान्यातून उत्पादक दरात शेती अवजारांची विक्री.'
+                ? 'सन १९९८ पासून महाराष्ट्रातील शेतकर्यांच्या सेवेत. मजबूत लोखंडी बनावट, सुधारित तंत्रज्ञान व प्रत्यक्ष कारखान्यातून उत्पादक दरात शेती अवजारांची विक्री.'
                 : 'Pioneer manufacturer of high durability Hydraulic & Mechanical Ploughs, Cultivators, Seed Drills, Razers, Levelers and Trailers. Built for tough Indian soil.'}
             </p>
 
-            <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
+            <div className="footer-indiamart-row">
               <a 
                 href={mainContact.indiaMartUrl} 
                 target="_blank" 
@@ -60,22 +60,22 @@ export default function Footer({ lang }) {
           {/* Head Office Contact */}
           <div>
             <h4 className="footer-title">{lang === 'mr' ? 'कारखाना संपर्क' : 'Factory Address'}</h4>
-            <div style={{ color: 'var(--slate-400)', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div className="footer-contact-list">
+              <div className="footer-contact-row">
                 <MapPin size={18} style={{ color: 'var(--secondary)', flexShrink: 0, marginTop: '3px' }} />
                 <span>Loni-Sadatpur Road, Sadatpur, Tal: Sangamner, Dist: Ahilyanagar, 413736</span>
               </div>
 
-              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <Phone size={16} style={{ color: 'var(--secondary)' }} />
-                <a href={`tel:${mainContact.mainPhone}`} style={{ color: 'white', fontWeight: '700' }}>
+              <div className="footer-contact-phone">
+                <Phone size={16} style={{ color: 'var(--secondary)', flexShrink: 0 }} />
+                <a href={`tel:${mainContact.mainPhone}`} className="footer-phone-link">
                   {mainContact.mainPhone}
                 </a>
               </div>
 
-              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <Mail size={16} style={{ color: 'var(--secondary)' }} />
-                <a href={`mailto:${mainContact.email}`} style={{ color: 'var(--slate-300)' }}>
+              <div className="footer-contact-phone">
+                <Mail size={16} style={{ color: 'var(--secondary)', flexShrink: 0 }} />
+                <a href={`mailto:${mainContact.email}`} className="footer-email-link">
                   {mainContact.email}
                 </a>
               </div>
@@ -86,11 +86,11 @@ export default function Footer({ lang }) {
         {/* Footer Bottom */}
         <div className="footer-bottom">
           <div>
-            © {new Date().getFullYear()} Padmashri Agro Engineering Works. All Rights Reserved.
+            &copy; {new Date().getFullYear()} Padmashri Agro Engineering Works. All Rights Reserved.
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <div className="footer-bottom-heart">
             <span>Crafted for Indian Farmers with</span>
-            <Heart size={14} style={{ color: '#ef4444', fill: '#ef4444' }} />
+            <Heart size={14} style={{ color: '#ef4444', fill: '#ef4444' }} aria-label="love" />
             <span>in Maharashtra</span>
           </div>
         </div>
