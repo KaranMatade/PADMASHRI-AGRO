@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    PADMASHRI AGRO ENGINEERING WORKS
    Complete Master Stylesheet — All Sections, Mobile-First, Premium UI
    ========================================================================== */
@@ -451,6 +451,35 @@ input,textarea,select { font-family: var(--font-body); }
 /* ============================================================
    6. HERO SECTION
    ============================================================ */
+
+/* --- Hero Entrance Keyframes --- */
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes hero-tag-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(21,128,61,0.18); }
+  50%       { box-shadow: 0 0 0 7px rgba(21,128,61,0); }
+}
+
+@keyframes stat-count-pop {
+  0%   { transform: scale(0.85); opacity: 0; }
+  60%  { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1);    opacity: 1; }
+}
+
 .hero-section {
   position: relative;
   padding: 3.5rem 0 4rem;
@@ -515,6 +544,10 @@ input,textarea,select { font-family: var(--font-body); }
   font-size: 0.8rem;
   font-weight: 700;
   margin-bottom: 1rem;
+  /* Entrance + subtle pulse */
+  animation:
+    hero-fade-up 0.55s cubic-bezier(0.22,1,0.36,1) 0.05s both,
+    hero-tag-pulse 2.8s ease-in-out 0.8s infinite;
 }
 
 .hero-title {
@@ -522,6 +555,7 @@ input,textarea,select { font-family: var(--font-body); }
   color: var(--text-main);
   margin-bottom: 1rem;
   line-height: 1.15;
+  animation: hero-fade-up 0.6s cubic-bezier(0.22,1,0.36,1) 0.18s both;
 }
 .hero-title .highlight {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -535,6 +569,7 @@ input,textarea,select { font-family: var(--font-body); }
   color: var(--text-muted);
   margin-bottom: 1.75rem;
   line-height: 1.7;
+  animation: hero-fade-up 0.6s cubic-bezier(0.22,1,0.36,1) 0.32s both;
 }
 
 .hero-actions {
@@ -542,6 +577,7 @@ input,textarea,select { font-family: var(--font-body); }
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-bottom: 1.25rem;
+  animation: hero-fade-up 0.6s cubic-bezier(0.22,1,0.36,1) 0.46s both;
 }
 
 /* IndiaMART Trust Badge — prominent, attractive, below CTA buttons */
@@ -588,10 +624,18 @@ input,textarea,select { font-family: var(--font-body); }
   gap: 1rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--border-color);
+  animation: hero-fade-up 0.6s cubic-bezier(0.22,1,0.36,1) 0.62s both;
+}
+.stat-item {
+  transition: transform 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+.stat-item:hover {
+  transform: translateY(-3px);
 }
 .stat-item h3 {
   font-size: 1.75rem;
   color: var(--primary);
+  animation: stat-count-pop 0.55s cubic-bezier(0.22,1,0.36,1) 0.75s both;
 }
 .stat-item p {
   font-size: 0.78rem;
@@ -682,6 +726,19 @@ input,textarea,select { font-family: var(--font-body); }
   }
   .hero-stats { gap: 0.75rem; }
   .stat-item h3 { font-size: 1.4rem; }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero-tag,
+  .hero-title,
+  .hero-subtitle,
+  .hero-actions,
+  .hero-stats,
+  .stat-item h3 {
+    animation: none !important;
+  }
+  .stat-item:hover { transform: none; }
 }
 
 /* ============================================================
