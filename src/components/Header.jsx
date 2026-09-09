@@ -41,15 +41,15 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
         <div className="container top-bar-inner">
           <div className="top-bar-left">
             <div className="top-info-item">
-              <MapPin size={14} className="text-secondary" />
+              <MapPin size={14} className="text-secondary" style={{ marginRight: '6px' }} />
               <span>{lang === 'mr' ? 'कारखाना: सादतपूर, संगमनेर' : 'Main Works: Sadatpur, Sangamner'}</span>
             </div>
             <div className="top-info-item">
-              <Phone size={14} className="text-secondary" />
+              <Phone size={14} className="text-secondary" style={{ marginRight: '6px' }} />
               <a href={`tel:${mainContact.mainPhone}`} style={{ color: 'inherit' }}>{mainContact.mainPhone}</a>
             </div>
             <div className="top-info-item">
-              <Mail size={14} className="text-secondary" />
+              <Mail size={14} className="text-secondary" style={{ marginRight: '6px' }} />
               <a href={`mailto:${mainContact.email}`} style={{ color: 'inherit' }}>{mainContact.email}</a>
             </div>
           </div>
