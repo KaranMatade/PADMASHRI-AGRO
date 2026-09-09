@@ -4,6 +4,8 @@ import { mainContact, branchesData } from '../data/branchesData';
 import { productsData } from '../data/productsData';
 import { validateInquiryForm } from '../utils/validation';
 import useFocusTrap from '../hooks/useFocusTrap';
+import { Drawer } from 'vaul';
+import { toast } from 'sonner';
 
 export default function InquiryModal({ lang, preselectedProduct, onClose }) {
   const [formData, setFormData] = useState({
@@ -16,7 +18,6 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
   });
   const [validationErrors, setValidationErrors] = useState({});
   const [touched, setTouched] = useState({});
-  const [submitted, setSubmitted] = useState(false);
 
   // Focus trap for keyboard accessibility
   const modalRef = useFocusTrap(true);
@@ -100,35 +101,43 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
         `• Message: ${formData.message || 'Please send formal quotation.'}`;
 
     window.open(`https://wa.me/${mainContact.whatsapp}?text=${encodeURIComponent(waText)}`, '_blank');
-    setSubmitted(true);
+    
+    toast.success(lang === 'mr' ? 'कोटेशन विनंती पाठवली आहे!' : 'Inquiry Submitted Successfully!', {
+      description: lang === 'mr' 
+        ? 'आमचे प्रतिनिधी लवकरच आपल्याशी संपर्क साधतील.' 
+        : 'Our sales representative will reach out to you shortly.'
+    });
+    
+    onClose();
   };
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div 
-        ref={modalRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="inquiry-modal-title"
-        className="modal-content" 
-        onClick={e => e.stopPropagation()} 
-        style={{ maxWidth: '600px' }}
-      >
-        <button 
-          className="modal-close-btn" 
-          onClick={onClose}
-          aria-label={lang === 'mr' ? 'मोडल बंद करा' : 'Close modal'}
+    <Drawer.Root open={true} onOpenChange={(open) => !open && onClose()} shouldScaleBackground>
+      <Drawer.Portal>
+        <Drawer.Overlay className="fixed inset-0 bg-black/60 z-[9999]" style={{ zIndex: 9999 }} />
+        <Drawer.Content 
+          ref={modalRef}
+          className="fixed bottom-0 left-0 right-0 bg-white flex flex-col rounded-t-[20px] max-h-[90vh] z-[10000]"
+          style={{ zIndex: 10000 }}
         >
-          <X size={20} />
-        </button>
+          <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mt-4 mb-2" />
+          
+          <div className="overflow-auto p-6" style={{ maxWidth: '600px', margin: '0 auto', width: '100%' }}>
+            <Drawer.Close asChild>
+              <button 
+                className="modal-close-btn" 
+                style={{ top: '15px', right: '15px' }}
+                aria-label={lang === 'mr' ? 'मोडल बंद करा' : 'Close modal'}
+              >
+                <X size={20} />
+              </button>
+            </Drawer.Close>
 
-        {!submitted ? (
-          <div>
             <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
               <span className="badge badge-amber" style={{ marginBottom: '0.5rem' }}>
                 {lang === 'mr' ? 'थेट कारखाना कोटेशन' : 'Factory Direct Quote'}
               </span>
-              <h2 style={{ fontSize: '1.6rem', color: 'var(--text-main)' }} id="inquiry-modal-title">
+              <h2 style={{ fontSize: '1.6rem', color: 'var(--text-main)', marginTop: '0.5rem' }} id="inquiry-modal-title">
                 {lang === 'mr' ? 'शेती अवजार कोटेशन विनंती' : 'Request Equipment Quotation'}
               </h2>
               <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
@@ -253,23 +262,8 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
               </button>
             </form>
           </div>
-        ) : (
-          <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
-            <CheckCircle size={54} style={{ color: 'var(--primary)', margin: '0 auto 1rem auto' }} />
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
-              {lang === 'mr' ? 'कोटेशन विनंती पाठवली आहे!' : 'Inquiry Submitted Successfully!'}
-            </h3>
-            <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
-              {lang === 'mr' 
-                ? 'आमचे प्रतिनिधी लवकरच आपल्याशी फोन किंवा व्हॉट्सॲपवर संपर्क साधतील.' 
-                : 'Our sales representative will reach out to you shortly with full details.'}
-            </p>
-            <button onClick={onClose} className="btn-primary">
-              {lang === 'mr' ? 'बंद करा' : 'Close Window'}
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer.Root>
   );
 }

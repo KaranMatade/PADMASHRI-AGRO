@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ResponsiveImage from './ResponsiveImage';
-import { X, CheckCircle2, MessageCircle, PhoneCall, ShieldCheck, Wrench, Layers, Tag, Check, Sparkles, Award, Cpu, FileText, CheckSquare } from 'lucide-react';
+import { X, CheckCircle2, MessageCircle, PhoneCall, ShieldCheck, Wrench, Tag, Check, Sparkles, Award, Cpu, FileText, CheckSquare } from 'lucide-react';
 import { mainContact } from '../data/branchesData';
 import useFocusTrap from '../hooks/useFocusTrap';
+import { Drawer } from 'vaul';
 
 export default function ProductDetailModal({ product, lang, onClose, onOpenInquiry }) {
   if (!product) return null;
@@ -67,184 +68,189 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
   )}`;
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div 
-        ref={modalRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-product-title"
-        className="modal-content product-specs-modal" 
-        onClick={e => e.stopPropagation()}
-      >
-        <button 
-          className="modal-close-btn" 
-          onClick={onClose} 
-          aria-label={lang === 'mr' ? 'मोडल बंद करा' : 'Close modal'}
-          title={lang === 'mr' ? 'विंडो बंद करा' : 'Close window'}
+    <Drawer.Root open={true} onOpenChange={(open) => !open && onClose()} shouldScaleBackground>
+      <Drawer.Portal>
+        <Drawer.Overlay className="fixed inset-0 bg-black/60 z-[9999]" style={{ zIndex: 9999 }} />
+        <Drawer.Content 
+          ref={modalRef}
+          className="fixed bottom-0 left-0 right-0 bg-white flex flex-col rounded-t-[20px] h-[92vh] z-[10000]"
+          style={{ zIndex: 10000 }}
         >
-          <X size={20} />
-        </button>
+          <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mt-4 mb-2" />
+          
+          <div className="overflow-auto p-4 md:p-8" style={{ width: '100%', height: '100%' }}>
+            <Drawer.Close asChild>
+              <button 
+                className="modal-close-btn" 
+                style={{ top: '15px', right: '15px' }}
+                aria-label={lang === 'mr' ? 'मोडल बंद करा' : 'Close modal'}
+              >
+                <X size={20} />
+              </button>
+            </Drawer.Close>
 
-        <div className="modal-grid-container">
-          {/* Left Column: Visual Showcase & Gallery */}
-          <div className="modal-left-col">
-            <div className="modal-main-image-box">
-              <ResponsiveImage src={activeImg} alt={product.name} preset="gallery" eager={true} />
-              <div className="modal-image-badge">
-                <ShieldCheck size={14} style={{ color: 'var(--primary-light)' }} />
-                <span>100% Factory Built</span>
-              </div>
-            </div>
+            <div className="modal-grid-container" style={{ marginTop: '0', padding: '0', boxShadow: 'none', background: 'transparent' }}>
+              {/* Left Column: Visual Showcase & Gallery */}
+              <div className="modal-left-col">
+                <div className="modal-main-image-box">
+                  <ResponsiveImage src={activeImg} alt={product.name} preset="gallery" eager={true} />
+                  <div className="modal-image-badge">
+                    <ShieldCheck size={14} style={{ color: 'var(--primary-light)' }} />
+                    <span>100% Factory Built</span>
+                  </div>
+                </div>
 
-            {/* Thumbnail Carousel - Filter out duplicate images */}
-            <div className="modal-thumbs-row">
-              {Array.from(new Set(product.images)).map((img, i) => (
-                <button 
-                  key={i} 
-                  type="button"
-                  onClick={() => setActiveImg(img)}
-                  className={`modal-thumb-btn ${activeImg === img ? 'active' : ''}`}
-                  aria-label={`${lang === 'mr' ? 'थंबनेल' : 'Thumbnail'} ${i + 1}`}
-                >
-                  <img 
-                    src={img} 
-                    alt={`${product.name} - Thumbnail ${i + 1}`} 
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </button>
-              ))}
-            </div>
-
-            {/* Tractor HP Compatibility Badge Card */}
-            <div className="hp-recommendation-box">
-              <div className="hp-header">
-                <Wrench size={18} className="hp-icon" />
-                <span>{lang === 'mr' ? 'ट्रॅक्टर एच.पी जोडणी शिफारस' : 'Recommended Tractor Power'}</span>
-              </div>
-              <div className="hp-value">{product.tractorHp}</div>
-            </div>
-          </div>
-
-          {/* Right Column: Product Specs & Size Selector */}
-          <div className="modal-right-col">
-            {/* Category & Verified Badges */}
-            <div className="modal-badges-header">
-              <span className="badge badge-primary">
-                <Tag size={13} />
-                <span>{product.categoryName}</span>
-              </span>
-              <span className="badge badge-amber">
-                <Award size={13} />
-                <span>{product.badge}</span>
-              </span>
-            </div>
-
-            <h2 className="modal-product-title" id="modal-product-title">{product.name}</h2>
-            <p className="modal-product-title-mr">{product.nameMr}</p>
-
-            {/* Size Selector Bar (Interactive) */}
-            <div className="size-selector-container">
-              <label className="size-selector-label">
-                <Sparkles size={16} style={{ color: 'var(--secondary)' }} />
-                <span>{lang === 'mr' ? 'साईज पर्याय निवडा (Select Size Variant):' : 'Select Size Variant:'}</span>
-              </label>
-              
-              <div className="size-buttons-group">
-                {product.sizes.map((sz, idx) => {
-                  const isSelected = selectedSizeIndex === idx;
-                  return (
-                    <button
-                      key={idx}
+                {/* Thumbnail Carousel - Filter out duplicate images */}
+                <div className="modal-thumbs-row">
+                  {Array.from(new Set(product.images)).map((img, i) => (
+                    <button 
+                      key={i} 
                       type="button"
-                      onClick={() => setSelectedSizeIndex(idx)}
-                      className={`size-select-pill ${isSelected ? 'selected' : ''}`}
-                      aria-label={`${lang === 'mr' ? 'साईज निवडा' : 'Select size'} ${sz}`}
-                      aria-pressed={isSelected}
+                      onClick={() => setActiveImg(img)}
+                      className={`modal-thumb-btn ${activeImg === img ? 'active' : ''}`}
+                      aria-label={`${lang === 'mr' ? 'थंबनेल' : 'Thumbnail'} ${i + 1}`}
                     >
-                      {isSelected && <Check size={14} className="check-icon" />}
-                      <span>{sz}</span>
+                      <img 
+                        src={img} 
+                        alt={`${product.name} - Thumbnail ${i + 1}`} 
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </button>
-                  );
-                })}
-              </div>
-            </div>
+                  ))}
+                </div>
 
-            {/* Dynamic Price Display */}
-            <div className="modal-price-box">
-              <div className="price-info-group">
-                <span className="price-label">
-                  {lang === 'mr' ? `अंदाजित कारखान्यातील दर (${selectedSize}):` : `Estimated Factory Price for (${selectedSize}):`}
-                </span>
-                <div className="price-val">
-                  ₹{displayPriceMin.toLocaleString()} - ₹{displayPriceMax.toLocaleString()}/-
+                {/* Tractor HP Compatibility Badge Card */}
+                <div className="hp-recommendation-box">
+                  <div className="hp-header">
+                    <Wrench size={18} className="hp-icon" />
+                    <span>{lang === 'mr' ? 'ट्रॅक्टर एच.पी जोडणी शिफारस' : 'Recommended Tractor Power'}</span>
+                  </div>
+                  <div className="hp-value">{product.tractorHp}</div>
                 </div>
               </div>
-              <Tag size={22} style={{ color: 'var(--secondary)' }} />
-            </div>
 
-            {/* Key Advantages List */}
-            <div className="modal-features-section">
-              <h4 className="modal-section-h4">
-                <CheckSquare size={16} style={{ color: 'var(--primary)' }} />
-                <span>{lang === 'mr' ? 'मुख्य तांत्रिक वैशिष्ट्ये (Key Advantages):' : 'Main Technical Characteristics:'}</span>
-              </h4>
-              <ul className="modal-features-list">
-                {(lang === 'mr' ? product.featuresMr : product.features).map((f, i) => (
-                  <li key={i}>
-                    <CheckCircle2 size={16} className="feat-check" />
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+              {/* Right Column: Product Specs & Size Selector */}
+              <div className="modal-right-col">
+                {/* Category & Verified Badges */}
+                <div className="modal-badges-header">
+                  <span className="badge badge-primary">
+                    <Tag size={13} />
+                    <span>{product.categoryName}</span>
+                  </span>
+                  <span className="badge badge-amber">
+                    <Award size={13} />
+                    <span>{product.badge}</span>
+                  </span>
+                </div>
 
-            {/* Technical Specs Table Grid */}
-            <div className="modal-specs-box">
-              <h4 className="modal-section-h4">
-                <FileText size={16} style={{ color: 'var(--secondary)' }} />
-                <span>{lang === 'mr' ? 'तांत्रिक माहिती (Technical Specifications):' : 'Technical Specifications:'}</span>
-              </h4>
+                <h2 className="modal-product-title" id="modal-product-title">{product.name}</h2>
+                <p className="modal-product-title-mr">{product.nameMr}</p>
 
-              <div className="specs-table-grid">
-                {Object.entries(product.specs).map(([key, val], idx) => (
-                  <div key={idx} className="spec-row">
-                    <div className="spec-key-col">
-                      <Cpu size={14} className="spec-icon" />
-                      <span>{key}</span>
-                    </div>
-                    <div className="spec-val-col">
-                      {val}
+                {/* Size Selector Bar (Interactive) */}
+                <div className="size-selector-container">
+                  <label className="size-selector-label">
+                    <Sparkles size={16} style={{ color: 'var(--secondary)' }} />
+                    <span>{lang === 'mr' ? 'साईज पर्याय निवडा (Select Size Variant):' : 'Select Size Variant:'}</span>
+                  </label>
+                  
+                  <div className="size-buttons-group">
+                    {product.sizes.map((sz, idx) => {
+                      const isSelected = selectedSizeIndex === idx;
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setSelectedSizeIndex(idx)}
+                          className={`size-select-pill ${isSelected ? 'selected' : ''}`}
+                          aria-label={`${lang === 'mr' ? 'साईज निवडा' : 'Select size'} ${sz}`}
+                          aria-pressed={isSelected}
+                        >
+                          {isSelected && <Check size={14} className="check-icon" />}
+                          <span>{sz}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Dynamic Price Display */}
+                <div className="modal-price-box">
+                  <div className="price-info-group">
+                    <span className="price-label">
+                      {lang === 'mr' ? `अंदाजित कारखान्यातील दर (${selectedSize}):` : `Estimated Factory Price for (${selectedSize}):`}
+                    </span>
+                    <div className="price-val">
+                      ₹{displayPriceMin.toLocaleString()} - ₹{displayPriceMax.toLocaleString()}/-
                     </div>
                   </div>
-                ))}
+                  <Tag size={22} style={{ color: 'var(--secondary)' }} />
+                </div>
+
+                {/* Key Advantages List */}
+                <div className="modal-features-section">
+                  <h4 className="modal-section-h4">
+                    <CheckSquare size={16} style={{ color: 'var(--primary)' }} />
+                    <span>{lang === 'mr' ? 'मुख्य तांत्रिक वैशिष्ट्ये (Key Advantages):' : 'Main Technical Characteristics:'}</span>
+                  </h4>
+                  <ul className="modal-features-list">
+                    {(lang === 'mr' ? product.featuresMr : product.features).map((f, i) => (
+                      <li key={i}>
+                        <CheckCircle2 size={16} className="feat-check" />
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Technical Specs Table Grid */}
+                <div className="modal-specs-box">
+                  <h4 className="modal-section-h4">
+                    <FileText size={16} style={{ color: 'var(--secondary)' }} />
+                    <span>{lang === 'mr' ? 'तांत्रिक माहिती (Technical Specifications):' : 'Technical Specifications:'}</span>
+                  </h4>
+
+                  <div className="specs-table-grid">
+                    {Object.entries(product.specs).map(([key, val], idx) => (
+                      <div key={idx} className="spec-row">
+                        <div className="spec-key-col">
+                          <Cpu size={14} className="spec-icon" />
+                          <span>{key}</span>
+                        </div>
+                        <div className="spec-val-col">
+                          {val}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="modal-actions-row">
+                  <a 
+                    href={whatsappUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="btn-amber modal-btn"
+                  >
+                    <MessageCircle size={18} />
+                    <span>{lang === 'mr' ? 'व्हॉट्सॲप ऑर्डर' : 'WhatsApp Order'}</span>
+                  </a>
+
+                  <button 
+                    onClick={() => { onClose(); onOpenInquiry(product); }}
+                    className="btn-primary modal-btn" 
+                  >
+                    <PhoneCall size={18} />
+                    <span>{lang === 'mr' ? 'कोटेशन मागा' : 'Get Official Quote'}</span>
+                  </button>
+                </div>
               </div>
             </div>
-
-            {/* Action Buttons */}
-            <div className="modal-actions-row">
-              <a 
-                href={whatsappUrl} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="btn-amber modal-btn"
-              >
-                <MessageCircle size={18} />
-                <span>{lang === 'mr' ? 'व्हॉट्सॲप ऑर्डर' : 'WhatsApp Order'}</span>
-              </a>
-
-              <button 
-                onClick={() => { onClose(); onOpenInquiry(product); }}
-                className="btn-primary modal-btn" 
-              >
-                <PhoneCall size={18} />
-                <span>{lang === 'mr' ? 'कोटेशन मागा' : 'Get Official Quote'}</span>
-              </button>
-            </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer.Root>
   );
 }
 

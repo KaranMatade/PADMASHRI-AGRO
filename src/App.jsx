@@ -14,6 +14,7 @@ import useLocalStorage from './hooks/useLocalStorage';
 // Lazy load modal components for code splitting
 const ProductDetailModal = lazy(() => import('./components/ProductDetailModal'));
 const InquiryModal = lazy(() => import('./components/InquiryModal'));
+import { Toaster } from 'sonner';
 
 export default function App() {
   const [lang, setLang] = useLocalStorage('padmashri-lang', 'mr'); // Default to Marathi, persists across reloads
@@ -33,7 +34,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <div className="app-container">
+      <div className="app-container" vaul-drawer-wrapper="">
       <Header 
         key={`header-${lang}`}
         lang={lang} 
@@ -104,6 +105,8 @@ export default function App() {
           />
         </Suspense>
       )}
+
+      <Toaster position="bottom-right" richColors />
     </div>
     </ErrorBoundary>
   );
