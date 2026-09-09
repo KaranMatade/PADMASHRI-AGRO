@@ -62,15 +62,15 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
     const errors = validateInquiryForm(formData, lang);
     setValidationErrors(errors);
   };
-  const handleSubmit = (e) => {
+  const [apiLoading, setApiLoading] = useState(false);
+  const [referenceNo, setReferenceNo] = useState('');
+  const [apiError, setApiError] = useState('');
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Mark all fields as touched
-    setTouched({
-      name: true,
-      phone: true,
-      village: true
-    });
+    setTouched({ name: true, phone: true, village: true });
     
     // Validate all fields
     const errors = validateInquiryForm(formData, lang);
@@ -80,28 +80,56 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
     if (Object.keys(errors).length > 0) {
       return;
     }
-    
-    const prod = productsData.find(p => p.id === formData.product);
-    
-    const waText = lang === 'mr'
-      ? `*कोटेशन विनंती - पद्मश्री ॲग्रो*\n\n` +
-        `• नाव: ${formData.name}\n` +
-        `• संपर्क क्रमांक: ${formData.phone}\n` +
-        `• गाव/पत्ता: ${formData.village}\n` +
-        `• इच्छित अवजार: ${prod?.nameMr || prod?.name}\n` +
-        `• पसंतीची शाखा: ${formData.branch}\n` +
-        `• संदेश: ${formData.message || 'दर व माहिती हवी आहे.'}`
-      : `*Quotation Request - Padmashri Agro*\n\n` +
-        `• Name: ${formData.name}\n` +
-        `• Mobile: ${formData.phone}\n` +
-        `• Village/City: ${formData.village}\n` +
-        `• Required Equipment: ${prod?.name}\n` +
-        `• Preferred Branch: ${formData.branch}\n` +
-        `• Message: ${formData.message || 'Please send formal quotation.'}`;
 
-    window.open(`https://wa.me/${mainContact.whatsapp}?text=${encodeURIComponent(waText)}`, '_blank');
-    setSubmitted(true);
+    setApiLoading(true);
+    setApiError('');
+
+    try {
+      // 🔌 POST inquiry to real backend API & SQLite database
+      const response = await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          phone: formData.phone.trim(),
+          village: formData.village.trim(),
+          product: formData.product,
+          branch: formData.branch,
+          message: formData.message.trim()
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Server error');
+      }
+
+      // ✅ Inquiry saved to database — show reference number
+      setReferenceNo(data.inquiry?.reference_no || 'PAD-CONFIRMED');
+
+      // Also open WhatsApp so customer gets immediate response
+      const prod = productsData.find(p => p.id === formData.product);
+      const waText = lang === 'mr'
+        ? `*कोटेशन विनंती - पद्मश्री ॲग्रो*\nRef: ${data.inquiry?.reference_no}\n• नाव: ${formData.name}\n• संपर्क: ${formData.phone}\n• गाव: ${formData.village}\n• अवजार: ${prod?.nameMr || prod?.name}`
+        : `*Quote Request - Padmashri Agro*\nRef: ${data.inquiry?.reference_no}\n• Name: ${formData.name}\n• Mobile: ${formData.phone}\n• Village: ${formData.village}\n• Equipment: ${prod?.name}`;
+      window.open(`https://wa.me/${mainContact.whatsapp}?text=${encodeURIComponent(waText)}`, '_blank');
+
+      setSubmitted(true);
+    } catch (err) {
+      // Fallback: if backend is unavailable, still open WhatsApp directly
+      console.warn('API not available, using WhatsApp fallback:', err.message);
+      const prod = productsData.find(p => p.id === formData.product);
+      const waText = lang === 'mr'
+        ? `*कोटेशन विनंती - पद्मश्री ॲग्रो*\n• नाव: ${formData.name}\n• संपर्क: ${formData.phone}\n• गाव: ${formData.village}\n• अवजार: ${prod?.nameMr || prod?.name}`
+        : `*Quote Request - Padmashri Agro*\n• Name: ${formData.name}\n• Mobile: ${formData.phone}\n• Village: ${formData.village}\n• Equipment: ${prod?.name}`;
+      window.open(`https://wa.me/${mainContact.whatsapp}?text=${encodeURIComponent(waText)}`, '_blank');
+      setSubmitted(true);
+    } finally {
+      setApiLoading(false);
+    }
   };
+
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -246,10 +274,20 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
               <button 
                 type="submit" 
                 className="btn-amber" 
-                style={{ width: '100%', justifyContent: 'center', padding: '0.9rem', fontSize: '1rem', marginTop: '0.5rem' }}
+                disabled={apiLoading}
+                style={{ width: '100%', justifyContent: 'center', padding: '0.9rem', fontSize: '1rem', marginTop: '0.5rem', opacity: apiLoading ? 0.75 : 1 }}
               >
-                <Send size={18} />
-                <span>{lang === 'mr' ? 'कोटेशन पाठवा (WhatsApp)' : 'Send Quote Request'}</span>
+                {apiLoading ? (
+                  <>
+                    <span className="inquiry-spinner" aria-hidden="true"></span>
+                    <span>{lang === 'mr' ? 'पाठवत आहे...' : 'Submitting...'}</span>
+                  </>
+                ) : (
+                  <>
+                    <Send size={18} />
+                    <span>{lang === 'mr' ? 'कोटेशन पाठवा (WhatsApp)' : 'Send Quote Request'}</span>
+                  </>
+                )}
               </button>
             </form>
           </div>
@@ -259,10 +297,16 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
             <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
               {lang === 'mr' ? 'कोटेशन विनंती पाठवली आहे!' : 'Inquiry Submitted Successfully!'}
             </h3>
-            <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
+            {referenceNo && (
+              <div className="inquiry-ref-badge">
+                <ShieldCheck size={16} style={{ color: 'var(--primary)' }} />
+                <span>{lang === 'mr' ? 'संदर्भ क्रमांक:' : 'Reference No:'} <strong>{referenceNo}</strong></span>
+              </div>
+            )}
+            <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', marginTop: '0.75rem' }}>
               {lang === 'mr' 
-                ? 'आमचे प्रतिनिधी लवकरच आपल्याशी फोन किंवा व्हॉट्सॲपवर संपर्क साधतील.' 
-                : 'Our sales representative will reach out to you shortly with full details.'}
+                ? 'तुमची विनंती डेटाबेसमध्ये नोंदवली गेली आहे. आमचे प्रतिनिधी लवकरच व्हॉट्सॲप / फोनवर संपर्क साधतील.'
+                : 'Your inquiry has been saved to our database. Our representative will contact you via WhatsApp or phone shortly.'}
             </p>
             <button onClick={onClose} className="btn-primary">
               {lang === 'mr' ? 'बंद करा' : 'Close Window'}

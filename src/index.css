@@ -2927,3 +2927,40 @@ button, a, [role="button"] {
 section {
   transition: background 0.3s ease;
 }
+
+/* ============================================================
+   BACKEND INTEGRATION UI — Inquiry Module (Anushka Shete)
+   ============================================================ */
+
+/* Loading spinner inside submit button */
+@keyframes inquiry-spin {
+  to { transform: rotate(360deg); }
+}
+.inquiry-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2.5px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: inquiry-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+/* Database reference number badge shown on success */
+.inquiry-ref-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(21,128,61,0.1);
+  border: 1.5px solid rgba(21,128,61,0.35);
+  color: var(--primary);
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin: 0.5rem auto;
+}
+[data-theme="dark"] .inquiry-ref-badge {
+  background: rgba(21,128,61,0.15);
+}
