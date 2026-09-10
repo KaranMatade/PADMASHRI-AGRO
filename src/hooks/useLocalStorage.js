@@ -1,43 +1,43 @@
-import { useState, useEffect } from 'react';
+/**
+ * useLocalStorage.js — Custom hook for persisting values in browser localStorage
+ * Author: Anushka Shete
+ * Used for saving user preferences like language, theme, recent inquiry ref
+ */
+
+import { useState } from 'react';
 
 /**
- * Custom hook for persisting state to localStorage
- * Automatically syncs state with localStorage on changes
- * Handles errors gracefully and falls back to in-memory state
- * 
- * @param {string} key - localStorage key to use
- * @param {any} defaultValue - Default value if no stored value exists
- * @returns {[any, Function]} - Tuple of [value, setValue] like useState
+ * useLocalStorage - Drop-in replacement for useState that persists to localStorage
+ * @param {string} key - localStorage key
+ * @param {any} initialValue - default value if key not present
+ * @returns [storedValue, setValue]
  */
-function useLocalStorage(key, defaultValue) {
-  // Initialize state with value from localStorage or default
-  const [value, setValue] = useState(() => {
+export default function useLocalStorage(key, initialValue) {
+  const [storedValue, setStoredValue] = useState(() => {
     try {
       const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : defaultValue;
-    } catch (error) {
-      console.error(`Error reading localStorage key "${key}":`, error);
-      return defaultValue;
+      return item !== null ? JSON.parse(item) : initialValue;
+    } catch {
+      return initialValue;
     }
   });
 
-  // Update localStorage whenever value changes
-  useEffect(() => {
+  const setValue = (value) => {
     try {
-      window.localStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-      // Handle quota exceeded errors, security errors, etc.
-      if (error.name === 'QuotaExceededError') {
-        console.error(`localStorage quota exceeded for key "${key}"`);
-      } else if (error.name === 'SecurityError') {
-        console.error(`localStorage access denied for key "${key}"`);
-      } else {
-        console.error(`Error setting localStorage key "${key}":`, error);
-      }
+      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      window.localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (err) {
+      console.warn(`[useLocalStorage] Could not save key "${key}":`, err);
     }
-  }, [key, value]);
+  };
 
-  return [value, setValue];
+  const removeValue = () => {
+    try {
+      window.localStorage.removeItem(key);
+      setStoredValue(initialValue);
+    } catch { /* silent */ }
+  };
+
+  return [storedValue, setValue, removeValue];
 }
-
-export default useLocalStorage;

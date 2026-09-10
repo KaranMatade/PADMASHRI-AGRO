@@ -6,7 +6,16 @@ export default defineConfig({
   plugins: [react()],
   base: './', // Ensures relative asset loading on GitHub Pages & static hosting
   server: {
-    port: 3000,
-    host: true
+    port: 5173,
+    host: true,
+    proxy: {
+      // Forward /api/* calls to Express backend
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false
+      }
+    }
   }
 })
+
