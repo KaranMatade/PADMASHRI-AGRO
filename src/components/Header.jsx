@@ -41,16 +41,16 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
         <div className="container top-bar-inner">
           <div className="top-bar-left">
             <div className="top-info-item">
-              <MapPin size={14} className="text-secondary" />
-              <span>{lang === 'mr' ? 'कारखाना: सादतपूर, संगमनेर' : 'Main Works: Sadatpur, Sangamner'}</span>
+              <MapPin size={15} className="text-secondary" />
+              <span style={{ lineHeight: 1, display: 'inline-flex', alignItems: 'center', height: '100%' }}>{lang === 'mr' ? 'कारखाना: सादतपूर, संगमनेर' : 'Main Works: Sadatpur, Sangamner'}</span>
             </div>
             <div className="top-info-item">
-              <Phone size={14} className="text-secondary" />
-              <a href={`tel:${mainContact.mainPhone}`} style={{ color: 'inherit' }}>{mainContact.mainPhone}</a>
+              <Phone size={15} className="text-secondary" />
+              <a href={`tel:${mainContact.mainPhone}`} style={{ color: 'inherit', lineHeight: 1, display: 'inline-flex', alignItems: 'center', height: '100%' }}>{mainContact.mainPhone}</a>
             </div>
             <div className="top-info-item">
-              <Mail size={14} className="text-secondary" />
-              <a href={`mailto:${mainContact.email}`} style={{ color: 'inherit' }}>{mainContact.email}</a>
+              <Mail size={15} className="text-secondary" />
+              <a href={`mailto:${mainContact.email}`} style={{ color: 'inherit', lineHeight: 1, display: 'inline-flex', alignItems: 'center', height: '100%' }}>{mainContact.email}</a>
             </div>
           </div>
 
