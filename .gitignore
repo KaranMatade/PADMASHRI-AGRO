@@ -1,10 +1,78 @@
-node_modules
-dist
-dist-ssr
-.DS_Store
-*.log
-*.tmp
-.tempmediaStorage
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production & Build outputs
+dist/
+dist-ssr/
+build/
+out/
+
+# Environment & Sensitive Credentials
 .env
 .env.local
-.kiro
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+!.env.example
+
+# Logs & Temporary Files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.tmp
+.tempmediaStorage
+
+# Android & Gradle (Native App)
+.gradle/
+**/build/
+local.properties
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.iml
+*.sublime-workspace
+*.sublime-project
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Agent / Tool folders
+.kiro/
+.kilo/
+
+# Admin & Native Apps (Separate from user web)
+/PadmashriAdminNative/
+/padmashri-admin-app/
+/src/admin/
+
+# Sensitive Configuration & Credentials
+google-services.json
+**/google-services.json
+service-account*.json
+*.keystore
+*.jks
+.env
+.env.*
+!.env.example
+
+# Local Utility & Seeding Scripts
+seed*.js
+seed*.mjs
+convert.cjs
+scaffold_android.ps1

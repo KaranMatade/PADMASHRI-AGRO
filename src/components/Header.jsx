@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Phone, Mail, MapPin, Globe, Menu, X, ShieldCheck, Sun, Moon, MessageSquare } from 'lucide-react';
-import { mainContact } from '../data/branchesData';
+import { useContactData } from '../hooks/useContactData';
 import { imageUrl } from '../lib/imageUrl';
 
 export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }) {
+  const { mainContact } = useContactData();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Close mobile menu on ESC key
@@ -27,6 +28,29 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
 
   return (
     <header className="header-wrapper">
+      {/* Accessibility: Skip to main content */}
+      <a
+        href="#main-content"
+        className="skip-to-content"
+        style={{
+          position: 'absolute',
+          top: '-100px',
+          left: '1rem',
+          zIndex: 9999,
+          background: 'var(--primary)',
+          color: 'white',
+          padding: '0.75rem 1.25rem',
+          borderRadius: '0 0 8px 8px',
+          fontWeight: 700,
+          textDecoration: 'none',
+          fontSize: '0.9rem',
+          transition: 'top 0.2s',
+        }}
+        onFocus={(e) => { e.target.style.top = '0'; }}
+        onBlur={(e) => { e.target.style.top = '-100px'; }}
+      >
+        {lang === 'mr' ? 'मुख्य साहित्यावर जा' : 'Skip to main content'}
+      </a>
       {/* Dark Backdrop Overlay on mobile when menu is open */}
       {mobileMenuOpen && (
         <div 
@@ -84,7 +108,7 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
         <div className="container navbar-inner">
           <a href="#home" className="brand-logo" aria-label={lang === 'mr' ? 'पद्मश्री ॲग्रो - मुख्यपृष्ठ' : 'Padmashri Agro - Home'}>
             <div className="brand-logo-img-wrapper">
-              <img src={imageUrl("https://res.cloudinary.com/bthbndrq/image/upload/v1786167598/padmashri-agro/site/logo.jpg")} alt="Padmashri Agro Logo" className="brand-logo-img" />
+              <img src={imageUrl("https://res.cloudinary.com/bthbndrq/image/upload/v1786167598/padmashri-agro/site/logo.jpg")} alt="Padmashri Agro Engineering Works — Agricultural Implements Manufacturer, Sangamner, Maharashtra" className="brand-logo-img" width="48" height="48" />
             </div>
             <div className="brand-text">
               <div className="brand-name">{lang === 'mr' ? 'पद्मश्री ॲग्रो' : 'PADMASHRI AGRO'}</div>
@@ -153,6 +177,17 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
               >
                 <Globe size={18} />
                 <span>{lang === 'en' ? 'मराठी मध्ये पहा (Language)' : 'Switch to English'}</span>
+              </button>
+            </li>
+
+            {/* Dark Mode Switcher inside Mobile Drawer */}
+            <li className="mobile-only-lang-item" style={{ marginTop: '8px' }}>
+              <button 
+                onClick={() => { toggleTheme(); setMobileMenuOpen(false); }}
+                style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', borderRadius: '12px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}
+              >
+                {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+                <span>{theme === 'light' ? (lang === 'mr' ? 'डार्क मोड (Dark Mode)' : 'Enable Dark Mode') : (lang === 'mr' ? 'लाईट मोड (Light Mode)' : 'Enable Light Mode')}</span>
               </button>
             </li>
           </ul>

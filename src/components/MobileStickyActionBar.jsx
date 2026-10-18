@@ -1,8 +1,9 @@
 import React from 'react';
 import { Phone, MessageCircle, FileText } from 'lucide-react';
-import { mainContact } from '../data/branchesData';
+import { useContactData } from '../hooks/useContactData';
 
 export default function MobileStickyActionBar({ lang, onOpenInquiry }) {
+  const { mainContact } = useContactData();
   const whatsappUrl = `https://wa.me/${mainContact.whatsapp}?text=${encodeURIComponent(
     lang === 'mr' 
       ? 'नमस्कार पद्मश्री ॲग्रो, मला आपल्या शेती अवजारांबद्दल व दराबद्दल माहिती हवी आहे.' 
@@ -35,7 +36,10 @@ export default function MobileStickyActionBar({ lang, onOpenInquiry }) {
 
       <button 
         id="mobile-sticky-quote"
-        onClick={onOpenInquiry}
+        onClick={(e) => {
+          e.preventDefault();
+          document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' });
+        }}
         className="mobile-action-btn"
         style={{ background: 'var(--primary)', color: 'white' }}
       >

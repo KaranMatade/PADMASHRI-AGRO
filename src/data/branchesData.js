@@ -3,7 +3,7 @@ export const mainContact = {
   companyNameMr: "पद्मश्री ॲग्रो इंजिनिअरिंग वर्क्स",
   established: "1998",
   founder: "S. Thengade & Family",
-  email: "contact@padmashreeagro.com",
+  email: "contact@padmashriagro.com",
   mainPhone: "+919226253710",
   whatsapp: "919226253710",
   indiaMartUrl: "https://www.indiamart.com/padmashriagroengworks/",
@@ -24,37 +24,49 @@ export const branchesData = [
     id: "branch-astgaon",
     name: "Astgaon Branch",
     nameMr: "आस्तगाव शाखा (राहाता)",
+    category: "Sales & Spare Parts",
     address: "Nagar-Manmad Road, Astgaon, Tal: Rahata, Dist: Ahilyanagar, Maharashtra",
     addressMr: "नगर-मनमाड रोड, आस्तगाव, ता. राहाता, जि. अहिल्यानगर",
     contactPerson: "Branch Sales Manager",
     phone: "+91 92262 53710",
     phoneClean: "919226253710",
     timing: "Mon - Sat: 9:00 AM - 8:00 PM",
-    badge: "Sales & Spare Parts"
+    badge: "Sales & Spare Parts",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Astgaon+Rahata+Ahilyanagar",
+    facilities: ["🚜 Machinery Demo", "⚙️ Genuine Spare Parts", "🌾 Mahadbt Subsidy Helpdesk", "🔧 Service Support"],
+    isActive: true
   },
   {
     id: "branch-mahalgaon",
     name: "Mahalgaon Branch",
     nameMr: "महालगाव शाखा (वैजापूर)",
+    category: "Demonstration & Sales",
     address: "Mahalgaon, Tal: Vaijapur, Dist: Chhatrapati Sambhajinagar, Maharashtra",
     addressMr: "महालगाव, ता. वैजापूर, जि. छत्रपती संभाजीनगर",
     contactPerson: "Branch Incharge",
     phone: "+91 99701 00169",
     phoneClean: "919970100169",
     timing: "Mon - Sat: 9:00 AM - 8:00 PM",
-    badge: "Demonstration & Sales"
+    badge: "Demonstration & Sales",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Mahalgaon+Vaijapur+Chhatrapati+Sambhajinagar",
+    facilities: ["🚜 Live Field Demo", "🌾 Farmer Guidance", "💳 Tractor Loan Desk", "⚙️ Fast Spare Parts"],
+    isActive: true
   },
   {
     id: "branch-palasvadi",
-    name: "Verul-Palasvadi Branch",
-    nameMr: "वेूळ-पळसवाडी शाखा (खुल्ताबाद)",
-    address: "Verul-Kannad Road, Palasvadi, Tal: Khultabad, Dist: Chhatrapati Sambhajinagar, Maharashtra",
-    addressMr: "वेूळ-कन्नड रोड, पळसवाडी, ता. खुलताबाद, जि. छत्रपती संभाजीनगर",
+    name: "Verul-Palaswadi Branch (Khultabad)",
+    nameMr: "वेरुळ-पळसवाडी शाखा (खुलताबाद)",
+    category: "Regional Showroom",
+    address: "Verul-Kannad Road, Palaswadi, Tal: Khultabad, Dist: Chhatrapati Sambhajinagar, Maharashtra",
+    addressMr: "वेरुळ-कन्नड रोड, पळसवाडी, ता. खुलताबाद, जि. छत्रपती संभाजीनगर",
     contactPerson: "Service & Inquiry Desk",
     phone: "+91 98605 25849",
     phoneClean: "919860525849",
     timing: "Mon - Sat: 9:00 AM - 8:00 PM",
-    badge: "Regional Showroom"
+    badge: "Regional Showroom",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Palaswadi+Khultabad+Chhatrapati+Sambhajinagar",
+    facilities: ["🚜 Full Display Showroom", "🌾 Subsidy Assistance", "🔧 Workshop Repair", "🚛 Delivery Desk"],
+    isActive: true
   }
 ];
 

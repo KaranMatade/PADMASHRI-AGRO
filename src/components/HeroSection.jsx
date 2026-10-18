@@ -1,10 +1,11 @@
 import React from 'react';
 import ResponsiveImage from './ResponsiveImage';
 import { ArrowRight, Shield, PhoneCall, MessageCircle } from 'lucide-react';
-import { mainContact } from '../data/branchesData';
+import { useContactData } from '../hooks/useContactData';
 import { imageUrl } from '../lib/imageUrl';
 
 export default function HeroSection({ lang, onOpenInquiry }) {
+  const { mainContact } = useContactData();
   const whatsappUrl = `https://wa.me/${mainContact.whatsapp}?text=${encodeURIComponent(
     lang === 'mr' 
       ? 'नमस्कार पद्मश्री ॲग्रो, मला आपल्या शेती अवजारांबद्दल व दराबद्दल माहिती हवी आहे.' 
@@ -13,8 +14,9 @@ export default function HeroSection({ lang, onOpenInquiry }) {
 
   return (
     <section
-      id="skip-content"
+      id="home"
       className="hero-section"
+      aria-label={lang === 'mr' ? 'मुख्य पृष्ठ' : 'Hero — Main Banner'}
       style={{ '--hero-background-image': `url("${imageUrl('/Frontpage_background.png')}")` }}
     >
       <div className="container hero-grid hero-single-col">

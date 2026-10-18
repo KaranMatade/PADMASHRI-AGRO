@@ -10,9 +10,11 @@
     "upload:cloudinary": "node scripts/upload-cloudinary-images.mjs"
   },
   "dependencies": {
+    "firebase": "^13.0.0",
     "lucide-react": "^0.344.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^7.18.3",
     "sonner": "^2.0.8",
     "vaul": "^1.1.2"
   },

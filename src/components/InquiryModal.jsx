@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { X, Send, PhoneCall, CheckCircle, ShieldCheck } from 'lucide-react';
-import { mainContact, branchesData } from '../data/branchesData';
+import { useContactData } from '../hooks/useContactData';
 import { productsData } from '../data/productsData';
 import { validateInquiryForm } from '../utils/validation';
 import useFocusTrap from '../hooks/useFocusTrap';
 import { Drawer } from 'vaul';
 import { toast } from 'sonner';
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function InquiryModal({ lang, preselectedProduct, onClose }) {
+  const { mainContact, branchesData } = useContactData();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -63,7 +66,7 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
     const errors = validateInquiryForm(formData, lang);
     setValidationErrors(errors);
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Mark all fields as touched
@@ -102,6 +105,51 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
 
     window.open(`https://wa.me/${mainContact.whatsapp}?text=${encodeURIComponent(waText)}`, '_blank');
     
+    // Save to Firestore — real-time sync with Android Admin App
+    try {
+      await addDoc(collection(db, 'inquiries'), {
+        name: formData.name.trim(),
+        phone: formData.phone.trim(),
+        village: formData.village.trim(),
+        productName: prod?.name || 'Agricultural Equipment',
+        productId: formData.product,
+        branch: formData.branch,
+        message: formData.message.trim() || 'Please send formal quotation.',
+        status: 'New',
+        createdAt: serverTimestamp(),
+        dateStr: new Date().toLocaleDateString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      });
+    } catch (err) {
+      console.error('Firestore inquiry save failed:', err);
+      // Show error but don't block the WhatsApp flow — lead is still sent via WhatsApp
+      toast.warning(
+        lang === 'mr'
+          ? 'व्हॉट्सॲप पाठवले, परंतु लीड जतन करताना त्रुटी आली.'
+          : 'WhatsApp sent, but lead could not be saved to admin. Check internet.'
+      );
+    }
+
+    // Save to local storage as fallback
+    const newInquiry = {
+      id: Date.now(),
+      name: formData.name,
+      phone: formData.phone,
+      village: formData.village,
+      productName: prod?.name || 'Unknown',
+      branch: formData.branch,
+      date: new Date().toISOString(),
+      status: 'New'
+    };
+    
+    const existingInquiries = JSON.parse(localStorage.getItem('padmashri_inquiries') || '[]');
+    localStorage.setItem('padmashri_inquiries', JSON.stringify([newInquiry, ...existingInquiries]));
+
     toast.success(lang === 'mr' ? 'कोटेशन विनंती पाठवली आहे!' : 'Inquiry Submitted Successfully!', {
       description: lang === 'mr' 
         ? 'आमचे प्रतिनिधी लवकरच आपल्याशी संपर्क साधतील.' 
@@ -114,13 +162,28 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
   return (
     <Drawer.Root open={true} onOpenChange={(open) => !open && onClose()} shouldScaleBackground>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-black/60 z-[9999]" style={{ zIndex: 9999 }} />
+        <Drawer.Overlay 
+          style={{ position: 'fixed', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 9999 }} 
+        />
         <Drawer.Content 
           ref={modalRef}
-          className="fixed bottom-0 left-0 right-0 bg-white flex flex-col rounded-t-[20px] max-h-[90vh] z-[10000]"
-          style={{ zIndex: 10000 }}
+          style={{ 
+            position: 'fixed', 
+            bottom: 0, 
+            left: 0, 
+            right: 0, 
+            maxWidth: '640px',
+            margin: '0 auto',
+            backgroundColor: '#ffffff', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            borderTopLeftRadius: '20px', 
+            borderTopRightRadius: '20px', 
+            maxHeight: '90vh', 
+            zIndex: 10000 
+          }}
         >
-          <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mt-4 mb-2" />
+          <div style={{ margin: '16px auto 8px auto', width: '48px', height: '6px', flexShrink: 0, borderRadius: '9999px', backgroundColor: '#d1d5db' }} />
           
           <div className="overflow-auto p-6" style={{ maxWidth: '600px', margin: '0 auto', width: '100%' }}>
             <Drawer.Close asChild>
@@ -246,8 +309,8 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
                   onChange={e => handleInputChange('branch', e.target.value)}
                 >
                   <option value="main">Main Factory (Sadatpur, Sangamner)</option>
-                  {branchesData.map(b => (
-                    <option key={b.id} value={b.name}>{b.name}</option>
+                  {branchesData.filter(b => b.isActive !== false).map(b => (
+                    <option key={b.id} value={b.name}>{lang === 'mr' ? b.nameMr : b.name}</option>
                   ))}
                 </select>
               </div>

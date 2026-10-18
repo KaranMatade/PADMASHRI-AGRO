@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { Calculator, MessageCircle, Sparkles, Send, Tag, ShieldCheck, Truck, User, MapPin, ChevronDown } from 'lucide-react';
 import { productsData } from '../data/productsData';
-import { branchesData, mainContact } from '../data/branchesData';
+import { useContactData } from '../hooks/useContactData';
 
 export default function PriceCalculator({ lang }) {
+  const { mainContact, branchesData } = useContactData();
+  const [calcMode, setCalcMode] = useState('price'); // 'price' or 'subsidy'
   const [selectedProductId, setSelectedProductId] = useState(productsData[0].id);
   const [selectedSize, setSelectedSize] = useState(productsData[0].sizes[0]);
   const [selectedBranch, setSelectedBranch] = useState('main');
   const [includeTransport, setIncludeTransport] = useState(false);
+  const [farmerCategory, setFarmerCategory] = useState('small_sc_st'); // 'small_sc_st' (50%) or 'general' (40%)
+  const [loanTenureMonths, setLoanTenureMonths] = useState(36); // 12, 24, 36, 48, 60
+  const [downPaymentPercent, setDownPaymentPercent] = useState(25); // 15% to 50%
   const [farmerName, setFarmerName] = useState('');
   const [farmerVillage, setFarmerVillage] = useState('');
+  const [showErrors, setShowErrors] = useState(false);
 
   const currentProduct = productsData.find(p => p.id === selectedProductId) || productsData[0];
 
@@ -34,30 +40,74 @@ export default function PriceCalculator({ lang }) {
   const transportEst = includeTransport ? 2500 : 0;
   const totalPriceEst = basePriceEst + transportEst;
 
+  // Subsidy Calculation (Mahadbt / Krishi Yantrikikaran scheme)
+  const subsidyPercent = farmerCategory === 'small_sc_st' ? 0.50 : 0.40;
+  const maxSubsidyCap = farmerCategory === 'small_sc_st' ? 50000 : 40000;
+  const calculatedSubsidy = Math.min(Math.round(basePriceEst * subsidyPercent), maxSubsidyCap);
+  const netFarmerShare = Math.max(totalPriceEst - calculatedSubsidy, 10000);
+
+  // Tractor Loan EMI Calculation (Standard Agri Loan at 8.5% p.a.)
+  const annualInterestRate = 0.085;
+  const monthlyRate = annualInterestRate / 12;
+  const downPaymentAmount = Math.round(netFarmerShare * (downPaymentPercent / 100));
+  const loanPrincipal = netFarmerShare - downPaymentAmount;
+  const monthlyEMI = Math.round(
+    (loanPrincipal * monthlyRate * Math.pow(1 + monthlyRate, loanTenureMonths)) /
+    (Math.pow(1 + monthlyRate, loanTenureMonths) - 1)
+  );
+
   const sendWhatsAppQuote = () => {
+    if (!farmerName.trim() || !farmerVillage.trim()) {
+      setShowErrors(true);
+      return;
+    }
+    setShowErrors(false);
     const branchInfo = selectedBranch === 'main'
-      ? mainContact.headOffice.title
-      : branchesData.find(b => b.id === selectedBranch)?.name;
+      ? (mainContact?.headOffice?.title || 'Main Factory HQ')
+      : (branchesData.find(b => b.id === selectedBranch)?.name || 'Nearest Branch');
 
-    const message = lang === 'mr'
-      ? `*कोटेशन अंदाजपत्रक चौकशी - पद्मश्री ॲग्रो*\n\n` +
-        `• शेतकर्‍याचे नाव: ${farmerName || 'शेतकरी मित्र'}\n` +
-        `• गाव/पत्ता: ${farmerVillage || 'महाराष्ट्र'}\n` +
-        `• निवडलेले अवजार: ${currentProduct.nameMr} (${currentProduct.name})\n` +
-        `• साईज (Size): ${selectedSize}\n` +
-        `• निवडलेली शाखा: ${branchInfo}\n` +
-        `• वाहतूक जोडणी: ${includeTransport ? 'होय (थेट शेतात पोच)' : 'नाही'}\n` +
-        `• अंदाजित दर: *₹${totalPriceEst.toLocaleString()}/-*\n\nकृपया मला नक्की डिस्काउंट व पेमेंट सवलत सांगा.`
-      : `*Price Estimation Inquiry - Padmashri Agro*\n\n` +
-        `• Farmer Name: ${farmerName || 'Farmer Customer'}\n` +
-        `• Location/Village: ${farmerVillage || 'Maharashtra'}\n` +
-        `• Selected Implement: ${currentProduct.name}\n` +
-        `• Size Variant: ${selectedSize}\n` +
-        `• Nearest Branch: ${branchInfo}\n` +
-        `• Transport Required: ${includeTransport ? 'Yes (Farm delivery)' : 'No'}\n` +
-        `• Estimated Quote: *₹${totalPriceEst.toLocaleString()}/-*\n\nPlease provide final best price and payment scheme.`;
+    const message = calcMode === 'subsidy'
+      ? (lang === 'mr'
+          ? `*शासकीय कृषी योजना व ईएमआय अंदाजपत्रक - पद्मश्री ॲग्रो*\n\n` +
+            `• शेतकर्‍याचे नाव: ${farmerName}\n` +
+            `• गाव/पत्ता: ${farmerVillage}\n` +
+            `• अवजार: ${currentProduct.nameMr} (${currentProduct.name})\n` +
+            `• साईज: ${selectedSize}\n` +
+            `• शेतकरी प्रवर्ग: ${farmerCategory === 'small_sc_st' ? 'अल्पभूधारक / महिला / SC-ST (५०% अनुदान)' : 'सर्वसाधारण प्रवर्ग (४०% अनुदान)'}\n` +
+            `• मूळ किंमत: ₹${totalPriceEst.toLocaleString()}/-\n` +
+            `• अंदाजित शासकीय अनुदान: ₹${calculatedSubsidy.toLocaleString()}/-\n` +
+            `• शेतकरी वाटा: *₹${netFarmerShare.toLocaleString()}/-*\n` +
+            `• अंदाजित मासिक हप्ता (EMI): *₹${monthlyEMI.toLocaleString()}/महिना* (${loanTenureMonths} महिने)\n\nकृपया महाडीबीटी कोटेशन व बँक लोन मंजुरीची माहिती द्या.`
+          : `*Govt Subsidy & Tractor Loan EMI Inquiry - Padmashri Agro*\n\n` +
+            `• Farmer Name: ${farmerName}\n` +
+            `• Location: ${farmerVillage}\n` +
+            `• Implement: ${currentProduct.name}\n` +
+            `• Variant: ${selectedSize}\n` +
+            `• Category: ${farmerCategory === 'small_sc_st' ? 'Small/Marginal/SC/ST/Women (50% Subsidy)' : 'General Category (40% Subsidy)'}\n` +
+            `• Total Price: ₹${totalPriceEst.toLocaleString()}/-\n` +
+            `• Est. Govt Subsidy: ₹${calculatedSubsidy.toLocaleString()}/-\n` +
+            `• Farmer Share: *₹${netFarmerShare.toLocaleString()}/-*\n` +
+            `• Est. Monthly EMI: *₹${monthlyEMI.toLocaleString()}/mo* (${loanTenureMonths} mos tenure)\n\nPlease provide formal quotation for Mahadbt subsidy & bank loan approval.`)
+      : (lang === 'mr'
+          ? `*कोटेशन अंदाजपत्रक चौकशी - पद्मश्री ॲग्रो*\n\n` +
+            `• शेतकर्‍याचे नाव: ${farmerName || 'शेतकरी मित्र'}\n` +
+            `• गाव/पत्ता: ${farmerVillage || 'महाराष्ट्र'}\n` +
+            `• निवडलेले अवजार: ${currentProduct.nameMr} (${currentProduct.name})\n` +
+            `• साईज (Size): ${selectedSize}\n` +
+            `• निवडलेली शाखा: ${branchInfo}\n` +
+            `• वाहतूक जोडणी: ${includeTransport ? 'होय (थेट शेतात पोच)' : 'नाही'}\n` +
+            `• अंदाजित दर: *₹${totalPriceEst.toLocaleString()}/-*\n\nकृपया मला नक्की डिस्काउंट व पेमेंट सवलत सांगा.`
+          : `*Price Estimation Inquiry - Padmashri Agro*\n\n` +
+            `• Farmer Name: ${farmerName || 'Farmer Customer'}\n` +
+            `• Location/Village: ${farmerVillage || 'Maharashtra'}\n` +
+            `• Selected Implement: ${currentProduct.name}\n` +
+            `• Size Variant: ${selectedSize}\n` +
+            `• Nearest Branch: ${branchInfo}\n` +
+            `• Transport Required: ${includeTransport ? 'Yes (Farm delivery)' : 'No'}\n` +
+            `• Estimated Quote: *₹${totalPriceEst.toLocaleString()}/-*\n\nPlease provide final best price and payment scheme.`);
 
-    window.open(`https://wa.me/${mainContact.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
+    const phoneNum = mainContact?.whatsapp || '919226253710';
+    window.open(`https://wa.me/${phoneNum}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   return (
@@ -84,6 +134,48 @@ export default function PriceCalculator({ lang }) {
           </p>
         </div>
 
+        {/* Mode Switcher Tabs */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.75rem', gap: '0.75rem' }}>
+          <button
+            type="button"
+            onClick={() => setCalcMode('price')}
+            style={{
+              padding: '0.65rem 1.25rem',
+              borderRadius: '9999px',
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              border: '1px solid',
+              borderColor: calcMode === 'price' ? '#059669' : '#e2e8f0',
+              backgroundColor: calcMode === 'price' ? '#059669' : '#ffffff',
+              color: calcMode === 'price' ? '#ffffff' : '#475569',
+              boxShadow: calcMode === 'price' ? '0 4px 12px rgba(5, 150, 105, 0.25)' : 'none',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            🏷️ {lang === 'mr' ? 'थेट कारखाना दर' : 'Factory Price Estimator'}
+          </button>
+          <button
+            type="button"
+            onClick={() => setCalcMode('subsidy')}
+            style={{
+              padding: '0.65rem 1.25rem',
+              borderRadius: '9999px',
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              border: '1px solid',
+              borderColor: calcMode === 'subsidy' ? '#059669' : '#e2e8f0',
+              backgroundColor: calcMode === 'subsidy' ? '#059669' : '#ffffff',
+              color: calcMode === 'subsidy' ? '#ffffff' : '#475569',
+              boxShadow: calcMode === 'subsidy' ? '0 4px 12px rgba(5, 150, 105, 0.25)' : 'none',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            🏛️ {lang === 'mr' ? 'शासकीय अनुदान व ईएमआय (EMI)' : 'Govt Subsidy & Tractor EMI'}
+          </button>
+        </div>
+
         {/* Main Calculator Card */}
         <div className="calculator-card">
 
@@ -92,7 +184,11 @@ export default function PriceCalculator({ lang }) {
             <div className="calc-form-inner">
               <div className="calc-form-heading">
                 <Sparkles size={20} className="calc-heading-icon" />
-                <span>{lang === 'mr' ? 'अवजार व साईझ निवडा' : 'Select Specifications'}</span>
+                <span>
+                  {calcMode === 'subsidy'
+                    ? (lang === 'mr' ? 'अनुदान व कर्ज तपशील निवडा' : 'Subsidy & Loan Parameters')
+                    : (lang === 'mr' ? 'अवजार व साईझ निवडा' : 'Select Specifications')}
+                </span>
               </div>
 
               {/* Step 1: Product */}
@@ -110,7 +206,7 @@ export default function PriceCalculator({ lang }) {
                   >
                     {productsData.map(p => (
                       <option key={p.id} value={p.id}>
-                        {lang === 'mr' ? p.nameMr : p.name} — ₹{p.priceMin.toLocaleString()} to ₹{p.priceMax.toLocaleString()}
+                        {(lang === 'mr' ? p.nameMr : p.name).replace(/[{}[\]]/g, '')} — ₹{p.priceMin.toLocaleString()} to ₹{p.priceMax.toLocaleString()}
                       </option>
                     ))}
                   </select>
@@ -132,7 +228,7 @@ export default function PriceCalculator({ lang }) {
                       onClick={() => setSelectedSize(sz)}
                       className={`calc-size-pill ${selectedSize === sz ? 'active' : ''}`}
                     >
-                      {sz}
+                      {typeof sz === 'string' ? sz.replace(/[{}[\]]/g, '') : sz}
                     </button>
                   ))}
                 </div>
@@ -154,7 +250,7 @@ export default function PriceCalculator({ lang }) {
                     <option value="main">
                       {lang === 'mr' ? mainContact.headOffice.titleMr : mainContact.headOffice.title}
                     </option>
-                    {branchesData.map(b => (
+                    {branchesData.filter(b => b.isActive !== false).map(b => (
                       <option key={b.id} value={b.id}>{lang === 'mr' ? b.nameMr : b.name}</option>
                     ))}
                   </select>
@@ -181,6 +277,94 @@ export default function PriceCalculator({ lang }) {
                 </label>
               </div>
 
+              {/* Step 4: Subsidy & Loan Controls (if in subsidy mode) */}
+              {calcMode === 'subsidy' && (
+                <>
+                  <div className="calc-form-group">
+                    <label className="calc-label">
+                      <span className="calc-step-num">4</span>
+                      {lang === 'mr' ? 'शेतकरी प्रवर्ग निवडा (महाडीबीटी योजना)' : 'Farmer Category (Mahadbt Scheme)'}
+                    </label>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                      <button
+                        type="button"
+                        onClick={() => setFarmerCategory('small_sc_st')}
+                        style={{
+                          padding: '0.6rem 0.75rem',
+                          borderRadius: '8px',
+                          border: farmerCategory === 'small_sc_st' ? '2px solid #059669' : '1px solid #e2e8f0',
+                          backgroundColor: farmerCategory === 'small_sc_st' ? '#f0fdf4' : '#ffffff',
+                          color: farmerCategory === 'small_sc_st' ? '#166534' : '#475569',
+                          fontWeight: 600,
+                          fontSize: '0.8rem',
+                          cursor: 'pointer',
+                          textAlign: 'left'
+                        }}
+                      >
+                        🌾 {lang === 'mr' ? 'अल्पभूधारक / महिला / SC / ST' : 'Small / SC / ST / Women'}<br />
+                        <span style={{ fontSize: '0.75rem', color: '#059669', fontWeight: 700 }}>50% {lang === 'mr' ? 'अनुदान' : 'Subsidy'} (Max ₹50K)</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFarmerCategory('general')}
+                        style={{
+                          padding: '0.6rem 0.75rem',
+                          borderRadius: '8px',
+                          border: farmerCategory === 'general' ? '2px solid #059669' : '1px solid #e2e8f0',
+                          backgroundColor: farmerCategory === 'general' ? '#f0fdf4' : '#ffffff',
+                          color: farmerCategory === 'general' ? '#166534' : '#475569',
+                          fontWeight: 600,
+                          fontSize: '0.8rem',
+                          cursor: 'pointer',
+                          textAlign: 'left'
+                        }}
+                      >
+                        👨‍🌾 {lang === 'mr' ? 'सर्वसाधारण प्रवर्ग शेतकरी' : 'General Category Farmer'}<br />
+                        <span style={{ fontSize: '0.75rem', color: '#059669', fontWeight: 700 }}>40% {lang === 'mr' ? 'अनुदान' : 'Subsidy'} (Max ₹40K)</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="calc-form-group">
+                    <label className="calc-label">
+                      <span className="calc-step-num">5</span>
+                      {lang === 'mr' ? 'बँक कर्ज मुदत (Tenure)' : 'Loan Tenure'}
+                    </label>
+                    <div className="calc-size-pills">
+                      {[12, 24, 36, 48, 60].map(months => (
+                        <button
+                          key={months}
+                          type="button"
+                          onClick={() => setLoanTenureMonths(months)}
+                          className={`calc-size-pill ${loanTenureMonths === months ? 'active' : ''}`}
+                        >
+                          {months} {lang === 'mr' ? 'महिने' : 'Months'} ({months / 12} {lang === 'mr' ? 'वर्ष' : 'Yr'})
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="calc-form-group">
+                    <label className="calc-label">
+                      <span className="calc-step-num">6</span>
+                      {lang === 'mr' ? 'डाऊन पेमेंट टक्केवारी' : 'Down Payment'}
+                    </label>
+                    <div className="calc-size-pills">
+                      {[15, 25, 35, 50].map(pct => (
+                        <button
+                          key={pct}
+                          type="button"
+                          onClick={() => setDownPaymentPercent(pct)}
+                          className={`calc-size-pill ${downPaymentPercent === pct ? 'active' : ''}`}
+                        >
+                          {pct}% (₹{Math.round(netFarmerShare * (pct / 100)).toLocaleString()})
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+
               {/* Farmer Info Row */}
               <div className="calc-farmer-row">
                 <div className="calc-farmer-field">
@@ -190,11 +374,17 @@ export default function PriceCalculator({ lang }) {
                   </label>
                   <input
                     type="text"
-                    className="calc-input"
+                    className={`calc-input ${showErrors && !farmerName.trim() ? 'border-red-500' : ''}`}
+                    style={showErrors && !farmerName.trim() ? { borderColor: '#ef4444' } : {}}
                     placeholder={lang === 'mr' ? 'उदा. रामराव पाटील' : 'e.g. Ramesh Patil'}
                     value={farmerName}
-                    onChange={e => setFarmerName(e.target.value)}
+                    onChange={e => { setFarmerName(e.target.value); setShowErrors(false); }}
                   />
+                  {showErrors && !farmerName.trim() && (
+                    <span style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem', display: 'block' }}>
+                      {lang === 'mr' ? 'कृपया तुमचे नाव प्रविष्ट करा' : 'Name is required'}
+                    </span>
+                  )}
                 </div>
                 <div className="calc-farmer-field">
                   <label className="calc-label">
@@ -203,11 +393,17 @@ export default function PriceCalculator({ lang }) {
                   </label>
                   <input
                     type="text"
-                    className="calc-input"
+                    className={`calc-input ${showErrors && !farmerVillage.trim() ? 'border-red-500' : ''}`}
+                    style={showErrors && !farmerVillage.trim() ? { borderColor: '#ef4444' } : {}}
                     placeholder={lang === 'mr' ? 'उदा. संगमनेर' : 'e.g. Sangamner'}
                     value={farmerVillage}
-                    onChange={e => setFarmerVillage(e.target.value)}
+                    onChange={e => { setFarmerVillage(e.target.value); setShowErrors(false); }}
                   />
+                  {showErrors && !farmerVillage.trim() && (
+                    <span style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem', display: 'block' }}>
+                      {lang === 'mr' ? 'कृपया गावाचे नाव प्रविष्ट करा' : 'Village is required'}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -220,7 +416,9 @@ export default function PriceCalculator({ lang }) {
               <div className="calc-result-header">
                 <span className="calc-result-badge">
                   <Tag size={14} />
-                  {lang === 'mr' ? 'अंदाजित दरपत्रक' : 'Estimated Quotation'}
+                  {calcMode === 'subsidy' 
+                    ? (lang === 'mr' ? 'शासकीय योजना अंदाज' : 'Subsidy & EMI Plan')
+                    : (lang === 'mr' ? 'अंदाजित दरपत्रक' : 'Estimated Quotation')}
                 </span>
                 <span className="calc-warranty-note">
                   <ShieldCheck size={13} />
@@ -242,10 +440,38 @@ export default function PriceCalculator({ lang }) {
               {/* Big Price Display */}
               <div className="calc-price-display">
                 <span className="calc-price-rupee">₹</span>
-                <span className="calc-price-amount">{totalPriceEst.toLocaleString()}</span>
+                <span className="calc-price-amount">
+                  {calcMode === 'subsidy' ? netFarmerShare.toLocaleString() : totalPriceEst.toLocaleString()}
+                </span>
                 <span className="calc-price-suffix">/-</span>
               </div>
-              <p className="calc-price-note">{lang === 'mr' ? '(अंदाजित कारखान्यातील दर)' : '(Estimated Ex-Factory Price)'}</p>
+              <p className="calc-price-note">
+                {calcMode === 'subsidy'
+                  ? (lang === 'mr' ? '(अनुदानानंतर शेतकरी प्रत्यक्ष वाटा)' : '(Farmer Net Cost After Subsidy)')
+                  : (lang === 'mr' ? '(अंदाजित कारखान्यातील दर)' : '(Estimated Ex-Factory Price)')}
+              </p>
+
+              {/* Monthly EMI highlight pill in subsidy mode */}
+              {calcMode === 'subsidy' && (
+                <div style={{
+                  backgroundColor: '#ecfdf5',
+                  border: '1px solid #a7f3d0',
+                  borderRadius: '12px',
+                  padding: '0.75rem',
+                  marginBottom: '1rem',
+                  textAlign: 'center'
+                }}>
+                  <span style={{ fontSize: '0.75rem', color: '#047857', fontWeight: 600, display: 'block' }}>
+                    {lang === 'mr' ? 'अंदाजित मासिक हप्ता (Tractor/Agri Loan EMI)' : 'Est. Monthly Installment (EMI)'}
+                  </span>
+                  <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#065f46' }}>
+                    ₹{monthlyEMI.toLocaleString()} <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>/ {lang === 'mr' ? 'महिना' : 'month'}</span>
+                  </span>
+                  <span style={{ fontSize: '0.7rem', color: '#059669', display: 'block', marginTop: '2px' }}>
+                    ({loanTenureMonths} {lang === 'mr' ? 'महिने' : 'mos'} @ 8.5% p.a. • {downPaymentPercent}% {lang === 'mr' ? 'डाऊन पेमेंट' : 'down payment'})
+                  </span>
+                </div>
+              )}
 
               {/* Price Breakdown */}
               <div className="calc-price-breakdown">
@@ -253,6 +479,12 @@ export default function PriceCalculator({ lang }) {
                   <span>{lang === 'mr' ? 'मूळ अवजार किंमत:' : 'Base Implement Price:'}</span>
                   <span className="calc-breakdown-val">₹{basePriceEst.toLocaleString()}/-</span>
                 </div>
+                {calcMode === 'subsidy' && (
+                  <div className="calc-breakdown-row" style={{ color: '#059669', fontWeight: 700 }}>
+                    <span>{lang === 'mr' ? 'शासकीय महाडीबीटी अनुदान:' : 'Govt Mahadbt Subsidy:'}</span>
+                    <span className="calc-breakdown-val">- ₹{calculatedSubsidy.toLocaleString()}/-</span>
+                  </div>
+                )}
                 {includeTransport && (
                   <div className="calc-breakdown-row">
                     <span>{lang === 'mr' ? 'ट्रान्सपोर्ट भाडे:' : 'Farm Delivery Transport:'}</span>
@@ -272,7 +504,11 @@ export default function PriceCalculator({ lang }) {
                 className="calc-whatsapp-btn"
               >
                 <MessageCircle size={20} />
-                <span>{lang === 'mr' ? 'हे कोटेशन व्हॉट्सॲपवर पाठवा' : 'Send Quote on WhatsApp'}</span>
+                <span>
+                  {calcMode === 'subsidy'
+                    ? (lang === 'mr' ? 'अनुदान व EMI कोटेशन मिळवा' : 'Get Subsidy & EMI Quote')
+                    : (lang === 'mr' ? 'हे कोटेशन व्हॉट्सॲपवर पाठवा' : 'Send Quote on WhatsApp')}
+                </span>
                 <Send size={16} />
               </button>
             </div>

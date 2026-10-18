@@ -1,34 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ResponsiveImage from './ResponsiveImage';
-import { Search, CheckCircle2, SlidersHorizontal, MessageCircle, Eye, Tag, Sparkles, Award, PhoneCall, Star, ShieldCheck, Grid, List } from 'lucide-react';
-import { productsData } from '../data/productsData';
-import { mainContact } from '../data/branchesData';
+import { Search, CheckCircle2, SlidersHorizontal, MessageCircle, Eye, Tag, Sparkles, Award, PhoneCall, Star, ShieldCheck, Grid, List, Heart } from 'lucide-react';
+import { useContactData } from '../hooks/useContactData';
 import useDebounce from '../hooks/useDebounce';
+import { db } from '../firebase';
+import { collection, onSnapshot, query } from 'firebase/firestore';
 
 export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry }) {
+  const { mainContact } = useContactData();
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState('grid'); // Default to e-commerce Flipkart/Amazon grid view
+  const [viewMode, setViewMode] = useState('grid');
+  const [productsData, setProductsData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Debounce search query to prevent excessive re-renders
-  // Use immediate execution if search is empty
   const debouncedSearch = useDebounce(searchQuery, searchQuery === '' ? 0 : 300);
 
+  useEffect(() => {
+    const q = query(collection(db, 'products'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setProductsData(data);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Only display products that are active in real-time
+  const activeProducts = productsData.filter(product => {
+    if (product.isActive === false || product.status === 'inactive') return false;
+    return true;
+  });
+
   const categories = [
-    { id: 'all', nameEn: 'All Implements (8)', nameMr: 'सर्व अवजारे (८)' },
+    { id: 'all', nameEn: `All Implements (${activeProducts.length})`, nameMr: `सर्व अवजारे (${activeProducts.length})` },
     { id: 'ploughs', nameEn: 'Ploughs / नांगर', nameMr: 'नांगर (Ploughs)' },
     { id: 'tillage', nameEn: 'Tillage & Levelers', nameMr: 'कल्टिव्हेटर व लेव्हलर' },
     { id: 'sowing', nameEn: 'Seed Drills / पेरणी यंत्र', nameMr: 'पेरणी यंत्र (Seed Drills)' },
     { id: 'haulage', nameEn: 'Trailers / ट्रॉली', nameMr: 'ट्रॉली व ट्रेलर' }
   ];
 
-  const filteredProducts = productsData.filter(product => {
+  const filteredProducts = activeProducts.filter(product => {
     const matchesCategory = activeCategory === 'all' || product.category === activeCategory;
     const searchLower = debouncedSearch.toLowerCase();
     const matchesSearch = 
-      product.name.toLowerCase().includes(searchLower) ||
-      product.nameMr.includes(searchLower) ||
-      product.sizes.some(s => s.toLowerCase().includes(searchLower));
+      (product.name && product.name.toLowerCase().includes(searchLower)) ||
+      (product.nameMr && product.nameMr.toLowerCase().includes(searchLower)) ||
+      (product.sizes && Array.isArray(product.sizes) && product.sizes.some(s => s.toLowerCase().includes(searchLower)));
 
     return matchesCategory && matchesSearch;
   });
@@ -61,35 +80,13 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
           </p>
         </div>
 
-        {/* Top Horizontal Quick Highlights Rail */}
-        <div className="mobile-recommended-rail-container">
-          <div className="rail-header">
-            <span className="rail-title">
-              <Sparkles size={15} style={{ color: 'var(--secondary)' }} />
-              {lang === 'mr' ? 'लोकल शेतकर्‍यांची पहिली पसंती (Recommended)' : 'Recommended Products For You'}
-            </span>
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '3rem' }}>
+            <p>{lang === 'mr' ? 'लोड होत आहे...' : 'Loading products...'}</p>
           </div>
-          <div className="mobile-recommended-rail">
-            {productsData.slice(0, 5).map(prod => (
-              <div key={prod.id} className="rail-card" onClick={() => onSelectProduct(prod)}>
-                <div className="rail-card-img-wrapper">
-                  <ResponsiveImage src={prod.image} alt={prod.name} preset="thumbnail" />
-                  <span className="rail-badge">{prod.badge.split('/')[0]}</span>
-                </div>
-                <div className="rail-card-info">
-                  <h4 className="rail-prod-name">{lang === 'mr' ? prod.nameMr : prod.name}</h4>
-                  <div className="rail-price">₹{prod.priceMin.toLocaleString()}</div>
-                  <button className="rail-call-btn">
-                    <MessageCircle size={13} />
-                    <span>{lang === 'mr' ? 'ऑर्डर' : 'Quote'}</span>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Filter Bar with Search and View Mode Switcher */}
+        ) : (
+          <>
+            {/* Filter Bar with Search and View Mode Switcher */}
         <div className="filter-bar">
           <div className="category-tabs" role="tablist" aria-label={lang === 'mr' ? 'अवजार प्रकार' : 'Product categories'}>
             {categories.map(cat => (
@@ -153,23 +150,31 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
           {filteredProducts.map(product => {
             if (viewMode === 'grid') {
               return (
-                <div key={product.id} className="product-card">
-                  <div className="product-card-image-box" onClick={() => onSelectProduct(product)}>
+                <div key={product.id} className="product-card flex flex-col h-full relative transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                  <div className="product-card-image-box relative" onClick={() => onSelectProduct(product)}>
+                    <div 
+                      className="absolute top-2 right-2 bg-white rounded-full shadow-sm p-1.5 z-10 hover:text-red-500 cursor-pointer"
+                      onClick={(e) => { e.stopPropagation(); /* wishlist logic */ }}
+                    >
+                      <Heart size={16} />
+                    </div>
                     <img 
                       src={product.image} 
                       alt={product.name} 
                       loading="lazy"
                       decoding="async"
                     />
-                    <div className="product-card-badge-pill">
-                      <Award size={13} />
+                    <div className="product-card-badge-pill px-2 py-1 flex items-center justify-center text-center">
+                      <Award size={13} className="mr-1" />
                       <span>{product.badge}</span>
                     </div>
                   </div>
 
-                  <div className="product-card-body">
-                    <h3 className="product-title" onClick={() => onSelectProduct(product)}>{product.name}</h3>
-                    <p className="product-title-mr">{product.nameMr}</p>
+                  <div className="product-card-body flex flex-col flex-grow">
+                    <div className="flex-grow">
+                      <h3 className="product-title" onClick={() => onSelectProduct(product)}>{product.name}</h3>
+                      <p className="product-title-mr">{product.nameMr}</p>
+                    </div>
 
                     <div className="product-price-tag">
                       <div>
@@ -209,7 +214,7 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
 
             // B2B Row Card View
             return (
-              <div key={product.id} className="b2b-product-card">
+              <div key={product.id} className="b2b-product-card transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                 <div className="b2b-card-header">
                   <div className="b2b-header-left">
                     <span className="b2b-verified-tag">
@@ -221,11 +226,11 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
                       <span>4.9 (150+ Reviews)</span>
                     </span>
                   </div>
-                  <span className="b2b-badge-pill">{product.badge}</span>
+                  <span className="b2b-badge-pill px-2 py-1 text-center flex items-center justify-center">{product.badge}</span>
                 </div>
 
-                <div className="b2b-card-body">
-                  <div className="b2b-img-box" onClick={() => onSelectProduct(product)}>
+                <div className="b2b-card-body flex flex-col md:flex-row gap-4 items-start w-full">
+                  <div className="b2b-img-box w-full md:w-48 flex-shrink-0 relative overflow-hidden rounded-md" onClick={() => onSelectProduct(product)}>
                     <img 
                       src={product.image} 
                       alt={product.name} 
@@ -238,7 +243,7 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
                     </div>
                   </div>
 
-                  <div className="b2b-info-col">
+                  <div className="b2b-info-col flex-grow min-w-0">
                     <h3 className="b2b-title" onClick={() => onSelectProduct(product)}>
                       {product.name}
                     </h3>
@@ -305,6 +310,8 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
               {lang === 'mr' ? 'सर्व अवजारे पहा' : 'View All Products'}
             </button>
           </div>
+        )}
+        </>
         )}
       </div>
     </section>

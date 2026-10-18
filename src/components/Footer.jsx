@@ -1,9 +1,10 @@
 import React from 'react';
 import { MapPin, Phone, Mail, ShieldCheck, ExternalLink, Heart } from 'lucide-react';
-import { mainContact, branchesData } from '../data/branchesData';
+import { useContactData } from '../hooks/useContactData';
 import { galleryImages } from '../data/galleryData';
 
 export default function Footer({ lang }) {
+  const { mainContact, branchesData } = useContactData();
   return (
     <footer className="footer">
       <div className="container">
@@ -32,8 +33,8 @@ export default function Footer({ lang }) {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
+          {/* Quick Links — proper nav landmark */}
+          <nav aria-label={lang === 'mr' ? 'नेव्हिगेशन' : 'Footer Navigation'}>
             <h4 className="footer-title">{lang === 'mr' ? 'नेव्हिगेशन' : 'Quick Navigation'}</h4>
             <ul className="footer-links">
               <li><a href="#home">{lang === 'mr' ? 'मुख्य पृष्ठ (Home)' : 'Home Overview'}</a></li>
@@ -42,7 +43,7 @@ export default function Footer({ lang }) {
               <li><a href="#gallery">{lang === 'mr' ? `फोटो गॅलरी (${galleryImages.length})` : `Photo Gallery (${galleryImages.length})`}</a></li>
               <li><a href="#branches">{lang === 'mr' ? 'शाखा नेटवर्क (Branches)' : 'Branch Locations'}</a></li>
             </ul>
-          </div>
+          </nav>
 
           {/* Core Products */}
           <div>
@@ -89,8 +90,8 @@ export default function Footer({ lang }) {
             &copy; {new Date().getFullYear()} Padmashri Agro Engineering Works. All Rights Reserved.
           </div>
           <div className="footer-bottom-heart">
-            <span>Crafted for Indian Farmers with</span>
-            <Heart size={14} style={{ color: '#ef4444', fill: '#ef4444' }} aria-label="love" />
+            <span>Crafted for Indian Farmers with pride</span>
+            <Heart size={14} style={{ color: '#ef4444', fill: '#ef4444', marginLeft: '4px', marginRight: '4px' }} aria-label="love" />
             <span>in Maharashtra</span>
           </div>
         </div>

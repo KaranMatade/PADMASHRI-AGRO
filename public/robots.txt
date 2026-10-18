@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin/dashboard
+Disallow: /admin/inquiries
+Disallow: /admin/products
+Disallow: /admin/cms
+Disallow: /admin/settings
+
+# Sitemap location
+Sitemap: https://www.padmashriagro.com/sitemap.xml
+
+# Crawl-delay (optional, polite crawling)
+Crawl-delay: 1
