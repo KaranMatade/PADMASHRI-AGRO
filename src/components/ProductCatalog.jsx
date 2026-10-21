@@ -196,16 +196,16 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
                         <span>{lang === 'mr' ? 'तपशील' : 'Specs'}</span>
                       </button>
 
-                      <a
+                      <button
                         id={`btn-wa-${product.id}`}
-                        href={getWhatsAppMessage(product)}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        type="button"
+                        onClick={() => onOpenInquiry(product)}
                         className="btn-card-quote"
+                        aria-label={lang === 'mr' ? `${product.nameMr || product.name} साठी दर व कोटेशन मागा` : `Request quotation for ${product.name}`}
                       >
                         <MessageCircle size={14} />
                         <span>{lang === 'mr' ? 'ऑर्डर' : 'Quote'}</span>
-                      </a>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -282,15 +282,15 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
                     <span>{lang === 'mr' ? 'तपशील' : 'Specs'}</span>
                   </button>
 
-                  <a
-                    href={getWhatsAppMessage(product)}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
+                    onClick={() => onOpenInquiry(product)}
                     className="b2b-btn-quote"
+                    aria-label={lang === 'mr' ? `${product.nameMr || product.name} चा थेट कारखाना दर मागा` : `Get factory quotation for ${product.name}`}
                   >
                     <MessageCircle size={16} />
                     <span>{lang === 'mr' ? 'ऑफर दर मागा' : 'Get Best Price'}</span>
-                  </a>
+                  </button>
                 </div>
               </div>
             );

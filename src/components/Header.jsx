@@ -168,6 +168,18 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
               </a>
             </li>
 
+            {/* Quote Request CTA in Mobile Drawer */}
+            <li className="mobile-only-lang-item" style={{ marginBottom: '8px' }}>
+              <button 
+                onClick={() => { setMobileMenuOpen(false); onOpenInquiry(); }}
+                className="btn-amber"
+                style={{ width: '100%', justifyContent: 'center', background: '#059669', color: 'white' }}
+              >
+                <MessageSquare size={18} />
+                <span>{lang === 'mr' ? 'कोटेशन मागा (Get Quote)' : 'Get Instant Quote'}</span>
+              </button>
+            </li>
+
             {/* Language Switcher inside Mobile Drawer */}
             <li className="mobile-only-lang-item">
               <button 

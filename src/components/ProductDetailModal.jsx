@@ -254,15 +254,15 @@ export default function ProductDetailModal({ product, lang, onClose, onOpenInqui
 
             {/* Action Buttons */}
             <div className="modal-actions-row">
-              <a 
-                href={whatsappUrl} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <button 
+                type="button"
+                onClick={() => { onClose(); onOpenInquiry(product); }}
                 className="modal-btn modal-btn-whatsapp"
+                aria-label={lang === 'mr' ? 'व्हॉट्सॲप द्वारे चौकशी करा' : 'Inquire via WhatsApp'}
               >
                 <MessageCircle size={17} />
                 <span>{lang === 'mr' ? 'व्हॉट्सॲप ऑर्डर' : 'WhatsApp Order'}</span>
-              </a>
+              </button>
 
               <button 
                 type="button"

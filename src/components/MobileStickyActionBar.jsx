@@ -36,10 +36,7 @@ export default function MobileStickyActionBar({ lang, onOpenInquiry }) {
 
       <button 
         id="mobile-sticky-quote"
-        onClick={(e) => {
-          e.preventDefault();
-          document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' });
-        }}
+        onClick={() => onOpenInquiry()}
         className="mobile-action-btn"
         style={{ background: 'var(--primary)', color: 'white' }}
       >

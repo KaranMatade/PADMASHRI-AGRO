@@ -1,24 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import { X, Send, PhoneCall, CheckCircle, ShieldCheck } from 'lucide-react';
 import { useContactData } from '../hooks/useContactData';
-import { productsData } from '../data/productsData';
+import { productsData as defaultProductsData } from '../data/productsData';
 import { validateInquiryForm } from '../utils/validation';
 import useFocusTrap from '../hooks/useFocusTrap';
 import { Drawer } from 'vaul';
 import { toast } from 'sonner';
 import { db } from '../firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, onSnapshot, query } from 'firebase/firestore';
 
 export default function InquiryModal({ lang, preselectedProduct, onClose }) {
   const { mainContact, branchesData } = useContactData();
+  const [productsList, setProductsList] = useState(defaultProductsData);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     village: '',
-    product: preselectedProduct ? preselectedProduct.id : productsData[0].id,
+    product: preselectedProduct ? preselectedProduct.id : defaultProductsData[0].id,
     branch: 'main',
     message: ''
   });
+
+  // Subscribe to live products from Firestore
+  useEffect(() => {
+    const q = query(collection(db, 'products'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (!snapshot.empty) {
+        const live = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const active = live.filter(p => p.isActive !== false && p.status !== 'inactive');
+        if (active.length > 0) {
+          setProductsList(active);
+        }
+      }
+    }, (err) => {
+      console.error('Error fetching live products in InquiryModal:', err);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Update selected product when preselectedProduct changes
+  useEffect(() => {
+    if (preselectedProduct?.id) {
+      setFormData(prev => ({ ...prev, product: preselectedProduct.id }));
+    }
+  }, [preselectedProduct]);
   const [validationErrors, setValidationErrors] = useState({});
   const [touched, setTouched] = useState({});
 
@@ -85,7 +110,10 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
       return;
     }
     
-    const prod = productsData.find(p => p.id === formData.product);
+    const prod = productsList.find(p => p.id === formData.product) ||
+      (preselectedProduct && preselectedProduct.id === formData.product ? preselectedProduct : null) ||
+      defaultProductsData.find(p => p.id === formData.product) ||
+      productsList[0];
     
     const waText = lang === 'mr'
       ? `*कोटेशन विनंती - पद्मश्री ॲग्रो*\n\n` +
@@ -99,7 +127,7 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
         `• Name: ${formData.name}\n` +
         `• Mobile: ${formData.phone}\n` +
         `• Village/City: ${formData.village}\n` +
-        `• Required Equipment: ${prod?.name}\n` +
+        `• Required Equipment: ${prod?.name || prod?.nameMr}\n` +
         `• Preferred Branch: ${formData.branch}\n` +
         `• Message: ${formData.message || 'Please send formal quotation.'}`;
 
@@ -111,7 +139,7 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
         name: formData.name.trim(),
         phone: formData.phone.trim(),
         village: formData.village.trim(),
-        productName: prod?.name || 'Agricultural Equipment',
+        productName: prod?.name || prod?.nameMr || 'Agricultural Equipment',
         productId: formData.product,
         branch: formData.branch,
         message: formData.message.trim() || 'Please send formal quotation.',
@@ -290,11 +318,16 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
                   value={formData.product}
                   onChange={e => handleInputChange('product', e.target.value)}
                 >
-                  {productsData.map(p => (
+                  {productsList.map(p => (
                     <option key={p.id} value={p.id}>
-                      {lang === 'mr' ? p.nameMr : p.name}
+                      {lang === 'mr' ? (p.nameMr || p.name) : (p.name || p.nameMr)}
                     </option>
                   ))}
+                  {preselectedProduct && !productsList.some(p => p.id === preselectedProduct.id) && (
+                    <option key={preselectedProduct.id} value={preselectedProduct.id}>
+                      {lang === 'mr' ? (preselectedProduct.nameMr || preselectedProduct.name) : preselectedProduct.name}
+                    </option>
+                  )}
                 </select>
               </div>
 

@@ -1,30 +1,52 @@
-import React, { useState } from 'react';
-import { Calculator, MessageCircle, Sparkles, Send, Tag, ShieldCheck, Truck, User, MapPin, ChevronDown } from 'lucide-react';
-import { productsData } from '../data/productsData';
+import React, { useState, useEffect } from 'react';
+import { Calculator, MessageCircle, Sparkles, Send, Tag, ShieldCheck, Truck, User, MapPin, ChevronDown, Phone } from 'lucide-react';
+import { productsData as defaultProductsData } from '../data/productsData';
 import { useContactData } from '../hooks/useContactData';
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp, onSnapshot, query } from 'firebase/firestore';
+import { toast } from 'sonner';
 
 export default function PriceCalculator({ lang }) {
   const { mainContact, branchesData } = useContactData();
   const [calcMode, setCalcMode] = useState('price'); // 'price' or 'subsidy'
-  const [selectedProductId, setSelectedProductId] = useState(productsData[0].id);
-  const [selectedSize, setSelectedSize] = useState(productsData[0].sizes[0]);
+  const [productsList, setProductsList] = useState(defaultProductsData);
+  const [selectedProductId, setSelectedProductId] = useState(defaultProductsData[0].id);
+  const [selectedSize, setSelectedSize] = useState(defaultProductsData[0].sizes[0]);
   const [selectedBranch, setSelectedBranch] = useState('main');
   const [includeTransport, setIncludeTransport] = useState(false);
   const [farmerCategory, setFarmerCategory] = useState('small_sc_st'); // 'small_sc_st' (50%) or 'general' (40%)
   const [loanTenureMonths, setLoanTenureMonths] = useState(36); // 12, 24, 36, 48, 60
   const [downPaymentPercent, setDownPaymentPercent] = useState(25); // 15% to 50%
   const [farmerName, setFarmerName] = useState('');
+  const [farmerPhone, setFarmerPhone] = useState('');
   const [farmerVillage, setFarmerVillage] = useState('');
   const [showErrors, setShowErrors] = useState(false);
 
-  const currentProduct = productsData.find(p => p.id === selectedProductId) || productsData[0];
+  // Subscribe to live products from Firestore
+  useEffect(() => {
+    const q = query(collection(db, 'products'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (!snapshot.empty) {
+        const live = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const active = live.filter(p => p.isActive !== false && p.status !== 'inactive');
+        if (active.length > 0) {
+          setProductsList(active);
+        }
+      }
+    }, (err) => {
+      console.error('Error fetching live products in PriceCalculator:', err);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const currentProduct = productsList.find(p => p.id === selectedProductId) || productsList[0] || defaultProductsData[0];
 
   const handleProductChange = (e) => {
     const prodId = e.target.value;
     setSelectedProductId(prodId);
-    const p = productsData.find(prod => prod.id === prodId);
+    const p = productsList.find(prod => prod.id === prodId);
     // Always reset to first size when product changes to avoid index mismatch
-    if (p && p.sizes.length > 0) {
+    if (p && p.sizes && p.sizes.length > 0) {
       setSelectedSize(p.sizes[0]);
     }
   };
@@ -56,9 +78,14 @@ export default function PriceCalculator({ lang }) {
     (Math.pow(1 + monthlyRate, loanTenureMonths) - 1)
   );
 
-  const sendWhatsAppQuote = () => {
-    if (!farmerName.trim() || !farmerVillage.trim()) {
+  const sendWhatsAppQuote = async () => {
+    if (!farmerName.trim() || !farmerPhone.trim() || !farmerVillage.trim()) {
       setShowErrors(true);
+      toast.error(
+        lang === 'mr' 
+          ? 'कृपया तुमचे नाव, मोबाईल नंबर आणि गाव प्रविष्ट करा.' 
+          : 'Please enter your name, mobile number, and village.'
+      );
       return;
     }
     setShowErrors(false);
@@ -70,6 +97,7 @@ export default function PriceCalculator({ lang }) {
       ? (lang === 'mr'
           ? `*शासकीय कृषी योजना व ईएमआय अंदाजपत्रक - पद्मश्री ॲग्रो*\n\n` +
             `• शेतकर्‍याचे नाव: ${farmerName}\n` +
+            `• संपर्क मोबाईल: ${farmerPhone}\n` +
             `• गाव/पत्ता: ${farmerVillage}\n` +
             `• अवजार: ${currentProduct.nameMr} (${currentProduct.name})\n` +
             `• साईज: ${selectedSize}\n` +
@@ -80,6 +108,7 @@ export default function PriceCalculator({ lang }) {
             `• अंदाजित मासिक हप्ता (EMI): *₹${monthlyEMI.toLocaleString()}/महिना* (${loanTenureMonths} महिने)\n\nकृपया महाडीबीटी कोटेशन व बँक लोन मंजुरीची माहिती द्या.`
           : `*Govt Subsidy & Tractor Loan EMI Inquiry - Padmashri Agro*\n\n` +
             `• Farmer Name: ${farmerName}\n` +
+            `• Mobile: ${farmerPhone}\n` +
             `• Location: ${farmerVillage}\n` +
             `• Implement: ${currentProduct.name}\n` +
             `• Variant: ${selectedSize}\n` +
@@ -90,16 +119,18 @@ export default function PriceCalculator({ lang }) {
             `• Est. Monthly EMI: *₹${monthlyEMI.toLocaleString()}/mo* (${loanTenureMonths} mos tenure)\n\nPlease provide formal quotation for Mahadbt subsidy & bank loan approval.`)
       : (lang === 'mr'
           ? `*कोटेशन अंदाजपत्रक चौकशी - पद्मश्री ॲग्रो*\n\n` +
-            `• शेतकर्‍याचे नाव: ${farmerName || 'शेतकरी मित्र'}\n` +
-            `• गाव/पत्ता: ${farmerVillage || 'महाराष्ट्र'}\n` +
+            `• शेतकर्‍याचे नाव: ${farmerName}\n` +
+            `• संपर्क मोबाईल: ${farmerPhone}\n` +
+            `• गाव/पत्ता: ${farmerVillage}\n` +
             `• निवडलेले अवजार: ${currentProduct.nameMr} (${currentProduct.name})\n` +
             `• साईज (Size): ${selectedSize}\n` +
             `• निवडलेली शाखा: ${branchInfo}\n` +
             `• वाहतूक जोडणी: ${includeTransport ? 'होय (थेट शेतात पोच)' : 'नाही'}\n` +
             `• अंदाजित दर: *₹${totalPriceEst.toLocaleString()}/-*\n\nकृपया मला नक्की डिस्काउंट व पेमेंट सवलत सांगा.`
           : `*Price Estimation Inquiry - Padmashri Agro*\n\n` +
-            `• Farmer Name: ${farmerName || 'Farmer Customer'}\n` +
-            `• Location/Village: ${farmerVillage || 'Maharashtra'}\n` +
+            `• Farmer Name: ${farmerName}\n` +
+            `• Mobile: ${farmerPhone}\n` +
+            `• Location/Village: ${farmerVillage}\n` +
             `• Selected Implement: ${currentProduct.name}\n` +
             `• Size Variant: ${selectedSize}\n` +
             `• Nearest Branch: ${branchInfo}\n` +
@@ -108,6 +139,38 @@ export default function PriceCalculator({ lang }) {
 
     const phoneNum = mainContact?.whatsapp || '919226253710';
     window.open(`https://wa.me/${phoneNum}?text=${encodeURIComponent(message)}`, '_blank');
+
+    // Save Lead to Firestore 'inquiries' collection in real-time
+    try {
+      await addDoc(collection(db, 'inquiries'), {
+        name: farmerName.trim(),
+        phone: farmerPhone.trim(),
+        village: farmerVillage.trim(),
+        productName: `${currentProduct.nameMr || currentProduct.name} (${selectedSize})`,
+        productId: currentProduct.id,
+        branch: branchInfo,
+        message: calcMode === 'subsidy'
+          ? `शासकीय योजना अंदाज: एकूण ₹${totalPriceEst.toLocaleString()} | शेतकरी वाटा ₹${netFarmerShare.toLocaleString()} | EMI ₹${monthlyEMI}/महिना (${loanTenureMonths} महिने)`
+          : `कॅल्क्युलेटर दर अंदाज: ₹${totalPriceEst.toLocaleString()} | साईझ: ${selectedSize} | ट्रान्सपोर्ट: ${includeTransport ? 'होय' : 'नाही'}`,
+        status: 'New',
+        createdAt: serverTimestamp(),
+        dateStr: new Date().toLocaleDateString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      });
+
+      toast.success(
+        lang === 'mr'
+          ? 'कोटेशन विनंती यशस्वीरित्या नोंदवली गेली आहे!'
+          : 'Price estimate inquiry submitted to admin successfully!'
+      );
+    } catch (err) {
+      console.error('Failed to log lead in Firestore inquiries:', err);
+    }
   };
 
   return (
@@ -204,9 +267,9 @@ export default function PriceCalculator({ lang }) {
                     value={selectedProductId}
                     onChange={handleProductChange}
                   >
-                    {productsData.map(p => (
+                    {productsList.map(p => (
                       <option key={p.id} value={p.id}>
-                        {(lang === 'mr' ? p.nameMr : p.name).replace(/[{}[\]]/g, '')} — ₹{p.priceMin.toLocaleString()} to ₹{p.priceMax.toLocaleString()}
+                        {(lang === 'mr' ? (p.nameMr || p.name) : (p.name || p.nameMr)).replace(/[{}[\]]/g, '')} — ₹{(p.priceMin || 0).toLocaleString()} to ₹{(p.priceMax || 0).toLocaleString()}
                       </option>
                     ))}
                   </select>
@@ -366,11 +429,11 @@ export default function PriceCalculator({ lang }) {
               )}
 
               {/* Farmer Info Row */}
-              <div className="calc-farmer-row">
+              <div className="calc-farmer-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.85rem' }}>
                 <div className="calc-farmer-field">
                   <label className="calc-label">
                     <User size={14} />
-                    {lang === 'mr' ? 'तुमचे नाव' : 'Your Name'}
+                    {lang === 'mr' ? '१. तुमचे नाव' : '1. Your Name'}
                   </label>
                   <input
                     type="text"
@@ -382,14 +445,35 @@ export default function PriceCalculator({ lang }) {
                   />
                   {showErrors && !farmerName.trim() && (
                     <span style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem', display: 'block' }}>
-                      {lang === 'mr' ? 'कृपया तुमचे नाव प्रविष्ट करा' : 'Name is required'}
+                      {lang === 'mr' ? 'नाव आवश्यक आहे' : 'Name is required'}
                     </span>
                   )}
                 </div>
+
+                <div className="calc-farmer-field">
+                  <label className="calc-label">
+                    <Phone size={14} />
+                    {lang === 'mr' ? '२. मोबाईल नंबर' : '2. Mobile Number'}
+                  </label>
+                  <input
+                    type="tel"
+                    className={`calc-input ${showErrors && !farmerPhone.trim() ? 'border-red-500' : ''}`}
+                    style={showErrors && !farmerPhone.trim() ? { borderColor: '#ef4444' } : {}}
+                    placeholder="98xxxxxxxx"
+                    value={farmerPhone}
+                    onChange={e => { setFarmerPhone(e.target.value); setShowErrors(false); }}
+                  />
+                  {showErrors && !farmerPhone.trim() && (
+                    <span style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem', display: 'block' }}>
+                      {lang === 'mr' ? 'मोबाईल नंबर आवश्यक आहे' : 'Mobile number is required'}
+                    </span>
+                  )}
+                </div>
+
                 <div className="calc-farmer-field">
                   <label className="calc-label">
                     <MapPin size={14} />
-                    {lang === 'mr' ? 'गाव / तालुका' : 'Village / Location'}
+                    {lang === 'mr' ? '३. गाव / तालुका' : '3. Village / Location'}
                   </label>
                   <input
                     type="text"
@@ -401,7 +485,7 @@ export default function PriceCalculator({ lang }) {
                   />
                   {showErrors && !farmerVillage.trim() && (
                     <span style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem', display: 'block' }}>
-                      {lang === 'mr' ? 'कृपया गावाचे नाव प्रविष्ट करा' : 'Village is required'}
+                      {lang === 'mr' ? 'गावाचे नाव आवश्यक आहे' : 'Village is required'}
                     </span>
                   )}
                 </div>
