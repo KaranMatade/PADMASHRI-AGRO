@@ -309,13 +309,7 @@ export default function VideoGallery({ lang }) {
             </div>
 
             {/* Reels Grid (Tailored ~230px-260px portrait cards) */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 240px))',
-              gap: '1.25rem',
-              justifyContent: 'start',
-              alignItems: 'stretch'
-            }}>
+            <div className="reels-video-grid">
               {demoVideos.filter(v => v.orientation === 'vertical').map(video => (
                 <div
                   key={video.id}
@@ -578,12 +572,7 @@ export default function VideoGallery({ lang }) {
             </div>
 
             {/* Widescreen 16:9 Grid */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(310px, 1fr))',
-              gap: '1.5rem',
-              alignItems: 'stretch'
-            }}>
+            <div className="widescreen-video-grid">
               {demoVideos.filter(v => v.orientation !== 'vertical').map(video => (
                 <div
                   key={video.id}

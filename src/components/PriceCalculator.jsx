@@ -429,7 +429,7 @@ export default function PriceCalculator({ lang }) {
               )}
 
               {/* Farmer Info Row */}
-              <div className="calc-farmer-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.85rem' }}>
+              <div className="calc-farmer-row">
                 <div className="calc-farmer-field">
                   <label className="calc-label">
                     <User size={14} />
