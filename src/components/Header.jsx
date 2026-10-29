@@ -18,6 +18,13 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [mobileMenuOpen]);
 
+  // A fixed navigation drawer must not leave the page scrolling underneath it.
+  // This is especially noticeable on short Android phone viewports.
+  useEffect(() => {
+    document.body.classList.toggle('nav-menu-open', mobileMenuOpen);
+    return () => document.body.classList.remove('nav-menu-open');
+  }, [mobileMenuOpen]);
+
   const toggleLang = () => {
     setLang(prev => (prev === 'en' ? 'mr' : 'en'));
   };
@@ -120,6 +127,7 @@ export default function Header({ lang, setLang, theme, setTheme, onOpenInquiry }
           <ul 
             className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}
             role="list"
+            aria-hidden={!mobileMenuOpen && window.innerWidth <= 900}
             aria-label={lang === 'mr' ? 'मुख्य नेव्हिगेशन मेनू' : 'Main navigation menu'}
           >
             <li>

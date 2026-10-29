@@ -4,7 +4,7 @@ import { Search, CheckCircle2, SlidersHorizontal, MessageCircle, Eye, Tag, Spark
 import { useContactData } from '../hooks/useContactData';
 import useDebounce from '../hooks/useDebounce';
 import { db } from '../firebase';
-import { collection, onSnapshot, query } from 'firebase/firestore';
+import { collection, onSnapshot, query, doc, setDoc, updateDoc, increment } from 'firebase/firestore';
 
 export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry }) {
   const { mainContact } = useContactData();
@@ -13,6 +13,50 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
   const [viewMode, setViewMode] = useState('grid');
   const [productsData, setProductsData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Favorites / Wishlist state with localStorage persistence
+  const [likedProducts, setLikedProducts] = useState(() => {
+    try {
+      const saved = localStorage.getItem('padmashri_favorites');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  const toggleLike = async (productId, e) => {
+    e.stopPropagation();
+    const isLiked = likedProducts.includes(productId);
+    
+    // 1. Optimistic local update for liked IDs
+    setLikedProducts(prev => {
+      const updated = isLiked ? prev.filter(id => id !== productId) : [...prev, productId];
+      try {
+        localStorage.setItem('padmashri_favorites', JSON.stringify(updated));
+      } catch (err) {}
+      return updated;
+    });
+
+    // 2. Optimistic local update for likesCount counter in state
+    setProductsData(prev => prev.map(p => {
+      if (p.id === productId) {
+        const currentLikes = Number(p.likesCount || 0);
+        const newLikes = Math.max(0, currentLikes + (isLiked ? -1 : 1));
+        return { ...p, likesCount: newLikes };
+      }
+      return p;
+    }));
+
+    // 3. Real-time Firestore sync with Android Admin App (safe setDoc merge)
+    try {
+      const prodRef = doc(db, 'products', productId);
+      await setDoc(prodRef, {
+        likesCount: increment(isLiked ? -1 : 1)
+      }, { merge: true });
+    } catch (err) {
+      console.warn('Firestore likesCount sync error:', err);
+    }
+  };
 
   // Debounce search query to prevent excessive re-renders
   const debouncedSearch = useDebounce(searchQuery, searchQuery === '' ? 0 : 300);
@@ -35,6 +79,7 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
 
   const categories = [
     { id: 'all', nameEn: `All Implements (${activeProducts.length})`, nameMr: `सर्व अवजारे (${activeProducts.length})` },
+    { id: 'most-liked', nameEn: '❤️ Most Liked', nameMr: '❤️ सर्वाधिक पसंतीची' },
     { id: 'ploughs', nameEn: 'Ploughs / नांगर', nameMr: 'नांगर (Ploughs)' },
     { id: 'tillage', nameEn: 'Tillage & Levelers', nameMr: 'कल्टिव्हेटर व लेव्हलर' },
     { id: 'sowing', nameEn: 'Seed Drills / पेरणी यंत्र', nameMr: 'पेरणी यंत्र (Seed Drills)' },
@@ -42,7 +87,7 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
   ];
 
   const filteredProducts = activeProducts.filter(product => {
-    const matchesCategory = activeCategory === 'all' || product.category === activeCategory;
+    const matchesCategory = activeCategory === 'all' || activeCategory === 'most-liked' || product.category === activeCategory;
     const searchLower = debouncedSearch.toLowerCase();
     const matchesSearch = 
       (product.name && product.name.toLowerCase().includes(searchLower)) ||
@@ -50,6 +95,11 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
       (product.sizes && Array.isArray(product.sizes) && product.sizes.some(s => s.toLowerCase().includes(searchLower)));
 
     return matchesCategory && matchesSearch;
+  }).sort((a, b) => {
+    if (activeCategory === 'most-liked') {
+      return (Number(b.likesCount) || 0) - (Number(a.likesCount) || 0);
+    }
+    return 0;
   });
 
   const getWhatsAppMessage = (product) => {
@@ -151,23 +201,35 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
             if (viewMode === 'grid') {
               return (
                 <div key={product.id} className="product-card flex flex-col h-full relative transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-                  <div className="product-card-image-box relative" onClick={() => onSelectProduct(product)}>
-                    <div 
-                      className="absolute top-2 right-2 bg-white rounded-full shadow-sm p-1.5 z-10 hover:text-red-500 cursor-pointer"
-                      onClick={(e) => { e.stopPropagation(); /* wishlist logic */ }}
-                    >
-                      <Heart size={16} />
+                  <div className="product-card-image-box" onClick={() => onSelectProduct(product)}>
+                    <div className="product-card-badge-pill">
+                      <Award size={13} className="mr-1 flex-shrink-0" />
+                      <span>{product.badge}</span>
                     </div>
+
+                    <button 
+                      type="button"
+                      className={`product-like-btn ${likedProducts.includes(product.id) ? 'liked' : ''}`}
+                      onClick={(e) => toggleLike(product.id, e)}
+                      aria-label={likedProducts.includes(product.id) ? 'Remove from favorites' : 'Add to favorites'}
+                      title={likedProducts.includes(product.id) ? (lang === 'mr' ? 'पसंतीतून काढा' : 'Remove from Favorites') : (lang === 'mr' ? 'पसंती जोडा' : 'Add to Favorites')}
+                    >
+                      <Heart 
+                        size={15} 
+                        fill={likedProducts.includes(product.id) ? '#ef4444' : 'none'} 
+                        color={likedProducts.includes(product.id) ? '#ef4444' : 'currentColor'} 
+                      />
+                      {(product.likesCount || 0) > 0 && (
+                        <span className="product-like-counter">{product.likesCount}</span>
+                      )}
+                    </button>
+
                     <img 
                       src={product.image} 
                       alt={product.name} 
                       loading="lazy"
                       decoding="async"
                     />
-                    <div className="product-card-badge-pill px-2 py-1 flex items-center justify-center text-center">
-                      <Award size={13} className="mr-1" />
-                      <span>{product.badge}</span>
-                    </div>
                   </div>
 
                   <div className="product-card-body flex flex-col flex-grow">
@@ -237,6 +299,21 @@ export default function ProductCatalog({ lang, onSelectProduct, onOpenInquiry })
                       loading="lazy"
                       decoding="async"
                     />
+                    <button 
+                      type="button"
+                      className={`product-like-btn ${likedProducts.includes(product.id) ? 'liked' : ''}`}
+                      onClick={(e) => toggleLike(product.id, e)}
+                      aria-label="Toggle favorite"
+                    >
+                      <Heart 
+                        size={15} 
+                        fill={likedProducts.includes(product.id) ? '#ef4444' : 'none'} 
+                        color={likedProducts.includes(product.id) ? '#ef4444' : 'currentColor'} 
+                      />
+                      {(product.likesCount || 0) > 0 && (
+                        <span className="product-like-counter">{product.likesCount}</span>
+                      )}
+                    </button>
                     <div className="b2b-img-zoom-tag">
                       <Eye size={13} />
                       <span>{lang === 'mr' ? 'झूम पहा' : 'View'}</span>

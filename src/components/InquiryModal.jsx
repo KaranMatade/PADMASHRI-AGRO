@@ -195,6 +195,8 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
         />
         <Drawer.Content 
           ref={modalRef}
+          className="inquiry-drawer-content"
+          aria-labelledby="inquiry-modal-title"
           style={{ 
             position: 'fixed', 
             bottom: 0, 
@@ -213,7 +215,7 @@ export default function InquiryModal({ lang, preselectedProduct, onClose }) {
         >
           <div style={{ margin: '16px auto 8px auto', width: '48px', height: '6px', flexShrink: 0, borderRadius: '9999px', backgroundColor: '#d1d5db' }} />
           
-          <div className="overflow-auto p-6" style={{ maxWidth: '600px', margin: '0 auto', width: '100%' }}>
+          <div className="inquiry-drawer-body" style={{ maxWidth: '600px', margin: '0 auto', width: '100%' }}>
             <Drawer.Close asChild>
               <button 
                 className="modal-close-btn" 

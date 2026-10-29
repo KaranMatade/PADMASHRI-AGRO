@@ -11,11 +11,12 @@ export default function MobileStickyActionBar({ lang, onOpenInquiry }) {
   )}`;
 
   return (
-    <div className="mobile-sticky-action-bar" id="mobile-sticky-bar">
+    <nav className="mobile-sticky-action-bar" id="mobile-sticky-bar" aria-label={lang === 'mr' ? 'त्वरित संपर्क पर्याय' : 'Quick contact options'}>
       <a 
         id="mobile-sticky-call"
         href={`tel:${mainContact.mainPhone}`} 
         className="mobile-action-btn"
+        aria-label={lang === 'mr' ? 'फोन करा' : 'Call Padmashri Agro'}
         style={{ background: 'var(--slate-800)', color: 'white', border: '1px solid var(--slate-700)' }}
       >
         <Phone size={18} style={{ color: 'var(--secondary)' }} />
@@ -28,6 +29,7 @@ export default function MobileStickyActionBar({ lang, onOpenInquiry }) {
         target="_blank"
         rel="noopener noreferrer"
         className="mobile-action-btn"
+        aria-label={lang === 'mr' ? 'व्हॉट्सॲपवर संदेश पाठवा' : 'Message Padmashri Agro on WhatsApp'}
         style={{ background: '#25D366', color: 'white' }}
       >
         <MessageCircle size={18} />
@@ -38,11 +40,12 @@ export default function MobileStickyActionBar({ lang, onOpenInquiry }) {
         id="mobile-sticky-quote"
         onClick={() => onOpenInquiry()}
         className="mobile-action-btn"
+        aria-label={lang === 'mr' ? 'कोटेशन मागा' : 'Request a quotation'}
         style={{ background: 'var(--primary)', color: 'white' }}
       >
         <FileText size={18} />
         <span>{lang === 'mr' ? 'कोटेशन' : 'Get Quote'}</span>
       </button>
-    </div>
+    </nav>
   );
 }
